@@ -31,6 +31,7 @@ var BASE_DIR = '../',
 var projectName = program.project,
     version = program.ver,
     buildNumber = program.build,
+    tag = version + '.' + buildNumber,
     license,
     packageMap = {},
     outputDir = OUTPUT_DIR;
@@ -115,6 +116,7 @@ function processPackage(package) {
         files = package.files,
         dir,
         filePath,
+        code,
         outputCode = [];
     
     log('Creating the "' + name + '" target as "' + target + '"');
@@ -132,7 +134,11 @@ function processPackage(package) {
     files.forEach(function(file) {
         filePath = SRC_DIR + file.path + file.name;
         log('    + ' + filePath);
-        outputCode.push(fs.readFileSync(filePath, ENCODING));
+        code = fs.readFileSync(filePath, ENCODING);
+        if (file.name === 'matrix.js') {
+            code = code.replace(/@VERSION/, tag);
+        }
+        outputCode.push(code);
     });
     
     fs.writeFileSync(outputDir + target, outputCode.join('\n'), ENCODING);
@@ -143,13 +149,9 @@ function processBuild(build) {
         target = build.target,
         packages = build.packages,
         compress = build.compress,
-        outputCode = [],
         file,
-        code;
-    
-    if (license) {
-        outputCode.push(license, '\n');
-    }
+        code,
+        outputCode = [];
     
     log('Creating the "' + name + '" target as "' + target + '"');
     log('  - ' + packages.length + ' package(s) included in this target.');
@@ -171,6 +173,9 @@ function processBuild(build) {
         code = pro.gen_code(ast);
     }
     
+    if (license) {
+        code = license + code;
+    }
     fs.writeFileSync(outputDir + target, code, ENCODING);
 }
 
@@ -203,12 +208,14 @@ function buildProject() {
         builds = packageConfig.builds;
         resources = packageConfig.resources;
         
+        wrapLicense();
+        
         outputDir += projectName + '/';
         if (!fs.existsSync(outputDir)) {
             fs.mkdirSync(outputDir);
         }
         
-        outputDir += version + '.' + buildNumber + '/';
+        outputDir += tag + '/';
         if (fs.existsSync(outputDir)) {
             rmdirSync(outputDir);
         }
@@ -233,6 +240,19 @@ function buildProject() {
         }
     } else {
         err('No "' + packagePath + '" in this directory');
+    }
+}
+
+function wrapLicense() {
+    var arr, newStr = [];
+    if (license) {
+        arr = license.split('\n');
+        newStr.push('/*!', '\n');
+        arr.forEach(function(str) {
+            newStr.push(' * ', str, '\n');
+        });
+        newStr.push(' */', '\n');
+        license = newStr.join('');
     }
 }
 
