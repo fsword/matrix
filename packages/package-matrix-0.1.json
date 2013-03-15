@@ -1,0 +1,111 @@
+{
+    "projectName": "Matrix",
+    "license": "Matrix - A Mobile WebApp Framework\nhttp://github.com/mxjs/matrix\n\n@author max<zhangdaiping@gmail.com>\n\nThis version of Matrix is licensed under the MIT License.\nhttp://github.com/mxjs/matrix/blob/master/MIT-LICENSE.md",
+    "packages": [
+        {
+            "name": "Third Party JavaScript Libraries",
+            "target": "pkgs/libs-all.js",
+            "id": "libs-all",
+            "files": [
+                {
+                    "path": "lib/",
+                    "name": "jquery-1.9.1.js"
+                },
+                {
+                    "path": "lib/",
+                    "name": "jquery.mobile-1.3.0.js"
+                },
+                {
+                    "path": "lib/",
+                    "name": "iscroll-4.2.5.js"
+                },
+                {
+                    "path": "lib/",
+                    "name": "artTemplate-1.4.0.js"
+                }
+            ]
+        },
+        {
+            "name": "Third Party JavaScript Libraries",
+            "target": "pkgs/libs.js",
+            "id": "libs",
+            "files": [
+                {
+                    "path": "lib/",
+                    "name": "jquery-1.9.1.js"
+                },
+                {
+                    "path": "lib/",
+                    "name": "jquery.mobile-1.3.0-lite.js"
+                },
+                {
+                    "path": "lib/",
+                    "name": "iscroll-4.2.5.js"
+                },
+                {
+                    "path": "lib/",
+                    "name": "artTemplate-1.4.0.js"
+                }
+            ]
+        },
+        {
+            "name": "Matrix",
+            "target": "pkgs/mx.js",
+            "id": "mx",
+            "files": [
+                {
+                    "path": "",
+                    "name": "matrix.js"
+                }
+            ]
+        }
+    ],
+    "builds": [
+        {
+            "name": "Portal All",
+            "target": "matrix.js",
+            "packages": [
+                "libs",
+                "mx"
+            ]
+        },
+        {
+            "name": "Portal All",
+            "target": "matrix.min.js",
+            "compress": true,
+            "packages": [
+                "libs",
+                "mx"
+            ]
+        },
+        {
+            "name": "Portal All",
+            "target": "matrix-all.js",
+            "packages": [
+                "libs-all",
+                "mx"
+            ]
+        },
+        {
+            "name": "Portal All",
+            "target": "matrix-all.min.js",
+            "compress": true,
+            "packages": [
+                "libs-all",
+                "mx"
+            ]
+        }
+    ],
+    "resources": [
+        {
+            "src": "resources/",
+            "dest": "resources/",
+            "filters": ".*"
+        },
+        {
+            "src": "examples/",
+            "dest": "examples/",
+            "filters": ".*"
+        }
+    ]
+}
