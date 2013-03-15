@@ -210,14 +210,17 @@ function buildProject() {
         
         wrapLicense();
         
+        if (!fs.existsSync(outputDir)) {
+            fs.mkdirSync(outputDir);
+        }
         outputDir += projectName + '/';
         if (!fs.existsSync(outputDir)) {
             fs.mkdirSync(outputDir);
         }
-        
         outputDir += tag + '/';
         if (fs.existsSync(outputDir)) {
             rmdirSync(outputDir);
+            log('The directory "' + outputDir + '" has been removed.');
         }
         fs.mkdirSync(outputDir);
         
