@@ -6,8 +6,6 @@
  * 依赖node module: uglify-js,commander，使用npm安装
  * npm install uglify-js@1
  * npm install commander
- * 
- * @author max<zhandaiping@gmail.com>
  */
 
 var program = require('commander'),
@@ -238,6 +236,7 @@ function buildProject() {
         if (resources) {
             log('Copy resources');
             resources.forEach(function(resource) {
+                log('    + ' + resource.src);
                 copyResource(resource);
             });
         }
