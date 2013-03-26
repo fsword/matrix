@@ -4,8 +4,6 @@
  * 依赖node module: clean-css,commander，使用npm安装
  * npm install clean-css
  * npm install commander
- * 
- * @author max<zhandaiping@gmail.com>
  */
 
 var program = require('commander'),
