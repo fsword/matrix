@@ -1,11 +1,10 @@
 /**
- * @author max<zhandaiping@gmail.com>
  * @class MX.klass.KlassManager
  */
-(function() {
+(function(X) {
     "use strict";
     
-    MX.klass.KlassManager = function() {
+    X.klass.KlassManager = function() {
         var classes = {};
         
         return {
@@ -13,18 +12,26 @@
                 classes[alias] = klass;
             },
             
+            get: function(alias) {
+                return X.isString(alias) ? classes[alias] : alias;
+            },
+            
             create: function(alias, config) {
-                return new classes[alias](config);
+                var cls = this.get(alias);
+                return new cls(config);
             }
         };
-    };
+    }();
     
     /**
      * @memberOf MX
      */
-    MX.reg = MX.klass.KlassManager.register;
+    X.reg = X.klass.KlassManager.register;
     
-    MX.reg('$', window.jQuery);
-    MX.reg('jquery', window.jQuery);
-    MX.reg('template', window.template);
-})();
+    X.reg('$', X.lib.jQuery);
+    X.reg('jquery', X.lib.jQuery);
+    X.lib.artTemplate && X.reg('arttemplate', X.lib.artTemplate);
+    X.lib.iScroll && X.reg('iscroll', X.lib.iScroll);
+    
+    X.reg('klassmanager', X.klass.KlassManager);
+})(MX);

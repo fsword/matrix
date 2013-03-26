@@ -1,9 +1,9 @@
 {
     "projectName": "Matrix",
-    "license": "Matrix - A Mobile WebApp Framework\nhttp://github.com/mxjs/matrix\n\n@author max<zhangdaiping@gmail.com>\n\nThis version of Matrix is licensed under the MIT License.\nhttp://github.com/mxjs/matrix/blob/master/MIT-LICENSE.md",
+    "license": "Matrix - A Mobile WebApp Framework\nhttp://github.com/mxjs/matrix\n\nAuthor: max<zhangdaiping@gmail.com>\n\nThis version of Matrix is licensed under the MIT License.\nhttp://github.com/mxjs/matrix/blob/master/MIT-LICENSE.md",
     "packages": [
         {
-            "name": "Third Party JavaScript Libraries",
+            "name": "Third Party JavaScript Libraries (all widgets)",
             "target": "pkgs/libs-all.js",
             "id": "libs-all",
             "files": [
@@ -49,13 +49,79 @@
             ]
         },
         {
-            "name": "Matrix",
-            "target": "pkgs/mx.js",
-            "id": "mx",
+            "name": "Matrix Core",
+            "target": "pkgs/core.js",
+            "id": "core",
             "files": [
                 {
                     "path": "",
                     "name": "matrix.js"
+                },
+                {
+                    "path": "klass/",
+                    "name": "klass-manager.js"
+                },
+                {
+                    "path": "klass/",
+                    "name": "base.js"
+                },
+                {
+                    "path": "klass/",
+                    "name": "klass.js"
+                }
+            ]
+        },
+        {
+            "name": "Utils",
+            "target": "pkgs/utils.js",
+            "id": "utils",
+            "files": [
+                {
+                    "path": "util/",
+                    "name": "dispatcher.js"
+                },
+                {
+                    "path": "klass/",
+                    "name": "utility.js"
+                },
+                {
+                    "path": "util/",
+                    "name": "localstorage.js"
+                }
+            ]
+        },
+        {
+            "name": "Appliaction Framework",
+            "target": "pkgs/app.js",
+            "id": "app",
+            "files": [
+                {
+                    "path": "app/",
+                    "name": "template.js"
+                },
+                {
+                    "path": "app/",
+                    "name": "model.js"
+                },
+                {
+                    "path": "app/",
+                    "name": "store.js"
+                },
+                {
+                    "path": "app/",
+                    "name": "view.js"
+                },
+                {
+                    "path": "app/",
+                    "name": "controller.js"
+                },
+                {
+                    "path": "app/",
+                    "name": "pagelet.js"
+                },
+                {
+                    "path": "app/",
+                    "name": "application.js"
                 }
             ]
         }
@@ -63,19 +129,23 @@
     "builds": [
         {
             "name": "Portal All",
-            "target": "matrix.js",
+            "target": "matrix-lite.js",
             "packages": [
                 "libs",
-                "mx"
+                "core",
+                "utils",
+                "app"
             ]
         },
         {
             "name": "Portal All",
-            "target": "matrix.min.js",
+            "target": "matrix-lite.min.js",
             "compress": true,
             "packages": [
                 "libs",
-                "mx"
+                "core",
+                "utils",
+                "app"
             ]
         },
         {
@@ -83,7 +153,9 @@
             "target": "matrix-all.js",
             "packages": [
                 "libs-all",
-                "mx"
+                "core",
+                "utils",
+                "app"
             ]
         },
         {
@@ -92,11 +164,18 @@
             "compress": true,
             "packages": [
                 "libs-all",
-                "mx"
+                "core",
+                "utils",
+                "app"
             ]
         }
     ],
     "resources": [
+        {
+            "src": "src/",
+            "dest": "src/",
+            "filters": ".*"
+        },
         {
             "src": "resources/",
             "dest": "resources/",
@@ -105,6 +184,11 @@
         {
             "src": "examples/",
             "dest": "examples/",
+            "filters": ".*"
+        },
+        {
+            "src": "test/",
+            "dest": "test/",
             "filters": ".*"
         }
     ]

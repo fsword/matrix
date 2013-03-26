@@ -1,15 +1,23 @@
 /**
- * @class MX.clazz.Base
+ * @class MX.klass.Base
  * 
  * 所有使用Class.define()方法声明类的基类
  */
-(function() {
-    var Zepto = MX.lib.Zepto,
-        enumerables = ['hasOwnProperty', 'valueOf', 'isPrototypeOf', 'propertyIsEnumerable', 'toLocaleString', 'toString', 'constructor'],
-        noArgs = [];
+MX.kindle('jquery', function(X, $) {
+    "use strict";
+    
+    var enumerables = ['hasOwnProperty', 'valueOf', 'isPrototypeOf', 'propertyIsEnumerable', 'toLocaleString', 'toString', 'constructor'],
+        noArgs = [],
+        TemplateClass = function() {},
+        chain = function(object) {
+            TemplateClass.prototype = object;
+            var result = new TemplateClass();
+            TemplateClass.prototype = null;
+            return result;
+        };
     
     var Base = function() {};
-    Zepto.extend(Base, {
+    $.extend(Base, {
         $isClass: true,
         
         addMembers: function(members) {
@@ -47,7 +55,7 @@
             var superPrototype = SuperClass.prototype,
                 basePrototype, prototype, name;
 
-            prototype = this.prototype = MX.chain(superPrototype);
+            prototype = this.prototype = chain(superPrototype);
             this.superclass = prototype.superclass = superPrototype;
 
             if (!SuperClass.$isClass) {
@@ -62,13 +70,13 @@
     });
     
     // Base类的prototype属性
-    Zepto.extend(Base.prototype, {
+    $.extend(Base.prototype, {
         $isInstance: true,
         
         /**
          * 调用当前方法的父类方法，例子：
          * <code>
-         *  var Cls1 = Class.define({
+         *  var Cls1 = Klass.define({
          *      constructor: function(name) {
          *          this.name = name;
          *      },
@@ -78,7 +86,7 @@
          *      }
          *  });
          *  
-         *  var Cls2 = Class.define({
+         *  var Cls2 = Klass.define({
          *      extend: Cls1,
          *      
          *      constructor: function() {
@@ -99,7 +107,7 @@
                               (method = method.$owner ? method : method.caller) &&
                                method.$owner.superclass[method.$name];
             
-            return superMethod.apply(this, MX.toArray(args) || noArgs);
+            return superMethod.apply(this, X.toArray(args) || noArgs);
         },
         
         // Default constructor, simply returns `this`
@@ -108,6 +116,6 @@
         }
     });
     
-    MX.clazz.Base = Base;
-    
-})();
+    X.klass.Base = Base;
+    X.reg('base', Base);
+});
