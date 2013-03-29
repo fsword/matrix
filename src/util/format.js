@@ -198,37 +198,6 @@ MX.kindle('jquery', function(X, $) {
             }
 
             return !isNaN(value) ? value : defaultValue;
-        },
-        
-        
-        /* date format */
-        
-        /**
-         * Formats the passed date using the specified format pattern.
-         * @param {String/Date} value The value to format. If a string is passed, it is converted to a Date by the Javascript
-         * Date object's <a href="http://www.w3schools.com/jsref/jsref_parse.asp">parse()</a> method.
-         * @param {String} format (Optional) Any valid date format string. Defaults to {@link MX.util.Date#defaultFormat}.
-         * @return {String} The formatted date string.
-         */
-        date: function(v, format) {
-            if (!v) {
-                return "";
-            }
-            if (!X.isDate(v)) {
-                v = new Date(Date.parse(v));
-            }
-            return X.util.DateFormat.dateFormat(v, format || X.util.DateFormat.defaultFormat);
-        },
-
-        /**
-         * Returns a date rendering function that can be reused to apply a date format multiple times efficiently
-         * @param {String} format Any valid date format string. Defaults to {@link MX.util.Date#defaultFormat}.
-         * @return {Function} The date formatting function
-         */
-        dateRenderer: function(format) {
-            return function(v) {
-                return UtilFormat.date(v, format);
-            };
         }
     };
     
