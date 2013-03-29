@@ -1,5 +1,7 @@
 MX.ready('jquery', 'klass', 'localstorage', function(X, $, Klass, LocalStorage) {
     
+    LocalStorage.globalPrefix = 'msohu/';
+    
     var AppView = Klass.define({
         alias: 'demo.appview',
         
@@ -11,17 +13,48 @@ MX.ready('jquery', 'klass', 'localstorage', function(X, $, Klass, LocalStorage) 
             id: 'demo-body-template',
             renderToBody: true
         }]
-        
     });
     
     var AppController = Klass.define({
         alias: 'demo.appcontroller',
         
-        extend: 'controller'
+        extend: 'controller',
         
+        onPageShow: function() {
+            var body = this.getBody();
+            this.scroll = X.util.iScrollUtil.createScroll('h', body, {
+                snap: true,
+                momentum: false,
+                hScrollbar: false,
+                onScrollMove: function() {
+                    var w = window.innerWidth,
+                        x = this.x,
+                        scale = Math.abs(x) / w;
+                    body.css('background-position-x', x > 0 ? 0 : - scale * (w / 8));
+                },
+                onScrollEnd: function() {
+                    var winPage = body.find('.winPage');
+                    if (this.currPageX % 2 == 1) {
+                        winPage.addClass('rotate');
+                    } else {
+                        winPage.removeClass('rotate');
+                    }
+                },
+                onTouchEnd: function() {
+                    body.one('webkitTransitionEnd transitionend', function() {
+                        body.removeClass('slip');
+                    });
+                    body.addClass('slip');
+                    body.css('background-position-x', - this.currPageX * (window.innerWidth / 8));
+                }
+            });
+        },
+        
+        onDestroy: function() {
+            this.scroll.destroy();
+            this.scroll = null;
+        }
     });
-    
-    LocalStorage.globalPrefix = 'msohu/';
     
     var config = {
         templateVersion: '1.0', // 模版库版本号
@@ -51,17 +84,6 @@ MX.ready('jquery', 'klass', 'localstorage', function(X, $, Klass, LocalStorage) 
                 url: 'h',
                 view: 'demo.appview',
                 controller: 'demo.appcontroller',
-                models: 'demo-model',
-                stores: 'demo-store',
-                transition: 'slidefade'
-            },
-            {
-                id: 'demo-pagelet1',
-                url: 's',
-                view: 'demo.appview',
-                controller: 'demo.appcontroller',
-                models: 'demo-model',
-                stores: 'demo-store',
                 transition: 'slidefade'
             }
         ],
@@ -81,7 +103,7 @@ MX.ready('jquery', 'klass', 'localstorage', function(X, $, Klass, LocalStorage) 
         }
     };
     countDown();
-    X.App.on('pageafterchange', function() {
+    X.App.on('pagechange', function() {
         clearTimeout(countDownTimeout);
         numEl.html('100%');
     }, window, {
