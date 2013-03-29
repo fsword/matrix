@@ -1,7 +1,7 @@
 /**
  * @class MX.app.Application
  */
-MX.kindle('jquery', 'klass', 'klassmanager', 'localstorage', 'pagelet', function(X, $, Klass, KlassManager, LocalStorage, Pagelet) {
+MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, LocalStorage, Pagelet) {
     "use strict";
     
     var location = window.location,
@@ -74,9 +74,6 @@ MX.kindle('jquery', 'klass', 'klassmanager', 'localstorage', 'pagelet', function
             
             this.baseUrl = window.location.href;
             
-            // hash访问历史
-            this.histories = [];
-            
             // pagelet缓存池
             this.pageletCaches = this.pageletCaches || [];
         },
@@ -88,49 +85,26 @@ MX.kindle('jquery', 'klass', 'klassmanager', 'localstorage', 'pagelet', function
                  * @event beforelaunch
                  */
                 'beforelaunch',
-                
                 /**
                  * @event launch
                  */
                 'launch',
-                
                 /**
-                 * @event beforepagechange
+                 * @event pagebeforechange
                  */
-                'beforepagechange',
-                
+                'pagebeforechange',
+                /**
+                 * @event pagechange
+                 */
                 'pagechange',
-                
-                'pagechangefailed',
-                
-                'pagebeforecreate',
-                
-                'pagecreate',
-                
-                'pageinit',
-                
                 /**
-                 * @event pagebeforeload
+                 * @event pageafterchange
                  */
-                'pagebeforeload',
-                
+                'pageafterchange',
                 /**
-                 * @event pageload
+                 * @event pagechangefailed
                  */
-                'pageload',
-                
-                'pageloadfailed',
-                
-                'pagebeforeshow',
-                
-                'pageshow',
-                
-                'pagebeforehide',
-                
-                'pagehide',
-                
-                'pageremove'
-                
+                'pagechangefailed'
             );
             
             // 监听hashchange，当hash发生改变时，切换Pagelet
@@ -157,11 +131,7 @@ MX.kindle('jquery', 'klass', 'klassmanager', 'localstorage', 'pagelet', function
                 }).done(function(response) {
                     LocalStorage.set('mx-app/template-version', this.templateVersion);
                     LocalStorage.set('mx-app/templates', response);
-                    
-                    this.templateCt = $(document.createElement('div'));
-                    this.templateCt.attr('id', 'mx-app-templates')
-                    this.templateCt.html(response);
-                    $('body').append(this.templateCt);
+                    this.createTemplateElement(response);
                     
                     if ($.now() - dt > 200) {
                         this._launch(config);
@@ -169,9 +139,11 @@ MX.kindle('jquery', 'klass', 'klassmanager', 'localstorage', 'pagelet', function
                         X.defer(this._launch, 200, this, [config]);
                     }
                 }).fail(function() {
-                    // 加载模版失败
+                    // TODO 加载模版失败
                 });
             } else {
+                this.createTemplateElement(templates);
+                
                 // iScroll加载需要延迟200毫秒，防止iScroll加载失败
                 X.defer(this._launch, 200, this, [config]);
             }
@@ -182,30 +154,46 @@ MX.kindle('jquery', 'klass', 'klassmanager', 'localstorage', 'pagelet', function
             if (!this.isLaunched && this.beforeLaunch() !== false && this.fireEvent('beforelaunch', this) !== false) {
                 this.isLaunched = true;
                 
+                this.splashScreen = $(this.splashScreenSelector);
+                if (this.splashScreen.length == 0) {
+                    this.splashScreen = null;
+                } else {
+                    /*
+                     * 初始化启动画面状态，jquery mobile changePage()会使用到
+                     */
+                    this.splashScreen.page();
+                }
+            
+                // 初始化jquery mobile配置
+                // start ---------------------------------------------------
+                $.extend($.mobile, {
+                    firstPage: this.splashScreen || $(''),
+                    activePage: this.splashScreen,
+                    pageContainer: this.pageContainer
+                });
+                $(window).trigger('pagecontainercreate');
+                this.mon(this.pageContainer, {
+                    'pagechange': this.onPageChange,
+                    'pagechangefailed': this.onPageChangeFailed
+                });
+                // end -----------------------------------------------------
+                
                 this.initDatabase();
                 
                 this.addModel(config.models);
                 this.addStore(config.stores);
                 this.addPagelet(config.pagelets);
                 
-                this.splashScreen = $(this.splashScreenSelector);
-                if (this.splashScreen.length == 0) {
-                    this.splashScreen = null;
-                }
-                
                 this.onLaunch();
                 this.fireEvent('launch', this);
                 
-                // 跳转到初始page
                 var hash = this.getHash(),
                     pagelet = this.matchPagelet(hash);
-                
                 if (pagelet) {
                     pagelet = this.createPagelet(pagelet, hash);
-                    this.histories.push(hash);
-                    this.fresh(pagelet);
+                    this.changePage(pagelet);
                 } else {
-                    this.forward(this.welcome);
+                    this.go(this.welcome);
                 }
             }
         },
@@ -217,6 +205,14 @@ MX.kindle('jquery', 'klass', 'klassmanager', 'localstorage', 'pagelet', function
         onLaunch: X.emptyFn,
         
         // private
+        createTemplateElement: function(templates) {
+            this.templateCt = $(document.createElement('div'));
+            this.templateCt.attr('id', 'mx-app-templates').hide();
+            this.templateCt.html(templates);
+            $('body').append(this.templateCt);
+        },
+        
+        // private
         setConfig: function(config) {
             config = $.extend({}, config);
             delete config.models;
@@ -224,7 +220,7 @@ MX.kindle('jquery', 'klass', 'klassmanager', 'localstorage', 'pagelet', function
             delete config.pagelets;
             $.extend(this, config);
             
-            this.pageContainer = $.mobile.pageContainer = $('body');
+            this.pageContainer = $('body');
             
             if (this.useWebDatabase) {
                 // 没有设置数据库名称，则禁用web sql database
@@ -277,9 +273,7 @@ MX.kindle('jquery', 'klass', 'klassmanager', 'localstorage', 'pagelet', function
                                         tableName;
                                     for (i = 0, len = rows.length; i < len; i++) {
                                         tableName = rows.item(i)['table_name'];
-                                        t.executeSql('DELETE FROM ' + tableName + ' WHERE _last_updated < ?', [expires], null, function() {
-                                            // ignore error
-                                        });
+                                        t.executeSql('DELETE FROM ' + tableName + ' WHERE _last_updated < ?', [expires]);
                                     }
                                 });
                                 LocalStorage.set('mx-app/database-last-cleaned', now);
@@ -308,7 +302,7 @@ MX.kindle('jquery', 'klass', 'klassmanager', 'localstorage', 'pagelet', function
                 
                 var props = $.extend({}, models, { id: null }),
                     id = models.id;
-                props.useCache = this.useWebDatabase ? props.useCache : false;
+                props.useWebDatabase = this.useWebDatabase ? props.useWebDatabase : false;
                 props.db = this.db;
                 this.models[id] = props;
             }
@@ -326,7 +320,7 @@ MX.kindle('jquery', 'klass', 'klassmanager', 'localstorage', 'pagelet', function
                 
                 var props = $.extend({}, stores, { id: null }),
                     id = stores.id;
-                props.useCache = this.useWebDatabase ? props.useCache : false;
+                props.useWebDatabase = this.useWebDatabase ? props.useWebDatabase : false;
                 props.db = this.db;
                 this.stores[id] = props;
             }
@@ -386,13 +380,11 @@ MX.kindle('jquery', 'klass', 'klassmanager', 'localstorage', 'pagelet', function
             
             if (config.singleton) {
                 if (!config.instance) {
-                    config.instance = new Pagelet($.extend({}, config));
-                    this.preparePagelet(config.instance);
+                    config.instance = new Pagelet(this.preparePageletConfig($.extend({}, config)));
                 }
                 pagelet = config.instance;
             } else if (config.noCache) {
-                pagelet = new Pagelet($.extend(config, { id: null }));
-                this.preparePagelet(pagelet);
+                pagelet = new Pagelet(this.preparePageletConfig($.extend({}, config, { id: null })));
             } else {
                 for (len = this.pageletCaches.length, i = len - 1; i >= 0; i--) {
                     p = this.pageletCaches[i];
@@ -407,8 +399,7 @@ MX.kindle('jquery', 'klass', 'klassmanager', 'localstorage', 'pagelet', function
                     }
                 }
                 if (!pagelet) {
-                    pagelet = new Pagelet($.extend(config, { id: null }));
-                    this.preparePagelet(pagelet);
+                    pagelet = new Pagelet(this.preparePageletConfig($.extend({}, config, { id: null })));
                 }
                 this.pageletCaches.push(pagelet);
                 len = this.pageletCaches.length;
@@ -431,25 +422,26 @@ MX.kindle('jquery', 'klass', 'klassmanager', 'localstorage', 'pagelet', function
         },
         
         // private
-        preparePagelet: function(pagelet) {
+        preparePageletConfig: function(config) {
             var models, model,
                 stores, store;
-            if (pagelet.models) {
-                models = pagelet.models;
-                pagelet.models = {};
+            if (config.models) {
+                models = config.models;
+                config.models = {};
                 X.each(X.toArray(models), function(i, id) {
                     model = this.models[id];
-                    pagelet.models[id] = KlassManager.create(model.cls || 'model', $.extend({}, model));
+                    config.models[id] = X.create(model.cls || 'model', $.extend({}, model));
                 }, this);
             }
-            if (pagelet.stores) {
-                stores = pagelet.stores;
-                pagelet.stores = {};
+            if (config.stores) {
+                stores = config.stores;
+                config.stores = {};
                 X.each(X.toArray(stores), function(i, id) {
                     store = this.stores[id];
-                    pagelet.stores[id] = KlassManager.create(store.cls || 'store', $.extend({}, store));
+                    config.stores[id] = X.create(store.cls || 'store', $.extend({}, store));
                 }, this);
             }
+            return config;
         },
         
         // private
@@ -477,8 +469,8 @@ MX.kindle('jquery', 'klass', 'klassmanager', 'localstorage', 'pagelet', function
          * 转向到hash
          * @param {String} hash
          */
-        forward: function(hash) {
-            $.mobile.navigate('#' + hash);
+        go: function(hash) {
+            window.location.hash = '#/' + hash;
         },
         
         /**
@@ -486,7 +478,7 @@ MX.kindle('jquery', 'klass', 'klassmanager', 'localstorage', 'pagelet', function
          * @param {String} (optional) defaultHash 当访问路径历史没有上一页时，默认跳转hash
          */
         back: function(defaultHash) {
-            
+            $.mobile.back();
         },
         
         // private
@@ -495,33 +487,76 @@ MX.kindle('jquery', 'klass', 'klassmanager', 'localstorage', 'pagelet', function
                 pagelet = this.matchPagelet(hash);
             if (pagelet) {
                 pagelet = this.createPagelet(pagelet, hash);
-                this.histories.push(hash);
-                this.fresh(pagelet);
+                this.changePage(pagelet);
             }
         },
         
-        fresh: function(pagelet) {
+        // private
+        changePage: function(pagelet) {
             if (this.fireEvent('beforepagechange', this, pagelet) !== false) {
-                this.beforePageChange();
-                
                 var lp = this.lastPagelet,
                     np = this.nextPagelet = pagelet;
                 
                 np.render(this.pageContainer);
                 
-                
-                
+                $.mobile.changePage(np.el, {
+                    transition: np.transition,
+                    fromHashChange: true
+                });
             }
         },
         
-        beforePageChange: function() {}
+        // private
+        onPageChange: function() {
+            this.fireEvent('pagechange', this, this.nextPagelet, this.lastPagelet);
+            this.afterChangePage();
+        },
+        
+        // private
+        onPageChangeFailed: function() {
+            this.fireEvent('pagechangefailed', this, this.nextPagelet, this.lastPagelet);
+        },
+        
+        // private
+        afterChangePage: function() {
+            this.lastPagelet = this.nextPagelet;
+            this.nextPagelet = null;
+            this.fireEvent('pageafterchange', this, this.lastPagelet);
+        },
+        
+        // private
+        onDestroy: function() {
+            X.each(this.pageletCaches, function(i, pagelet) {
+                pagelet.destroy();
+            }, this);
+            this.pageletCaches = null;
+            this.pageContainer = null;
+        }
     });
     
     /**
-     * @class X.App
+     * @class MX.App
      * @singleton
      * 
      * Application类的单例对象。在大多数应用场景中，不需要单独对Application实例化，直接使用X.App单例对象既可。
      */
     X.App = new X.app.Application();
 });
+
+// 初始化jquery mobile配置
+if ($ && $.mobile) {
+    $('html').addClass( "ui-mobile" );
+    
+    window.scrollTo( 0, 1 );
+    
+    $.extend($.mobile, {
+        autoInitializePage: false,
+        pushStateEnabled: false,
+        hashListeningEnabled: false,
+        
+        // if defaultHomeScroll hasn't been set yet, see if scrollTop is 1
+        // it should be 1 in most browsers, but android treats 1 as 0 (for hiding addr bar)
+        // so if it's 1, use 0 from now on
+        defaultHomeScroll: ( !$.support.scrollTop || $(window).scrollTop() === 1 ) ? 0 : 1
+    });
+}

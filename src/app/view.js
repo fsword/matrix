@@ -1,7 +1,7 @@
 /**
  * @class MX.app.View
  */
-MX.kindle('jquery', 'klass', 'klassmanager', function(X, $, Klass, KlassManager) {
+MX.kindle('jquery', 'klass', function(X, $, Klass) {
     "use strict";
     
     X.app.View = Klass.define({
@@ -30,7 +30,6 @@ MX.kindle('jquery', 'klass', 'klassmanager', function(X, $, Klass, KlassManager)
                  * @event beforerender
                  */
                 'beforerender',
-                
                 /**
                  * @event render
                  */
@@ -46,19 +45,22 @@ MX.kindle('jquery', 'klass', 'klassmanager', function(X, $, Klass, KlassManager)
                 this.container = container = $(container);
                 
                 this.header = $(document.createElement('div'));
-                this.header.attr('id', 'mx-app-page-header-' + this.id).data('role', 'header');
+                this.header.attr('id', 'mx-app-page-header-' + this.id)
+                           .attr('data' + $.mobile.ns + '-role', 'header');
                 if (this.headerCls) {
                     this.header.css(this.headerCls);
                 }
                 
                 this.footer = $(document.createElement('div'));
-                this.footer.attr('id', 'mx-app-page-footer-' + this.id).data('role', 'footer');
+                this.footer.attr('id', 'mx-app-page-footer-' + this.id)
+                           .attr('data' + $.mobile.ns + '-role', 'footer');
                 if (this.footerCls) {
                     this.footer.css(this.footerCls);
                 }
                 
                 this.body = $(document.createElement('div'));
-                this.body.attr('id', 'mx-app-page-body-' + this.id).data('role', 'content');
+                this.body.attr('id', 'mx-app-page-body-' + this.id)
+                         .attr('data' + $.mobile.ns + '-role', 'content');
                 if (this.bodyCls) {
                     this.body.css(this.bodyCls);
                 }
@@ -85,7 +87,7 @@ MX.kindle('jquery', 'klass', 'klassmanager', function(X, $, Klass, KlassManager)
             var templates = {}, tmpl;
             this.autoRenderTmpl = [];
             X.each(this.templates, function(i, config) {
-                tmpl = KlassManager.create('template', $.extend({}, config, {id: null}));
+                tmpl = X.create('template', $.extend({}, config));
                 if (tmpl.renderToBody) {
                     tmpl.container = this.body;
                     this.autoRenderTmpl.push(tmpl);
@@ -99,7 +101,23 @@ MX.kindle('jquery', 'klass', 'klassmanager', function(X, $, Klass, KlassManager)
                 templates[tmpl.id] = tmpl;
             }, this);
             this.templates = templates; 
-        }
+        },
         
+        // private
+        onDestory: function() {
+            if (this.header) {
+                this.header.remove();
+                this.header = null;
+            }
+            if (this.footer) {
+                this.footer.remove();
+                this.footer = null;
+            }
+            if (this.body) {
+                this.body.remove();
+                this.body = null;
+            }
+            this.container = null;
+        }
     });
 });

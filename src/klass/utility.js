@@ -184,6 +184,7 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
                 scope = fn;
                 options = scope;
                 selector = undefined;
+                scope = undefined;
             }
             
             if (!item.$isClass) {
@@ -214,7 +215,7 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
             });
             
             if (isClass) {
-                item.on(types, fn, scope, options);
+                item.on && item.on(types, fn, scope, options);
             } else {
                 item.on(types, selector, undefined, proxyFn);
             }
@@ -277,6 +278,7 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
                 fn = selector;
                 scope = fn;
                 selector = undefined;
+                scope = undefined;
             }
             
             scope = scope || this;
@@ -285,7 +287,7 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
                 if ((isClass ? item == event.item : item.is(event.item)) && types == event.type && selector == event.selector && fn == event.fn && scope == event.scope) {
                     this.eventCaches.splice(i, 1);
                     if (isClass) {
-                        item.un(types, fn, scope);
+                        item.un && item.un(types, fn, scope);
                     } else {
                         item.off(types, selector, undefined, event.proxyFn);
                     }

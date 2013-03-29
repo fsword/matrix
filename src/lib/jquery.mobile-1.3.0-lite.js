@@ -2797,6 +2797,82 @@ $.widget( "mobile.widget", {
 
 })( jQuery );
 
+(function( $ ) {
+    var meta = $( "meta[name=viewport]" ),
+        initialContent = meta.attr( "content" ),
+        disabledZoom = initialContent + ",maximum-scale=1, user-scalable=no",
+        enabledZoom = initialContent + ",maximum-scale=10, user-scalable=yes",
+        disabledInitially = /(user-scalable[\s]*=[\s]*no)|(maximum-scale[\s]*=[\s]*1)[$,\s]/.test( initialContent );
+
+    $.mobile.zoom = $.extend( {}, {
+        enabled: !disabledInitially,
+        locked: false,
+        disable: function( lock ) {
+            if ( !disabledInitially && !$.mobile.zoom.locked ) {
+                meta.attr( "content", disabledZoom );
+                $.mobile.zoom.enabled = false;
+                $.mobile.zoom.locked = lock || false;
+            }
+        },
+        enable: function( unlock ) {
+            if ( !disabledInitially && ( !$.mobile.zoom.locked || unlock === true ) ) {
+                meta.attr( "content", enabledZoom );
+                $.mobile.zoom.enabled = true;
+                $.mobile.zoom.locked = false;
+            }
+        },
+        restore: function() {
+            if ( !disabledInitially ) {
+                meta.attr( "content", initialContent );
+                $.mobile.zoom.enabled = true;
+            }
+        }
+    });
+
+}( jQuery ));
+
+(function( $, window ) {
+
+    $.mobile.iosorientationfixEnabled = true;
+
+    // This fix addresses an iOS bug, so return early if the UA claims it's something else.
+    var ua = navigator.userAgent;
+    if( !( /iPhone|iPad|iPod/.test( navigator.platform ) && /OS [1-5]_[0-9_]* like Mac OS X/i.test( ua ) && ua.indexOf( "AppleWebKit" ) > -1 ) ){
+        $.mobile.iosorientationfixEnabled = false;
+        return;
+    }
+
+    var zoom = $.mobile.zoom,
+        evt, x, y, z, aig;
+
+    function checkTilt( e ) {
+        evt = e.originalEvent;
+        aig = evt.accelerationIncludingGravity;
+
+        x = Math.abs( aig.x );
+        y = Math.abs( aig.y );
+        z = Math.abs( aig.z );
+
+        // If portrait orientation and in one of the danger zones
+        if ( !window.orientation && ( x > 7 || ( ( z > 6 && y < 8 || z < 8 && y > 6 ) && x > 5 ) ) ) {
+                if ( zoom.enabled ) {
+                    zoom.disable();
+                }
+        }   else if ( !zoom.enabled ) {
+                zoom.enable();
+        }
+    }
+
+    $.mobile.document.on( "mobileinit", function(){
+        if( $.mobile.iosorientationfixEnabled ){
+            $.mobile.window
+                .bind( "orientationchange.iosorientationfix", zoom.enable )
+                .bind( "devicemotion.iosorientationfix", checkTilt );
+        }
+    });
+
+}( jQuery, this ));
+
 
 (function( $, undefined ) {
         var path, documentBase, $base, dialogHashKey = "&ui-state=dialog";
@@ -3642,6 +3718,182 @@ $.mobile.transitionFallbacks.slideup = "fade";
 $.mobile.transitionFallbacks.turn = "fade";
 
 })( jQuery, this );
+
+
+(function( $, window ) {
+    // DEPRECATED
+    // NOTE global mobile object settings
+    $.extend( $.mobile, {
+        // DEPRECATED Should the text be visble in the loading message?
+        loadingMessageTextVisible: undefined,
+
+        // DEPRECATED When the text is visible, what theme does the loading box use?
+        loadingMessageTheme: undefined,
+
+        // DEPRECATED default message setting
+        loadingMessage: undefined,
+
+        // DEPRECATED
+        // Turn on/off page loading message. Theme doubles as an object argument
+        // with the following shape: { theme: '', text: '', html: '', textVisible: '' }
+        // NOTE that the $.mobile.loading* settings and params past the first are deprecated
+        showPageLoadingMsg: function( theme, msgText, textonly ) {
+            $.mobile.loading( 'show', theme, msgText, textonly );
+        },
+
+        // DEPRECATED
+        hidePageLoadingMsg: function() {
+            $.mobile.loading( 'hide' );
+        },
+
+        loading: function() {
+            this.loaderWidget.loader.apply( this.loaderWidget, arguments );
+        }
+    });
+
+    // TODO move loader class down into the widget settings
+    var loaderClass = "ui-loader", $html = $( "html" ), $window = $.mobile.window;
+
+    $.widget( "mobile.loader", {
+        // NOTE if the global config settings are defined they will override these
+        //      options
+        options: {
+            // the theme for the loading message
+            theme: "a",
+
+            // whether the text in the loading message is shown
+            textVisible: false,
+
+            // custom html for the inner content of the loading message
+            html: "",
+
+            // the text to be displayed when the popup is shown
+            text: "loading"
+        },
+
+        defaultHtml: "<div class='" + loaderClass + "'>" +
+            "<span class='ui-icon ui-icon-loading'></span>" +
+            "<h1></h1>" +
+            "</div>",
+
+        // For non-fixed supportin browsers. Position at y center (if scrollTop supported), above the activeBtn (if defined), or just 100px from top
+        fakeFixLoader: function() {
+            var activeBtn = $( "." + $.mobile.activeBtnClass ).first();
+
+            this.element
+                .css({
+                    top: $.support.scrollTop && $window.scrollTop() + $window.height() / 2 ||
+                        activeBtn.length && activeBtn.offset().top || 100
+                });
+        },
+
+        // check position of loader to see if it appears to be "fixed" to center
+        // if not, use abs positioning
+        checkLoaderPosition: function() {
+            var offset = this.element.offset(),
+                scrollTop = $window.scrollTop(),
+                screenHeight = $.mobile.getScreenHeight();
+
+            if ( offset.top < scrollTop || ( offset.top - scrollTop ) > screenHeight ) {
+                this.element.addClass( "ui-loader-fakefix" );
+                this.fakeFixLoader();
+                $window
+                    .unbind( "scroll", this.checkLoaderPosition )
+                    .bind( "scroll", $.proxy( this.fakeFixLoader, this ) );
+            }
+        },
+
+        resetHtml: function() {
+            this.element.html( $( this.defaultHtml ).html() );
+        },
+
+        // Turn on/off page loading message. Theme doubles as an object argument
+        // with the following shape: { theme: '', text: '', html: '', textVisible: '' }
+        // NOTE that the $.mobile.loading* settings and params past the first are deprecated
+        // TODO sweet jesus we need to break some of this out
+        show: function( theme, msgText, textonly ) {
+            var textVisible, message, $header, loadSettings;
+
+            this.resetHtml();
+
+            // use the prototype options so that people can set them globally at
+            // mobile init. Consistency, it's what's for dinner
+            if ( $.type(theme) === "object" ) {
+                loadSettings = $.extend( {}, this.options, theme );
+
+                // prefer object property from the param then the old theme setting
+                theme = loadSettings.theme || $.mobile.loadingMessageTheme;
+            } else {
+                loadSettings = this.options;
+
+                // here we prefer the them value passed as a string argument, then
+                // we prefer the global option because we can't use undefined default
+                // prototype options, then the prototype option
+                theme = theme || $.mobile.loadingMessageTheme || loadSettings.theme;
+            }
+
+            // set the message text, prefer the param, then the settings object
+            // then loading message
+            message = msgText || $.mobile.loadingMessage || loadSettings.text;
+
+            // prepare the dom
+            $html.addClass( "ui-loading" );
+
+            if ( $.mobile.loadingMessage !== false || loadSettings.html ) {
+                // boolean values require a bit more work :P, supports object properties
+                // and old settings
+                if ( $.mobile.loadingMessageTextVisible !== undefined ) {
+                    textVisible = $.mobile.loadingMessageTextVisible;
+                } else {
+                    textVisible = loadSettings.textVisible;
+                }
+
+                // add the proper css given the options (theme, text, etc)
+                // Force text visibility if the second argument was supplied, or
+                // if the text was explicitly set in the object args
+                this.element.attr("class", loaderClass +
+                    " ui-corner-all ui-body-" + theme +
+                    " ui-loader-" + ( textVisible || msgText || theme.text ? "verbose" : "default" ) +
+                    ( loadSettings.textonly || textonly ? " ui-loader-textonly" : "" ) );
+
+                // TODO verify that jquery.fn.html is ok to use in both cases here
+                //      this might be overly defensive in preventing unknowing xss
+                // if the html attribute is defined on the loading settings, use that
+                // otherwise use the fallbacks from above
+                if ( loadSettings.html ) {
+                    this.element.html( loadSettings.html );
+                } else {
+                    this.element.find( "h1" ).text( message );
+                }
+
+                // attach the loader to the DOM
+                this.element.appendTo( $.mobile.pageContainer );
+
+                // check that the loader is visible
+                this.checkLoaderPosition();
+
+                // on scroll check the loader position
+                $window.bind( "scroll", $.proxy( this.checkLoaderPosition, this ) );
+            }
+        },
+
+        hide: function() {
+            $html.removeClass( "ui-loading" );
+
+            if ( $.mobile.loadingMessage ) {
+                this.element.removeClass( "ui-loader-fakefix" );
+            }
+
+            $.mobile.window.unbind( "scroll", this.fakeFixLoader );
+            $.mobile.window.unbind( "scroll", this.checkLoaderPosition );
+        }
+    });
+
+    $window.bind( 'pagecontainercreate', function() {
+        $.mobile.loaderWidget = $.mobile.loaderWidget || $( $.mobile.loader.prototype.defaultHtml ).loader();
+    });
+})(jQuery, this);
+
 
 (function( $, undefined ) {
 

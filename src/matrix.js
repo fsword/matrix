@@ -22,10 +22,10 @@ window.MX = {
         android = ua.match(/(Android)[\/\s+]([\d.]+)/),
         ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
         iphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
-        //webos = ua.match(/(webOS|hpwOS)[\s\/]([\d.]+)/),
-        //touchpad = webos && ua.match(/TouchPad/),
-        //kindle = ua.match(/Kindle\/([\d.]+)/),
-        //blackberry = ua.match(/(BlackBerry).*Version\/([\d.]+)/),
+        webos = ua.match(/(webOS|hpwOS)[\s\/]([\d.]+)/),
+        touchpad = webos && ua.match(/TouchPad/),
+        kindle = ua.match(/Kindle\/([\d.]+)/),
+        blackberry = ua.match(/(BlackBerry).*Version\/([\d.]+)/),
         os;
     
     /**
@@ -66,7 +66,6 @@ window.MX = {
         artTemplate: artTemplate,
         iScroll: iScroll
     });
-    $.mobile.autoInitializePage = false;
     if (artTemplate) {
         artTemplate.openTag = '<#';
         artTemplate.closeTag = '#>';
@@ -211,7 +210,6 @@ window.MX = {
         os.ios = os.ipad = true;
         os.version = ipad[2].replace(/_/g, '.');
     }
-    /*
     if (webos) {
         os.webos = true;
         os.version = webos[2];
@@ -227,13 +225,31 @@ window.MX = {
         os.kindle = true;
         os.version = kindle[1];
     }
-    */
     
     $.extend(X, {
         /**
          * 操作系统信息
          */
         os: os,
+        
+        /**
+         * 将config包含的属性，合并到object对象，如果object已存在相同的属性名，则忽略合并
+         * @param {Object} object
+         * @param {Object} config
+         */
+        applyIf: function(object, config) {
+            var property;
+
+            if (object) {
+                for (property in config) {
+                    if (object[property] === undefined) {
+                        object[property] = config[property];
+                    }
+                }
+            }
+
+            return object;
+        },
         
         /**
          * 将对象转换成数组

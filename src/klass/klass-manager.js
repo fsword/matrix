@@ -7,7 +7,7 @@
     X.klass.KlassManager = function() {
         var classes = {};
         
-        return {
+        var pub = {
             register: function(alias, klass) {
                 classes[alias] = klass;
             },
@@ -17,16 +17,23 @@
             },
             
             create: function(alias, config) {
-                var cls = this.get(alias);
+                var cls = pub.get(alias);
                 return new cls(config);
             }
         };
+        
+        return pub;
     }();
     
     /**
      * @memberOf MX
      */
     X.reg = X.klass.KlassManager.register;
+    
+    /**
+     * @memberOf MX
+     */
+    X.create = X.klass.KlassManager.create;
     
     X.reg('$', X.lib.jQuery);
     X.reg('jquery', X.lib.jQuery);

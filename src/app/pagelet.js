@@ -1,7 +1,7 @@
 /**
  * @class MX.app.Pagelet
  */
-MX.kindle('jquery', 'klass', 'klassmanager', function(X, $, Klass, KlassManager) {
+MX.kindle('jquery', 'klass', function(X, $, Klass) {
     "use strict";
     
     var paramNameRe = /(:|\*)\w+/g; // 匹配URL中的参数名
@@ -47,6 +47,15 @@ MX.kindle('jquery', 'klass', 'klassmanager', function(X, $, Klass, KlassManager)
          * @cfg {String} cls 添加到el元素上的扩展CSS样式
          */
         
+        /**
+         * @cfg {Boolean} useScroll true启用iScroll组件，iScroll将被引用在data-content element，默认true
+         */
+        useScroll: true,
+        
+        /**
+         * @cfg {Object} scrollConfig iScroll组件配置参数
+         */
+        
         // private
         init: function() {
             // 匹配URL中包含的参数名
@@ -59,7 +68,8 @@ MX.kindle('jquery', 'klass', 'klassmanager', function(X, $, Klass, KlassManager)
             this.initController();
         },
         
-        // private 将hash中包含的参数解析出来
+        // private
+        // 将hash中包含的参数解析出来
         parseParams: function() {
             var values = this.urlRe.exec(this.hash).slice(1),
                 params = {};
@@ -79,7 +89,6 @@ MX.kindle('jquery', 'klass', 'klassmanager', function(X, $, Klass, KlassManager)
                  * @event beforerender
                  */
                 'beforerender',
-                
                 /**
                  * @event render
                  */
@@ -89,12 +98,14 @@ MX.kindle('jquery', 'klass', 'klassmanager', function(X, $, Klass, KlassManager)
         
         // private
         initView: function() {
-            this.view = KlassManager.create(this.view || 'view', {});
+            this.view = X.create(this.view || 'view', {});
+            this.mon(this.view, 'render', this.initScroll, this);
+            this.mon(this.view, 'destroy', this.destroyScroll, this)
         },
         
         // private
         initController: function() {
-            this.controller = KlassManager.create(this.controller || 'controller', {
+            this.controller = X.create(this.controller || 'controller', {
                 pagelet: this,
                 view: this.view,
                 models: this.models,
@@ -110,7 +121,9 @@ MX.kindle('jquery', 'klass', 'klassmanager', function(X, $, Klass, KlassManager)
                 this.container = container = $(container);
                 
                 this.el = $(document.createElement('div'));
-                this.el.attr('id', 'mx-app-page-' + this.id).data('role', 'page');
+                this.el.attr('id', 'mx-app-page-' + this.id)
+                       .attr('data' + $.mobile.ns + '-role', 'page')
+                       .attr('data' + $.mobile.ns + '-url', '#/' + this.hash);
                 if (this.cls) {
                     this.el.css(this.cls);
                 }
@@ -120,14 +133,117 @@ MX.kindle('jquery', 'klass', 'klassmanager', function(X, $, Klass, KlassManager)
                     this.view.render(this.el);
                 }
                 
+                this.mon(this.el, {
+                    'pagebeforeshow': this.beforePageShow,
+                    'pageshow': this.onPageShow,
+                    'pagebeforehide': this.beforePageHide,
+                    'pagehide': this.onPageHide
+                });
+                
                 this.onRender(container);
                 this.fireEvent('render', this, container);
             }
         },
         
         // private
-        onRender: X.emptyFn
+        onRender: X.emptyFn,
         
+        // private
+        initScroll: function() {
+            // TODO
         
+        },
+        
+        // private
+        beforePageShow: function() {
+            if (this.controller) {
+                this.controller.beforePageShow();
+                this.controller.fireEvent('pagebeforeshow', this.controller);
+            }
+        },
+        
+        // private
+        onPageShow: function() {
+            if (this.controller) {
+                this.controller.onPageShow();
+                this.controller.fireEvent('pageshow', this.controller);
+            }
+        },
+        
+        // private
+        beforePageHide: function() {
+            this.cancelFetch();
+            if (this.controller) {
+                this.controller.beforePageHide();
+                this.controller.fireEvent('pagebeforehide', this.controller);
+            }
+        },
+        
+        // private
+        onPageHide: function() {
+            if (this.controller) {
+                this.controller.onPageHide();
+                this.controller.fireEvent('pagehide', this.controller);
+            }
+        },
+        
+        // private
+        // 取消所有model、store的AJAX fetch动作
+        cancelFetch: function() {
+            // TODO
+            /*X.each(this.models, function(id, model) {
+                model.cancelFetch();
+            }, this);
+            X.each(this.stores, function(id, store) {
+                store.cancelFetch();
+            }, this);*/
+        },
+        
+        /**
+         * 获得view对象
+         */
+        getView: function() {
+            return this.view;
+        },
+        
+        /**
+         * 获得controller对象
+         */
+        getController: function() {
+            return this.controller;
+        },
+        
+        // private
+        destroyScroll: function() {
+            // TODO
+            
+        },
+        
+        // private
+        onDestory: function() {
+            if (this.models && X.isObject(this.models)) {
+                X.each(this.models, function(i, model) {
+                    model.destroy();
+                });
+            }
+            if (this.stores && X.isObject(this.stores)) {
+                X.each(this.stores, function(i, store) {
+                    store.destroy();
+                });
+            }
+            if (this.controller) {
+                this.controller.destroy();
+                this.controller = null;
+            }
+            if (this.view) {
+                this.view.destroy();
+                this.view = null;
+            }
+            if (this.el) {
+                this.el.remove();
+                this.el = null;
+            }
+            this.container = null;
+        }
     });
 });

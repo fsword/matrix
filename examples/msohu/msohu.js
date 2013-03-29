@@ -5,13 +5,7 @@ MX.ready('klass', 'localstorage', function(X, Klass, LocalStorage) {
         
         extend: 'view',
         
-        templates: [/*{
-            id: 'demo-header-template',
-            renderToHeader: true
-        }, {
-            id: 'demo-footer-template',
-            renderToFooter: true
-        }, */{
+        templates: [{
             id: 'demo-body-template',
             renderToBody: true
         }]
@@ -35,25 +29,40 @@ MX.ready('klass', 'localstorage', function(X, Klass, LocalStorage) {
         databaseDescription: 'msohu offline database',
         databaseExpires: 3 * 24 * 60 * 60 * 1000, // 3天后过期
         
-        models: [{
-            id: "demo-model"
-            
-        }],
+        models: [
+            {
+                id: "demo-model"
+                
+            }
+        ],
         
-        stores: [{
-            id: "demo-store"
-            
-        }],
+        stores: [
+            {
+                id: "demo-store"
+                
+            }
+        ],
         
-        pagelets: [{
-            id: 'demo-pagelet',
-            url: 'h',
-            view: 'demo.appview',
-            controller: 'demo.appcontroller',
-            models: 'demo-model',
-            stores: 'demo-store',
-            transition: 'fade'
-        }],
+        pagelets: [
+            {
+                id: 'demo-pagelet',
+                url: 'h',
+                view: 'demo.appview',
+                controller: 'demo.appcontroller',
+                models: 'demo-model',
+                stores: 'demo-store',
+                transition: 'slidefade'
+            },
+            {
+                id: 'demo-pagelet1',
+                url: 's',
+                view: 'demo.appview',
+                controller: 'demo.appcontroller',
+                models: 'demo-model',
+                stores: 'demo-store',
+                transition: 'slidefade'
+            }
+        ],
         
         welcome: 'h'
     };
