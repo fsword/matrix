@@ -162,7 +162,7 @@
     
     var params = parseParams(bootstrapSrc),
         projectName = params.p,
-        version = params.v,
+        version = params.v || '0.1',
         dependBuild = params.d,
         packageFile = 'package-' + projectName + '-' + version + '.json',
         srcArr = bootstrapSrc.split('?'),
