@@ -112,6 +112,27 @@ MX.kindle('klass', function(X, Klass) {
             return this.stores[id];
         },
         
+        /**
+         * 获取header element
+         */
+        getHeader: function() {
+            return this.view.header;
+        },
+        
+        /**
+         * 获取footer element
+         */
+        getFooter: function() {
+            return this.view.footer;
+        },
+        
+        /**
+         * 获取body element
+         */
+        getBody: function() {
+            return this.view.body;
+        },
+        
         // private
         onDestroy: function() {
             this.view = null;

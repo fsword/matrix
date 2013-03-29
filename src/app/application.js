@@ -503,7 +503,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                 np.el.css('min-height', window.innerHeight + 'px');
                 
                 $.mobile.changePage(np.el, {
-                    transition: np.transition,
+                    transition: this.startUpView ? 'fade' : np.transition,
                     fromHashChange: true
                 });
             }
