@@ -2,21 +2,21 @@ MX.ready('jquery', 'klass', 'localstorage', function(X, $, Klass, LocalStorage) 
     
     LocalStorage.globalPrefix = 'msohu/';
     
-    var AppView = Klass.define({
-        alias: 'demo.appview',
+    var IndexView = Klass.define({
+        alias: 'msohu.indexview',
         
         extend: 'view',
         
         bodyCls: 'index-content',
                 
         templates: [{
-            id: 'demo-body-template',
+            id: 'index-body-template',
             renderToBody: true
         }]
     });
     
-    var AppController = Klass.define({
-        alias: 'demo.appcontroller',
+    var IndexController = Klass.define({
+        alias: 'msohu.indexcontroller',
         
         extend: 'controller',
         
@@ -66,24 +66,24 @@ MX.ready('jquery', 'klass', 'localstorage', function(X, $, Klass, LocalStorage) 
         
         models: [
             {
-                id: "demo-model"
+                id: "list-model"
                 
             }
         ],
         
         stores: [
             {
-                id: "demo-store"
+                id: "list-store"
                 
             }
         ],
         
         pagelets: [
             {
-                id: 'demo-pagelet',
+                id: 'index-pagelet',
                 url: 'h',
-                view: 'demo.appview',
-                controller: 'demo.appcontroller',
+                view: 'msohu.indexview',
+                controller: 'msohu.indexcontroller',
                 transition: 'slidefade'
             }
         ],
