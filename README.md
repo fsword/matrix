@@ -7,8 +7,8 @@ Matrix构建在jQuery Mobile 1.3.0之上，提供模版引擎、MVC框架，辅�
 
 # Hello World!
 
-<p><code>
-MX.ready(function(X) {
+```
+MX.ready('klass', function(X, Klass) {
     var DemoView = Klass.define({
         alias: 'demo.view',
         extend: 'view',
@@ -25,4 +25,4 @@ MX.ready(function(X) {
         welcome: 'h'
     });
 });
-</code></p>
+```
