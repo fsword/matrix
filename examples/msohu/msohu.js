@@ -57,8 +57,8 @@ MX.ready('jquery', 'klass', 'localstorage', function(X, $, Klass, LocalStorage) 
     });
     
     var config = {
-        templateVersion: '1.1', // 模版库版本号
-        templateUrl: 'main.tmpl', // 模版更新URL
+        templateVersion: '1.0',
+        templateUrl: 'main.tmpl',
         
         databaseName: 'msohu',
         databaseDescription: 'msohu offline database',
