@@ -14,6 +14,8 @@ Matrix是一个高度集成jQuery Mobile的MVC框架，它将jQuery Mobile的UI�
 
 学习Matrix非常简单，从第一个例子[Hello World](https://github.com/mxjs/matrix/tree/master/examples/helloworld/ "Example")开始吧
 
+学习Matrix非常简单，从第一个例子[Hello World](examples/helloword/ "Example")开始吧
+
 ```
 MX.ready('klass', function(X, Klass) {
     var DemoView = Klass.define({
