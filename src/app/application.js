@@ -4,7 +4,8 @@
 MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, LocalStorage, Pagelet) {
     "use strict";
     
-    var location = window.location,
+    var $window = $(window),
+        location = window.location,
         matchHashRe = /#(.*)$/, // 匹配url中的hash部分
         hashStripperRe = /^[#\/]/, // 移除hash碎片中的"#/"标识符
         namedParamRe = /:\w+/g, // 匹配hash中的parameter
@@ -57,9 +58,9 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
         databaseExpires: 3 * 24 * 60 * 60 * 1000,
         
         /**
-         * @cfg {String} splashScreenSelector 启动画面selector
+         * @cfg {String} startUpSelector 启动画面selector
          */
-        splashScreenSelector: 'div#splashScreen',
+        startUpSelector: 'div#startUpView',
         
         /**
          * @cfg {Number} pageletCacheSize pagelet缓存大小，默认为30
@@ -154,24 +155,25 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
             if (!this.isLaunched && this.beforeLaunch() !== false && this.fireEvent('beforelaunch', this) !== false) {
                 this.isLaunched = true;
                 
-                this.splashScreen = $(this.splashScreenSelector);
-                if (this.splashScreen.length == 0) {
-                    this.splashScreen = null;
+                this.startUpView = $(this.startUpSelector);
+                if (this.startUpView.length == 0) {
+                    this.startUpView = null;
                 } else {
                     /*
                      * 初始化启动画面状态，jquery mobile changePage()会使用到
                      */
-                    this.splashScreen.page();
+                    this.startUpView.page();
+                    this.startUpView.css('min-height', window.innerHeight + 'px');
                 }
             
                 // 初始化jquery mobile配置
                 // start ---------------------------------------------------
                 $.extend($.mobile, {
-                    firstPage: this.splashScreen || $(''),
-                    activePage: this.splashScreen,
+                    firstPage: this.startUpView || $(''),
+                    activePage: this.startUpView,
                     pageContainer: this.pageContainer
                 });
-                $(window).trigger('pagecontainercreate');
+                $window.trigger('pagecontainercreate');
                 this.mon(this.pageContainer, {
                     'pagechange': this.onPageChange,
                     'pagechangefailed': this.onPageChangeFailed
@@ -498,6 +500,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                     np = this.nextPagelet = pagelet;
                 
                 np.render(this.pageContainer);
+                np.el.css('min-height', window.innerHeight + 'px');
                 
                 $.mobile.changePage(np.el, {
                     transition: np.transition,
@@ -519,6 +522,11 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
         
         // private
         afterChangePage: function() {
+            if (this.startUpView) {
+                this.startUpView.remove();
+                this.startUpView = null;
+            }
+            
             this.lastPagelet = this.nextPagelet;
             this.nextPagelet = null;
             this.fireEvent('pageafterchange', this, this.lastPagelet);

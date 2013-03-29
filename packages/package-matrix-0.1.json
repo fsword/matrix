@@ -17,10 +17,6 @@
                 },
                 {
                     "path": "lib/",
-                    "name": "iscroll-4.2.5.js"
-                },
-                {
-                    "path": "lib/",
                     "name": "artTemplate-1.4.0.js"
                 }
             ]

@@ -1,10 +1,12 @@
-MX.ready('klass', 'localstorage', function(X, Klass, LocalStorage) {
+MX.ready('jquery', 'klass', 'localstorage', function(X, $, Klass, LocalStorage) {
     
     var AppView = Klass.define({
         alias: 'demo.appview',
         
         extend: 'view',
         
+        bodyCls: 'index-content',
+                
         templates: [{
             id: 'demo-body-template',
             renderToBody: true
@@ -66,6 +68,25 @@ MX.ready('klass', 'localstorage', function(X, Klass, LocalStorage) {
         
         welcome: 'h'
     };
+    
+    var numEl = $('#startUpView div.num'),
+        count = 0,
+        countDownTimeout;
+    function countDown() {
+        count += parseInt(Math.random() * 10 + 1);
+        count = count > 100 ? 100 : count;
+        numEl.html(count + '%');
+        if (count < 100) {
+            countDownTimeout = setTimeout(countDown, 70);
+        }
+    };
+    countDown();
+    X.App.on('pageafterchange', function() {
+        clearTimeout(countDownTimeout);
+        numEl.html('100%');
+    }, window, {
+        single: true
+    });
     
     X.App.launch(config);
 });

@@ -24,6 +24,28 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
          */
         
         // private
+        init: function() {
+            this.initTemplate();
+        },
+        
+        // private
+        initTemplate: function() {
+            var templates = {}, tmpl;
+            X.each(this.templates, function(i, config) {
+                tmpl = X.create('template', $.extend({}, config));
+                if (tmpl.renderToBody) {
+                    this.renderBodyTmpl = tmpl;
+                } else if (tmpl.renderToHeader) {
+                    this.renderHeaderTmpl = tmpl;
+                } else if (tmpl.renderToFooter) {
+                    this.renderFooterTmpl = tmpl;
+                }
+                templates[tmpl.id] = tmpl;
+            }, this);
+            this.templates = templates; 
+        },
+        
+        // private
         initEvents: function() {
             this.addEvents(
                 /**
@@ -44,35 +66,41 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                 
                 this.container = container = $(container);
                 
-                this.header = $(document.createElement('div'));
-                this.header.attr('id', 'mx-app-page-header-' + this.id)
-                           .attr('data' + $.mobile.ns + '-role', 'header');
-                if (this.headerCls) {
-                    this.header.css(this.headerCls);
+                if (this.renderHeaderTmpl) {
+                    this.header = $(document.createElement('div'));
+                    this.header.attr('id', 'mx-app-page-header-' + this.id)
+                               .attr('data' + $.mobile.ns + '-role', 'header');
+                    if (this.headerCls) {
+                        this.header.addClass(this.headerCls);
+                    }
+                    this.renderHeaderTmpl.container = this.header;
+                    this.renderHeaderTmpl.render();
+                    container.append(this.header);
                 }
                 
-                this.footer = $(document.createElement('div'));
-                this.footer.attr('id', 'mx-app-page-footer-' + this.id)
-                           .attr('data' + $.mobile.ns + '-role', 'footer');
-                if (this.footerCls) {
-                    this.footer.css(this.footerCls);
+                if (this.renderFooterTmpl) {
+                    this.footer = $(document.createElement('div'));
+                    this.footer.attr('id', 'mx-app-page-footer-' + this.id)
+                               .attr('data' + $.mobile.ns + '-role', 'footer');
+                    if (this.footerCls) {
+                        this.footer.addClass(this.footerCls);
+                    }
+                    this.renderFooterTmpl.container = this.header;
+                    this.renderFooterTmpl.render();
+                    container.append(this.header);
                 }
                 
                 this.body = $(document.createElement('div'));
                 this.body.attr('id', 'mx-app-page-body-' + this.id)
                          .attr('data' + $.mobile.ns + '-role', 'content');
                 if (this.bodyCls) {
-                    this.body.css(this.bodyCls);
+                    this.body.addClass(this.bodyCls);
                 }
-                
-                container.append(this.header);
+                if (this.renderBodyTmpl) {
+                    this.renderBodyTmpl.container = this.body;
+                    this.renderBodyTmpl.render();
+                }
                 container.append(this.body);
-                container.append(this.footer);
-                
-                this.initTemplate();
-                X.each(this.autoRenderTmpl, function(i, tmpl) {
-                    tmpl.render();
-                }, this);
                 
                 this.onRender(container);
                 this.fireEvent('render', this, container);
@@ -82,25 +110,13 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         // private
         onRender: X.emptyFn,
         
-        // private
-        initTemplate: function() {
-            var templates = {}, tmpl;
-            this.autoRenderTmpl = [];
-            X.each(this.templates, function(i, config) {
-                tmpl = X.create('template', $.extend({}, config));
-                if (tmpl.renderToBody) {
-                    tmpl.container = this.body;
-                    this.autoRenderTmpl.push(tmpl);
-                } else if (tmpl.renderToHeader) {
-                    tmpl.container = this.header;
-                    this.autoRenderTmpl.push(tmpl);
-                } else if (tmpl.renderToFooter) {
-                    tmpl.container = this.footer;
-                    this.autoRenderTmpl.push(tmpl);
-                }
-                templates[tmpl.id] = tmpl;
-            }, this);
-            this.templates = templates; 
+        /**
+         * 获取模版
+         * @param {String} id
+         * @return {Object} template
+         */
+        getTemplate: function(id) {
+            return this.templates[id];
         },
         
         // private

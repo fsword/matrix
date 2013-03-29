@@ -355,20 +355,6 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
         },
         
         /**
-         * 获取未经过渲染的数据
-         */
-        getRawValue: function(name) {
-            return this.get(name, true);
-        },
-        
-        /**
-         * 获取id
-         */
-        getId: function() {
-            return this.data[this.idProperty];
-        },
-        
-        /**
          * 加载数据
          */
         load: function(params) {
@@ -408,7 +394,7 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
         // private
         getFetchParams: function() {
             var params = {};
-            params[this.idProperty] = this.getId();
+            params[this.idProperty] = this.get(this.idProperty, true);
             return params;
         },
         
@@ -473,7 +459,7 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
         
         // private
         getStorageKey: function() {
-            return this.getId();
+            return this.get(this.idProperty, true);
         },
         
         // private

@@ -4,9 +4,143 @@
  * 本地调试环境，根据"package-matrix.json"文件依赖加载JS源码文件
  */
 (function() {
+    // from jquery.mobile.path ------------------------------------------------------------------------
+    var path, documentBase, $base, dialogHashKey = "&ui-state=dialog";
+
+    path = {
+        uiStateKey: "&ui-state",
+
+        // This scary looking regular expression parses an absolute URL or its relative
+        // variants (protocol, site, document, query, and hash), into the various
+        // components (protocol, host, path, query, fragment, etc that make up the
+        // URL as well as some other commonly used sub-parts. When used with RegExp.exec()
+        // or String.match, it parses the URL into a results array that looks like this:
+        //
+        //     [0]: http://jblas:password@mycompany.com:8080/mail/inbox?msg=1234&type=unread#msg-content
+        //     [1]: http://jblas:password@mycompany.com:8080/mail/inbox?msg=1234&type=unread
+        //     [2]: http://jblas:password@mycompany.com:8080/mail/inbox
+        //     [3]: http://jblas:password@mycompany.com:8080
+        //     [4]: http:
+        //     [5]: //
+        //     [6]: jblas:password@mycompany.com:8080
+        //     [7]: jblas:password
+        //     [8]: jblas
+        //     [9]: password
+        //    [10]: mycompany.com:8080
+        //    [11]: mycompany.com
+        //    [12]: 8080
+        //    [13]: /mail/inbox
+        //    [14]: /mail/
+        //    [15]: inbox
+        //    [16]: ?msg=1234&type=unread
+        //    [17]: #msg-content
+        //
+        urlParseRE: /^\s*(((([^:\/#\?]+:)?(?:(\/\/)((?:(([^:@\/#\?]+)(?:\:([^:@\/#\?]+))?)@)?(([^:\/#\?\]\[]+|\[[^\/\]@#?]+\])(?:\:([0-9]+))?))?)?)?((\/?(?:[^\/\?#]+\/+)*)([^\?#]*)))?(\?[^#]+)?)(#.*)?/,
+
+        //Parse a URL into a structure that allows easy access to
+        //all of the URL components by name.
+        parseUrl: function( url ) {
+            // If we're passed an object, we'll assume that it is
+            // a parsed url object and just return it back to the caller.
+            if ( typeof url === "object" ) {
+                return url;
+            }
+
+            var matches = path.urlParseRE.exec( url || "" ) || [];
+
+                // Create an object that allows the caller to access the sub-matches
+                // by name. Note that IE returns an empty string instead of undefined,
+                // like all other browsers do, so we normalize everything so its consistent
+                // no matter what browser we're running on.
+                return {
+                    href:         matches[  0 ] || "",
+                    hrefNoHash:   matches[  1 ] || "",
+                    hrefNoSearch: matches[  2 ] || "",
+                    domain:       matches[  3 ] || "",
+                    protocol:     matches[  4 ] || "",
+                    doubleSlash:  matches[  5 ] || "",
+                    authority:    matches[  6 ] || "",
+                    username:     matches[  8 ] || "",
+                    password:     matches[  9 ] || "",
+                    host:         matches[ 10 ] || "",
+                    hostname:     matches[ 11 ] || "",
+                    port:         matches[ 12 ] || "",
+                    pathname:     matches[ 13 ] || "",
+                    directory:    matches[ 14 ] || "",
+                    filename:     matches[ 15 ] || "",
+                    search:       matches[ 16 ] || "",
+                    hash:         matches[ 17 ] || ""
+                };
+        },
+
+        //Returns true for any relative variant.
+        isRelativeUrl: function( url ) {
+            // All relative Url variants have one thing in common, no protocol.
+            return path.parseUrl( url ).protocol === "";
+        },
+
+        //Turn relPath into an asbolute path. absPath is
+        //an optional absolute path which describes what
+        //relPath is relative to.
+        makePathAbsolute: function( relPath, absPath ) {
+            if ( relPath && relPath.charAt( 0 ) === "/" ) {
+                return relPath;
+            }
+
+            relPath = relPath || "";
+            absPath = absPath ? absPath.replace( /^\/|(\/[^\/]*|[^\/]+)$/g, "" ) : "";
+
+            var absStack = absPath ? absPath.split( "/" ) : [],
+                relStack = relPath.split( "/" );
+            for ( var i = 0; i < relStack.length; i++ ) {
+                var d = relStack[ i ];
+                switch ( d ) {
+                    case ".":
+                        break;
+                    case "..":
+                        if ( absStack.length ) {
+                            absStack.pop();
+                        }
+                        break;
+                    default:
+                        absStack.push( d );
+                        break;
+                }
+            }
+            return "/" + absStack.join( "/" );
+        },
+
+        //Turn the specified realtive URL into an absolute one. This function
+        //can handle all relative variants (protocol, site, document, query, fragment).
+        makeUrlAbsolute: function( relUrl, absUrl ) {
+            if ( !path.isRelativeUrl( relUrl ) ) {
+                return relUrl;
+            }
+
+            if ( absUrl === undefined ) {
+                absUrl = this.documentBase;
+            }
+
+            var relObj = path.parseUrl( relUrl ),
+                absObj = path.parseUrl( absUrl ),
+                protocol = relObj.protocol || absObj.protocol,
+                doubleSlash = relObj.protocol ? relObj.doubleSlash : ( relObj.doubleSlash || absObj.doubleSlash ),
+                authority = relObj.authority || absObj.authority,
+                hasPath = relObj.pathname !== "",
+                pathname = path.makePathAbsolute( relObj.pathname || absObj.filename, absObj.pathname ),
+                search = relObj.search || ( !hasPath && absObj.search ) || "",
+                hash = relObj.hash;
+
+            return protocol + doubleSlash + authority + pathname + search + hash;
+        }
+    };
+    
+    // end ------------------------------------------------------------------------
+    
+    
     var headNode = document.getElementsByTagName('head')[0],
         bootstrap = document.getElementById('bootstrap'),
-        bootstrapSrc = bootstrap.src;
+        bootstrapSrc = path.makeUrlAbsolute(bootstrap.src, window.location.href);
     
     function parseParams(url) {
         var params = {},

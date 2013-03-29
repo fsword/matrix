@@ -47,15 +47,6 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
          * @cfg {String} cls 添加到el元素上的扩展CSS样式
          */
         
-        /**
-         * @cfg {Boolean} useScroll true启用iScroll组件，iScroll将被引用在data-content element，默认true
-         */
-        useScroll: true,
-        
-        /**
-         * @cfg {Object} scrollConfig iScroll组件配置参数
-         */
-        
         // private
         init: function() {
             // 匹配URL中包含的参数名
@@ -99,8 +90,6 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         // private
         initView: function() {
             this.view = X.create(this.view || 'view', {});
-            this.mon(this.view, 'render', this.initScroll, this);
-            this.mon(this.view, 'destroy', this.destroyScroll, this)
         },
         
         // private
@@ -125,7 +114,7 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                        .attr('data' + $.mobile.ns + '-role', 'page')
                        .attr('data' + $.mobile.ns + '-url', '#/' + this.hash);
                 if (this.cls) {
-                    this.el.css(this.cls);
+                    this.el.addClass(this.cls);
                 }
                 container.append(this.el);
                 
@@ -147,12 +136,6 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         
         // private
         onRender: X.emptyFn,
-        
-        // private
-        initScroll: function() {
-            // TODO
-        
-        },
         
         // private
         beforePageShow: function() {
@@ -190,13 +173,12 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         // private
         // 取消所有model、store的AJAX fetch动作
         cancelFetch: function() {
-            // TODO
-            /*X.each(this.models, function(id, model) {
+            X.each(this.models, function(id, model) {
                 model.cancelFetch();
             }, this);
             X.each(this.stores, function(id, store) {
                 store.cancelFetch();
-            }, this);*/
+            }, this);
         },
         
         /**
@@ -211,12 +193,6 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
          */
         getController: function() {
             return this.controller;
-        },
-        
-        // private
-        destroyScroll: function() {
-            // TODO
-            
         },
         
         // private
