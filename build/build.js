@@ -82,29 +82,41 @@ var rmdirSync = (function() {
     };
 })();
 
-var copydirSync = function(src, dest, filters, encode) {
-    var files,
+var copydirSync = function(srcDir, src, destDir, dest, filters, encode) {
+    var srcFile = srcDir + src,
+        destFile = destDir + dest,
+        files,
         code,
         canCopy;
-    
-    if (!fs.existsSync(dest)) {
-        fs.mkdirSync(dest);
-    }
-    files = fs.readdirSync(src);
-    files.forEach(function(file) {
-        if (fs.statSync(src + file).isDirectory()) {
-            copydirSync(src + file + '/', dest + file + '/', filters, encode);
-        } else {
-            canCopy = true;
-            if (filters) {
-                canCopy = (typeof filters === 'string' ? new RegExp(filters, 'i') : filters).test(file);
-            }
-            if (canCopy) {
-                code = fs.readFileSync(src + file, encode);
-                fs.writeFileSync(dest + file, code, encode);
-            }
+    if (destFile.charAt(destFile.length - 1) == '/') {
+        if (!fs.existsSync(destFile)) {
+            fs.mkdirSync(destFile);
         }
-    });
+        files = fs.readdirSync(srcFile);
+        files.forEach(function(file) {
+            if (fs.statSync(srcFile + file).isDirectory()) {
+                copydirSync(srcFile + file + '/', '', destFile + file + '/', '', filters, encode);
+            } else {
+                canCopy = true;
+                if (filters) {
+                    canCopy = (typeof filters === 'string' ? new RegExp(filters, 'i') : filters).test(file);
+                }
+                if (canCopy) {
+                    code = fs.readFileSync(srcFile + file, encode);
+                    fs.writeFileSync(destFile + file, code, encode);
+                }
+            }
+        });
+    } else {
+        canCopy = true;
+        if (filters) {
+            canCopy = (typeof filters === 'string' ? new RegExp(filters, 'i') : filters).test(src);
+        }
+        if (canCopy) {
+            code = fs.readFileSync(srcFile, encode);
+            fs.writeFileSync(destFile, code, encode);
+        }
+    }
 };
 
 function processPackage(package) {
@@ -178,11 +190,7 @@ function processBuild(build) {
 }
 
 function copyResource(resource) {
-    var srcDir = BASE_DIR + resource.src,
-        destDir = outputDir + resource.dest,
-        filters = resource.filters;
-    
-    copydirSync(srcDir, destDir, filters, ENCODING);
+    copydirSync(BASE_DIR, resource.src, outputDir, resource.dest, resource.filters, ENCODING);
 }
 
 function buildProject() {

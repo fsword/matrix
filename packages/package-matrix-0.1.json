@@ -164,6 +164,21 @@
             "src": "test/",
             "dest": "test/",
             "filters": ".*"
+        },
+        {
+            "src": "bootstrap.js",
+            "dest": "bootstrap.js",
+            "filters": ".*"
+        },
+        {
+            "src": "MIT-LICENSE.md",
+            "dest": "MIT-LICENSE.md",
+            "filters": ".*"
+        },
+        {
+            "src": "README.md",
+            "dest": "README.md",
+            "filters": ".*"
         }
     ]
 }
