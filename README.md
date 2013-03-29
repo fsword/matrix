@@ -7,6 +7,8 @@ Matrix构建在jQuery Mobile 1.3.0之上，提供模版引擎、MVC框架，辅�
 
 # Hello World!
 
+学习Matrix非常简单，从第一个例子[Hello World](examples/helloword/ "Example")开始吧
+
 ```
 MX.ready('klass', function(X, Klass) {
     var DemoView = Klass.define({
