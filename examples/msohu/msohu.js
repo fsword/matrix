@@ -1,7 +1,5 @@
 MX.ready('jquery', 'klass', 'localstorage', function(X, $, Klass, LocalStorage) {
     
-    LocalStorage.globalPrefix = 'msohu/';
-    
     var IndexView = Klass.define({
         alias: 'msohu.indexview',
         
@@ -19,6 +17,10 @@ MX.ready('jquery', 'klass', 'localstorage', function(X, $, Klass, LocalStorage) 
         alias: 'msohu.indexcontroller',
         
         extend: 'controller',
+        
+        delegates: {
+            'click .nav_tool > a': 'showMessage'
+        },
         
         onPageShow: function() {
             var body = this.getBody();
@@ -50,11 +52,35 @@ MX.ready('jquery', 'klass', 'localstorage', function(X, $, Klass, LocalStorage) 
             });
         },
         
+        showMessage: function(e) {
+            e.preventDefault();
+            showMessage();
+        },
+        
         onDestroy: function() {
             this.scroll.destroy();
             this.scroll = null;
         }
     });
+    
+    var msgEl = $('<div class="lay miniPop" style="opacity: 0; top: 278.5px; visibility: hidden;"><div class="cnt">这仅仅是一个demo，没有这个功能</div></div>');
+    $('body').append(msgEl);
+    var isMsgElShow;
+    function showMessage() {
+        if (!isMsgElShow) {
+            isMsgElShow = true;
+            msgEl.css('visibility', 'visible');
+            msgEl.one('webkitTransitionEnd transitionend', function() {
+                msgElHideTimeout = setTimeout(function() {
+                    msgEl.css('visibility', 'hidden').css('opacity', 0);
+                    isMsgElShow = false;
+                }, 2000);
+            });
+            msgEl.css('opacity', 1);
+        }
+    };
+    
+    LocalStorage.globalPrefix = 'msohu/';
     
     var config = {
         templateVersion: '1.0',

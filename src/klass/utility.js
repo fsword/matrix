@@ -187,7 +187,7 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
                 scope = undefined;
             }
             
-            if (!item.$isClass) {
+            if (!item.$isInstance) {
                 isClass = false;
                 item = $(item);
                 if (item.length > 1) {
@@ -239,7 +239,7 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
          * @param {Object} scope (optional) 处理函数作用域
          */
         mun: function(item, types, selector, fn, scope) {
-            var isClass = item.$isClass,
+            var isClass = item.$isInstance,
                 event,
                 type,
                 i, len;
