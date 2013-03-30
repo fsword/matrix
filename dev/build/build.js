@@ -110,9 +110,15 @@ var copyFile = function(src, dest, file, filters, encode) {
             });
         } else {
             code = fs.readFileSync(src, encode);
-            match = code.match(/<script type="text\/javascript" id="bootstrap" src="(.*)"><\/script>/);
-            if (match && match[0]) {
-                code = code.replace(match[0], '<script type="text/javascript" src="../../matrix.min.js"></script>');
+            if (/\.html$/i.test(file)) {
+                match = code.match(/<script type="text\/javascript" id="bootstrap" src="(.*)"><\/script>/);
+                if (match && match[0]) {
+                    code = code.replace(match[0], '<script type="text/javascript" src="../../matrix.min.js"></script>');
+                }
+                match = code.match(/<html data\-manifest="appcache.manifest">/);
+                if (match && match[0]) {
+                    code = code.replace(match[0], '<html manifest="appcache.manifest">');
+                }
             }
             fs.writeFileSync(dest, code, encode);
         }
