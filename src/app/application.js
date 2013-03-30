@@ -73,8 +73,6 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
             this.stores = {};
             this.pagelets = {};
             
-            this.baseUrl = window.location.href;
-            
             // pagelet缓存池
             this.pageletCaches = this.pageletCaches || [];
         },
