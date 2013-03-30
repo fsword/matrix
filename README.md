@@ -39,4 +39,4 @@ MX.ready('klass', function(X, Klass) {
 你可以直接从手机浏览器打开[手机搜狐概念版（向Zaker致敬） WebApp](http://mxjs.github.com/matrix/dev/examples/msohu/index.html "手机搜狐概念版（向Zaker致敬）")，为了达到最佳展示效果，你需要将这个WebApp添加到你的桌面。
 
 直接用手机扫描下面的二维码，就可以访问[手机搜狐概念版（向Zaker致敬） WebApp](http://mxjs.github.com/matrix/dev/examples/msohu/index.html "手机搜狐概念版（向Zaker致敬）")
-https://github.com/mxjs/matrix/blob/master/examples/msohu/qrcode.png
+![QR Code](https://github.com/mxjs/matrix/blob/master/examples/msohu/qrcode.png)
