@@ -32,7 +32,7 @@ ul {
     -webkit-box-sizing: border-box;
     width: 100%;
     overflow: hidden;
-    background: url("background.jpg") no-repeat;
+    background: url("background.png") no-repeat;
     background-size: 480px;
 }
 .index-content.slip {
