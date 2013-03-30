@@ -2,8 +2,6 @@
  * @class MX.app.Model
  */
 MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
-    "use strict";
-    
     X.app.Model = Klass.define({
         // private
         alias: 'model',

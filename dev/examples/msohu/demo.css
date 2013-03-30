@@ -202,9 +202,107 @@ ul {
 }
 
 .winPage .front {
-    -webkit-transform: translateZ(1px);
+    -webkit-transform: translateZ(0px);
 }
 
 .winPage .back {
     -webkit-transform: scale(-1, 1) translateZ(-1px);
+}
+
+.favourite {
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
+.favourite img {
+    width: 100%;
+    height: 100%;
+}
+
+.favourite .cnt {
+    position: absolute;
+    left: 108px;
+    bottom: 50px;
+    color: #fff;
+    font-weight: 900;
+}
+
+.animated{-webkit-animation-fill-mode:both;-moz-animation-fill-mode:both;-ms-animation-fill-mode:both;-o-animation-fill-mode:both;animation-fill-mode:both;-webkit-animation-duration:0.7s;-moz-animation-duration:0.7s;-ms-animation-duration:0.7s;-o-animation-duration:0.7s;animation-duration:0.7s;}
+.animated.hinge{-webkit-animation-duration:2s;-moz-animation-duration:2s;-ms-animation-duration:2s;-o-animation-duration:2s;animation-duration:2s;}
+@-webkit-keyframes bounceInDown {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateY(-500px);
+    }
+    55% {
+        opacity: 1;
+        -webkit-transform: translateY(0px);
+    }
+    75% {
+        -webkit-transform: translateY(-80px);
+    }
+    100% {
+        -webkit-transform: translateY(0);
+    }
+}
+@-moz-keyframes bounceInDown {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateY(-500px);
+    }
+    55% {
+        opacity: 1;
+        -webkit-transform: translateY(0px);
+    }
+    75% {
+        -webkit-transform: translateY(-80px);
+    }
+    100% {
+        -webkit-transform: translateY(0);
+    }
+}
+@-o-keyframes bounceInDown {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateY(-500px);
+    }
+    55% {
+        opacity: 1;
+        -webkit-transform: translateY(0px);
+    }
+    75% {
+        -webkit-transform: translateY(-80px);
+    }
+    100% {
+        -webkit-transform: translateY(0);
+    }
+}
+@keyframes bounceInDown {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateY(-500px);
+    }
+    55% {
+        opacity: 1;
+        -webkit-transform: translateY(0px);
+    }
+    75% {
+        -webkit-transform: translateY(-80px);
+    }
+    100% {
+        -webkit-transform: translateY(0);
+    }
+}
+.bounceInDown {
+    -webkit-animation-name: bounceInDown;
+    -moz-animation-name: bounceInDown;
+    -o-animation-name: bounceInDown;
+    animation-name: bounceInDown;
+}
+.favouriteOut {
+    -webkit-transition: all 300ms ease;
 }

@@ -2,8 +2,6 @@
  * @class MX.app.View
  */
 MX.kindle('jquery', 'klass', function(X, $, Klass) {
-    "use strict";
-    
     X.app.View = Klass.define({
         // private
         alias: 'view',

@@ -25,8 +25,6 @@
  * 
  */
 MX.kindle('jquery', 'klass', function(X, $, Klass) {
-    "use strict";
-    
     var eventPropRe = /^(?:scope|delay|buffer|single|stopEvent|preventDefault|stopPropagation|normalized|args|delegate)$/;
     
     function createSingle(e, en, fn, scope){
@@ -247,8 +245,6 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
  * 抽象类，实现了类事件，对象实例化与销毁生命周期
  */
 MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
-    "use strict";
-    
     var idSeed = 1000,
         eventPropRe = /^(?:scope|delay|buffer|single|stopEvent|preventDefault|stopPropagation|normalized|args|delegate)$/;
     

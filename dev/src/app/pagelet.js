@@ -2,8 +2,6 @@
  * @class MX.app.Pagelet
  */
 MX.kindle('jquery', 'klass', function(X, $, Klass) {
-    "use strict";
-    
     var paramNameRe = /(:|\*)\w+/g; // 匹配URL中的参数名
     
     X.app.Pagelet = Klass.define({

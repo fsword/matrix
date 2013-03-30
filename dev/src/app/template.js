@@ -2,8 +2,6 @@
  * @class MX.app.Template
  */
 MX.kindle('jquery', 'arttemplate', 'klass', function(X, $, artTemplate, Klass) {
-    "use strict";
-    
     X.app.Template = Klass.define({
         // private
         alias: 'template',

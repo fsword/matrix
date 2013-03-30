@@ -10,8 +10,6 @@ window.MX = {
 };
 
 (function(X) {
-    "use strict";
-    
     var slice = Array.prototype.slice,
         toString = Object.prototype.toString,
         $ = window.jQuery,
@@ -346,8 +344,6 @@ window.MX = {
  * @class MX.klass.KlassManager
  */
 (function(X) {
-    "use strict";
-    
     X.klass.KlassManager = function() {
         var classes = {};
         
@@ -392,8 +388,6 @@ window.MX = {
  * 所有使用Class.define()方法声明类的基类
  */
 MX.kindle('jquery', function(X, $) {
-    "use strict";
-    
     var enumerables = ['hasOwnProperty', 'valueOf', 'isPrototypeOf', 'propertyIsEnumerable', 'toLocaleString', 'toString', 'constructor'],
         noArgs = [],
         TemplateClass = function() {},
@@ -513,8 +507,6 @@ MX.kindle('jquery', function(X, $) {
  * 声明类，类的继承，重写类方法
  */
 MX.kindle('base', 'klassmanager', function(X, Base, KlassManager) {
-    "use strict";
-    
     var makeCtor = function() {
         function constructor() {
             return this.constructor.apply(this, arguments) || null;

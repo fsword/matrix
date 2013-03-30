@@ -4,8 +4,6 @@
  * 所有使用Class.define()方法声明类的基类
  */
 MX.kindle('jquery', function(X, $) {
-    "use strict";
-    
     var enumerables = ['hasOwnProperty', 'valueOf', 'isPrototypeOf', 'propertyIsEnumerable', 'toLocaleString', 'toString', 'constructor'],
         noArgs = [],
         TemplateClass = function() {},

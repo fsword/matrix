@@ -15510,8 +15510,6 @@ window.MX = {
 };
 
 (function(X) {
-    "use strict";
-    
     var slice = Array.prototype.slice,
         toString = Object.prototype.toString,
         $ = window.jQuery,
@@ -15846,8 +15844,6 @@ window.MX = {
  * @class MX.klass.KlassManager
  */
 (function(X) {
-    "use strict";
-    
     X.klass.KlassManager = function() {
         var classes = {};
         
@@ -15892,8 +15888,6 @@ window.MX = {
  * 所有使用Class.define()方法声明类的基类
  */
 MX.kindle('jquery', function(X, $) {
-    "use strict";
-    
     var enumerables = ['hasOwnProperty', 'valueOf', 'isPrototypeOf', 'propertyIsEnumerable', 'toLocaleString', 'toString', 'constructor'],
         noArgs = [],
         TemplateClass = function() {},
@@ -16013,8 +16007,6 @@ MX.kindle('jquery', function(X, $) {
  * 声明类，类的继承，重写类方法
  */
 MX.kindle('base', 'klassmanager', function(X, Base, KlassManager) {
-    "use strict";
-    
     var makeCtor = function() {
         function constructor() {
             return this.constructor.apply(this, arguments) || null;
@@ -16177,8 +16169,6 @@ MX.kindle('base', 'klassmanager', function(X, Base, KlassManager) {
  * 
  */
 MX.kindle('jquery', 'klass', function(X, $, Klass) {
-    "use strict";
-    
     var eventPropRe = /^(?:scope|delay|buffer|single|stopEvent|preventDefault|stopPropagation|normalized|args|delegate)$/;
     
     function createSingle(e, en, fn, scope){
@@ -16399,8 +16389,6 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
  * 抽象类，实现了类事件，对象实例化与销毁生命周期
  */
 MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
-    "use strict";
-    
     var idSeed = 1000,
         eventPropRe = /^(?:scope|delay|buffer|single|stopEvent|preventDefault|stopPropagation|normalized|args|delegate)$/;
     
@@ -19080,8 +19068,6 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
  * @class MX.app.Template
  */
 MX.kindle('jquery', 'arttemplate', 'klass', function(X, $, artTemplate, Klass) {
-    "use strict";
-    
     X.app.Template = Klass.define({
         // private
         alias: 'template',
@@ -19133,8 +19119,6 @@ MX.kindle('jquery', 'arttemplate', 'klass', function(X, $, artTemplate, Klass) {
  * @class MX.app.Model
  */
 MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
-    "use strict";
-    
     X.app.Model = Klass.define({
         // private
         alias: 'model',
@@ -19686,8 +19670,6 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
  * @class MX.app.Store
  */
 MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
-    "use strict";
-    
     X.app.Store = Klass.define({
         // private
         alias: 'store',
@@ -20233,8 +20215,6 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
  * @class MX.app.View
  */
 MX.kindle('jquery', 'klass', function(X, $, Klass) {
-    "use strict";
-    
     X.app.View = Klass.define({
         // private
         alias: 'view',
@@ -20372,8 +20352,6 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
  * @class MX.app.Controller
  */
 MX.kindle('klass', function(X, Klass) {
-    "use strict";
-    
     X.app.Controller = Klass.define({
         // private
         alias: 'controller',
@@ -20503,6 +20481,20 @@ MX.kindle('klass', function(X, Klass) {
             return this.view.body;
         },
         
+        /**
+         * 获取container element
+         */
+        getContainer: function() {
+            return this.view.container;
+        },
+        
+        /**
+         * 获取container element
+         */
+        getCt: function() {
+            return this.getContainer();
+        },
+        
         // private
         onDestroy: function() {
             this.view = null;
@@ -20514,8 +20506,6 @@ MX.kindle('klass', function(X, Klass) {
  * @class MX.app.Pagelet
  */
 MX.kindle('jquery', 'klass', function(X, $, Klass) {
-    "use strict";
-    
     var paramNameRe = /(:|\*)\w+/g; // 匹配URL中的参数名
     
     X.app.Pagelet = Klass.define({
@@ -20739,8 +20729,6 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
  * @class MX.app.Application
  */
 MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, LocalStorage, Pagelet) {
-    "use strict";
-    
     var $window = $(window),
         location = window.location,
         matchHashRe = /#(.*)$/, // 匹配url中的hash部分

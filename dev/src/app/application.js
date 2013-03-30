@@ -2,8 +2,6 @@
  * @class MX.app.Application
  */
 MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, LocalStorage, Pagelet) {
-    "use strict";
-    
     var $window = $(window),
         location = window.location,
         matchHashRe = /#(.*)$/, // 匹配url中的hash部分
