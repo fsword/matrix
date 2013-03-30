@@ -4,8 +4,6 @@
  * 声明类，类的继承，重写类方法
  */
 MX.kindle('base', 'klassmanager', function(X, Base, KlassManager) {
-    "use strict";
-    
     var makeCtor = function() {
         function constructor() {
             return this.constructor.apply(this, arguments) || null;

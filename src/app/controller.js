@@ -2,8 +2,6 @@
  * @class MX.app.Controller
  */
 MX.kindle('klass', function(X, Klass) {
-    "use strict";
-    
     X.app.Controller = Klass.define({
         // private
         alias: 'controller',
@@ -131,6 +129,20 @@ MX.kindle('klass', function(X, Klass) {
          */
         getBody: function() {
             return this.view.body;
+        },
+        
+        /**
+         * 获取container element
+         */
+        getContainer: function() {
+            return this.view.container;
+        },
+        
+        /**
+         * 获取container element
+         */
+        getCt: function() {
+            return this.getContainer();
         },
         
         // private

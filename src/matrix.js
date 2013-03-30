@@ -10,8 +10,6 @@ window.MX = {
 };
 
 (function(X) {
-    "use strict";
-    
     var slice = Array.prototype.slice,
         toString = Object.prototype.toString,
         $ = window.jQuery,

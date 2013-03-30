@@ -25,8 +25,6 @@
  * 
  */
 MX.kindle('jquery', 'klass', function(X, $, Klass) {
-    "use strict";
-    
     var eventPropRe = /^(?:scope|delay|buffer|single|stopEvent|preventDefault|stopPropagation|normalized|args|delegate)$/;
     
     function createSingle(e, en, fn, scope){

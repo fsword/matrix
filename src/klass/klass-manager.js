@@ -2,8 +2,6 @@
  * @class MX.klass.KlassManager
  */
 (function(X) {
-    "use strict";
-    
     X.klass.KlassManager = function() {
         var classes = {};
         

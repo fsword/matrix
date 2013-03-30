@@ -2,8 +2,6 @@
  * @class MX.app.Store
  */
 MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
-    "use strict";
-    
     X.app.Store = Klass.define({
         // private
         alias: 'store',
