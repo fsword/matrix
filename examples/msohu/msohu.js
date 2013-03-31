@@ -112,7 +112,7 @@ MX.ready('jquery', 'klass', 'localstorage', function(X, $, Klass, LocalStorage) 
     var favEl, touchCoords, favCount = 0, resetFavCount, idiotMsg = ['姐姐，别玩了，有意思么', '有时间干点正事吧', '你也太无聊了吧'];
     function showFavourite() {
         if (!favEl) {
-            favEl = $('<div class="favourite"><img src="favourite.png" /><div class="cnt">长按图片下载</div></div>');
+            favEl = $('<div class="favourite"><div class="title">MATRIX</div><img src="favourite.png" class="img" /><a href="#0" class="download" /></div>');
             $body.append(favEl);
         }
         favEl.one('webkitAnimationEnd animationend', function() {
