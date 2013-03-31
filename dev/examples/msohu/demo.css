@@ -219,28 +219,43 @@ ul {
     -webkit-transform: translateY(-1000px);
 }
 
-.favourite img {
+.favourite .img {
     width: 100%;
     height: 100%;
 }
 
-.favourite .cnt {
+@font-face {
+    font-family: "Transformers";
+    src: url("Transformers.ttf") format("truetype");
+}
+
+.favourite .title {
     position: absolute;
-    left: 110px;
-    bottom: 50px;
-    color: #fff;
-    font-weight: 900;
+    left: 30px;
+    top: 30px;
+    font: bold 60px Transformers, Helvetica, sans-serif;
+    color: #bbb;
+    opacity: 0.8;
+}
+
+.favourite .download {
+    position: absolute;
+    left: 30px;
+    bottom: 30px;
+    display: block;
+    width: 24px;
+    height: 24px;
+    background-size: 24px 24px;
+    background: url(../share/icon/download-24.png) center center no-repeat;
 }
 
 .animated{-webkit-animation-fill-mode:both;-moz-animation-fill-mode:both;-ms-animation-fill-mode:both;-o-animation-fill-mode:both;animation-fill-mode:both;-webkit-animation-duration:0.7s;-moz-animation-duration:0.7s;-ms-animation-duration:0.7s;-o-animation-duration:0.7s;animation-duration:0.7s;}
 .animated.hinge{-webkit-animation-duration:2s;-moz-animation-duration:2s;-ms-animation-duration:2s;-o-animation-duration:2s;animation-duration:2s;}
 @-webkit-keyframes bounceInDown {
     0% {
-        opacity: 0;
         -webkit-transform: translateY(-500px);
     }
     55% {
-        opacity: 1;
         -webkit-transform: translateY(0px);
     }
     75% {
@@ -252,11 +267,9 @@ ul {
 }
 @-moz-keyframes bounceInDown {
     0% {
-        opacity: 0;
         -webkit-transform: translateY(-500px);
     }
     55% {
-        opacity: 1;
         -webkit-transform: translateY(0px);
     }
     75% {
@@ -268,11 +281,9 @@ ul {
 }
 @-o-keyframes bounceInDown {
     0% {
-        opacity: 0;
         -webkit-transform: translateY(-500px);
     }
     55% {
-        opacity: 1;
         -webkit-transform: translateY(0px);
     }
     75% {
@@ -284,11 +295,9 @@ ul {
 }
 @keyframes bounceInDown {
     0% {
-        opacity: 0;
         -webkit-transform: translateY(-500px);
     }
     55% {
-        opacity: 1;
         -webkit-transform: translateY(0px);
     }
     75% {
