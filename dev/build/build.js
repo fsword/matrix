@@ -89,7 +89,7 @@ var copyFile = function(src, dest, file, filters, encode) {
         canCopy = (typeof filters === 'string' ? new RegExp(filters, 'i') : filters).test(file);
     }
     if (canCopy) {
-        if (/\.(bmp|jpg|gif|jpeg|png)$/i.test(file)) {
+        if (!/\.(html|js|css)$/i.test(file)) {
             var rOption = {
                 flags: 'r',
                 encoding: null,
