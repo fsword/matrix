@@ -187,9 +187,6 @@ MX.ready('jquery', 'klass', 'localstorage', function(X, $, Klass, LocalStorage) 
     var config = {
         templateVersion: '1.0',
         templateUrl: 'main.tmpl',
-        databaseName: 'msohu',
-        databaseDescription: 'msohu offline database',
-        databaseExpires: 3 * 24 * 60 * 60 * 1000, // 3天后过期
         models: [
             {
                 id: "list-model"
