@@ -1,4 +1,5 @@
-MX.ready('jquery', 'klass', 'localstorage', function(X, $, Klass, LocalStorage) {
+MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 
+function(X, $, Klass, LocalStorage, iScrollUtil, TouchHolder) {
     var $body = $('body');
     
     var IndexView = Klass.define({
@@ -13,12 +14,9 @@ MX.ready('jquery', 'klass', 'localstorage', function(X, $, Klass, LocalStorage) 
     var IndexController = Klass.define({
         alias: 'msohu.indexcontroller',
         extend: 'controller',
-        delegates: {
-            'click .nav_tool > a': 'showMessage'
-        },
         onPageShow: function() {
             var body = this.getBody();
-            this.scroll = X.util.iScrollUtil.createScroll('h', body, {
+            this.scroll = iScrollUtil.createScroll('h', body, {
                 snap: true,
                 momentum: false,
                 hScrollbar: false,
@@ -45,74 +43,45 @@ MX.ready('jquery', 'klass', 'localstorage', function(X, $, Klass, LocalStorage) 
                 }
             });
             showFavourite();
-            this.mon(this.getCt(), 'touchstart', this.onTouchStart);
+            this.initHolder();
         },
         onPageHide: function() {
-            this.mun(this.getCt(), 'touchstart', this.onTouchStart);
+            this.destroyHolder();
         },
-        showMessage: function(e) {
-            e.preventDefault();
-            showMessage('这仅仅是一个demo，没有这个功能');
-        },
-        onTouchStart: function(e) {
-            this.mun(this.getCt(), 'touchmove', this.onTouchMove);
-            this.mun(this.getCt(), 'touchend', this.onTouchEnd);
-            this.mon(this.getCt(), 'touchmove', this.onTouchMove);
-            this.mon(this.getCt(), 'touchend', this.onTouchEnd);
-            delete this.touchMoveVertical;
-            this.touchCoords = {};
-            this.touchCoords.startX = e.originalEvent.touches[0].pageX;
-            this.touchCoords.startY = e.originalEvent.touches[0].pageY;
-            this.touchCoords.timeStamp = e.timeStamp;
-        },
-        onTouchMove: function(e) {
-            if (!this.touchCoords) {
-                return;
-            }
-            this.touchCoords.stopX = e.originalEvent.touches[0].pageX;
-            this.touchCoords.stopY = e.originalEvent.touches[0].pageY;
-            var offsetX = this.touchCoords.startX - this.touchCoords.stopX,
-                offsetY = this.touchCoords.startY - this.touchCoords.stopY,
-                absX = Math.abs(offsetX),
-                absY = Math.abs(offsetY),
-                isPreventDefault;
-            if (MX.isDefined(this.touchMoveVertical)) {
-                if (offsetY != 0) {
-                    e.preventDefault();
-                }
-            } else {
-                if (absY > absX) {
-                    this.touchMoveVertical = true;
-                    if (offsetX != 0) {
-                        e.preventDefault();
-                    }
-                } else {
-                    delete this.touchCoords;
-                    return;
-                }
+        initHolder: function() {
+            if (!this.holder) {
+                this.holder = new TouchHolder({
+                    target: this.getCt(),
+                    type: 'v',
+                    scope: this,
+                    handleTouchEnd: this.onTouchEnd
+                });
             }
         },
-        onTouchEnd: function(e) {
-            this.mun(this.getCt(), 'touchmove', this.onTouchMove);
-            this.mun(this.getCt(), 'touchend', this.onTouchEnd);
-            if (!this.touchCoords) {
-                return;
-            }
-            if (this.touchCoords.stopY - this.touchCoords.startY > 100) {
+        onTouchEnd: function() {
+            if (this.holder.touchCoords.stopY - this.holder.touchCoords.startY > 100) {
                 showFavourite();
+            }
+        },
+        destroyHolder: function() {
+            if (this.holder) {
+                this.holder.destroy();
             }
         },
         onDestroy: function() {
             this.callParent();
             this.scroll.destroy();
             this.scroll = null;
+            this.destroyHolder();
         }
     });
     
+    
+    // 欢迎页 start *********************************************
     var favEl, touchCoords, favCount = 0, resetFavCount, idiotMsg = ['姐姐，别玩了，有意思么', '有时间干点正事吧', '你也太无聊了吧'];
     function showFavourite() {
         if (!favEl) {
-            favEl = $('<div class="favourite"><div class="title">MATRIX</div><img src="favourite.png" class="img" /><a href="#0" class="download" /></div>');
+            favEl = $('<div class="favourite"><div class="title">MATRIX</div><img src="favourite.png" class="img" /><a href="#0" class="download" data-message="true"></a></div>');
             $body.append(favEl);
         }
         favEl.one('webkitAnimationEnd animationend', function() {
@@ -148,10 +117,12 @@ MX.ready('jquery', 'klass', 'localstorage', function(X, $, Klass, LocalStorage) 
     function bodyTouchEnd(e) {
         $body.off('touchmove', bodyTouchMove);
         $body.off('touchend', bodyTouchEnd);
-        favEl.one('webkitTransitionEnd transitionend', function() {
-            favEl.removeClass('favouriteOut');
-        });
-        favEl.addClass('favouriteOut');
+        if (touchCoords.startY > touchCoords.stopY) {
+            favEl.one('webkitTransitionEnd transitionend', function() {
+                favEl.removeClass('favouriteOut');
+            });
+            favEl.addClass('favouriteOut');
+        }
         if ((touchCoords.stopY < touchCoords.startY && (e.timeStamp - touchCoords.timeStamp < 100)) ||
             (touchCoords.stopY - touchCoords.startY < -100)) {
             $body.off('touchstart', bodyTouchStart);
@@ -163,7 +134,10 @@ MX.ready('jquery', 'klass', 'localstorage', function(X, $, Klass, LocalStorage) 
             favEl.css('-webkit-transform', 'translateY(0px)');
         }
     };
+    // 欢迎页 end *********************************************
     
+    
+    // 消息提示 start *********************************************
     var msgEl = $('<div class="lay miniPop" style="opacity: 0; top: 278.5px; visibility: hidden;"><div class="cnt"></div></div>');
     $body.append(msgEl);
     var isMsgElShow;
@@ -182,10 +156,39 @@ MX.ready('jquery', 'klass', 'localstorage', function(X, $, Klass, LocalStorage) 
         }
     };
     
-    LocalStorage.globalPrefix = 'msohu/';
+    $body.delegate('[data-message]', 'click', function(e) {
+        e.preventDefault();
+        var msg = $(e.target).attr('data-message');
+        showMessage(msg != 'true' ? msg : '这仅仅是一个demo，没有这个功能');
+    });
+    // 消息提示 end *********************************************
     
+    
+    // 模拟加载进度 start *********************************************
+    var numEl = $('#startUpView div.num'),
+        count = 0,
+        countDownTimeout;
+    function countDown() {
+        count += parseInt(Math.random() * 10 + 1);
+        count = count > 100 ? 100 : count;
+        numEl.html(count + '%');
+        if (count < 100) {
+            countDownTimeout = setTimeout(countDown, 70);
+        }
+    };
+    countDown();
+    X.App.on('pagechange', function() {
+        clearTimeout(countDownTimeout);
+        numEl.html('100%');
+    }, window, {
+        single: true
+    });
+    // 模拟加载进度 end *********************************************
+    
+    
+    LocalStorage.globalPrefix = 'msohu/';
     var config = {
-        templateVersion: '1.0',
+        templateVersion: '1.1',
         templateUrl: 'main.tmpl',
         models: [
             {
@@ -210,25 +213,5 @@ MX.ready('jquery', 'klass', 'localstorage', function(X, $, Klass, LocalStorage) 
         ],
         welcome: 'h'
     };
-    
-    var numEl = $('#startUpView div.num'),
-        count = 0,
-        countDownTimeout;
-    function countDown() {
-        count += parseInt(Math.random() * 10 + 1);
-        count = count > 100 ? 100 : count;
-        numEl.html(count + '%');
-        if (count < 100) {
-            countDownTimeout = setTimeout(countDown, 70);
-        }
-    };
-    countDown();
-    X.App.on('pagechange', function() {
-        clearTimeout(countDownTimeout);
-        numEl.html('100%');
-    }, window, {
-        single: true
-    });
-    
     X.App.launch(config);
 });

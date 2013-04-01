@@ -86,51 +86,51 @@ ul {
 }
 
 .winBox .wLi .ico-home {
-    background: url(../share/icon/home-4-48.png) no-repeat center center;
+    background: url(../share/icons/home-4-48.png) no-repeat center center;
 }
 
 .winBox .wLi .ico-news {
-    background: url(../share/icon/newspaper-8-48.png) no-repeat center center;
+    background: url(../share/icons/newspaper-8-48.png) no-repeat center center;
 }
 
 .winBox .wLi .ico-finance {
-    background: url(../share/icon/money-21-48.png) no-repeat center center;
+    background: url(../share/icons/money-21-48.png) no-repeat center center;
 }
 
 .winBox .wLi .ico-ent {
-    background: url(../share/icon/vimeo-3-48.png) no-repeat center center;
+    background: url(../share/icons/vimeo-3-48.png) no-repeat center center;
 }
 
 .winBox .wLi .ico-sport {
-    background: url(../share/icon/basketball-10-48.png) no-repeat center center;
+    background: url(../share/icons/basketball-10-48.png) no-repeat center center;
 }
 
 .winBox .wLi .ico-tech {
-    background: url(../share/icon/network-6-48.png) no-repeat center center;
+    background: url(../share/icons/network-6-48.png) no-repeat center center;
 }
 
 .winBox .wLi .ico-woman {
-    background: url(../share/icon/woman-2-48.png) no-repeat center center;
+    background: url(../share/icons/woman-2-48.png) no-repeat center center;
 }
 
 .winBox .wLi .ico-auto {
-    background: url(../share/icon/auto-rickshaw-2-48.png) no-repeat center center;
+    background: url(../share/icons/auto-rickshaw-2-48.png) no-repeat center center;
 }
 
 .winBox .wLi .ico-auto {
-    background: url(../share/icon/auto-rickshaw-2-48.png) no-repeat center center;
+    background: url(../share/icons/auto-rickshaw-2-48.png) no-repeat center center;
 }
 
 .winBox .wLi .ico-astro {
-    background: url(../share/icon/compass-22-48.png) no-repeat center center;
+    background: url(../share/icons/compass-22-48.png) no-repeat center center;
 }
 
 .winBox .wLi .ico-joke {
-    background: url(../share/icon/emoticon-34-48.png) no-repeat center center;
+    background: url(../share/icons/emoticon-34-48.png) no-repeat center center;
 }
 
 .winBox .wLi .ico-plus {
-    background: url(../share/icon/plus-48.png) no-repeat center center;
+    background: url(../share/icons/plus-48.png) no-repeat center center;
     margin-top: 26px;
 }
 
@@ -156,15 +156,15 @@ ul {
 }
 
 .nav_tool .download {
-    background: url(../share/icon/download-24.png) center center no-repeat;
+    background: url(../share/icons/download-24.png) center center no-repeat;
 }
 
 .nav_tool .manage {
-    background: url(../share/icon/gear-4-24.png) center center no-repeat;
+    background: url(../share/icons/gear-4-24.png) center center no-repeat;
 }
 
 .nav_tool .add {
-    background: url(../share/icon/add-24.png) center center no-repeat;
+    background: url(../share/icons/add-24.png) center center no-repeat;
 }
 
 .winPage {
@@ -246,7 +246,7 @@ ul {
     width: 24px;
     height: 24px;
     background-size: 24px 24px;
-    background: url(../share/icon/download-24.png) center center no-repeat;
+    background: url(../share/icons/download-24.png) center center no-repeat;
 }
 
 .animated{-webkit-animation-fill-mode:both;-moz-animation-fill-mode:both;-ms-animation-fill-mode:both;-o-animation-fill-mode:both;animation-fill-mode:both;-webkit-animation-duration:0.7s;-moz-animation-duration:0.7s;-ms-animation-duration:0.7s;-o-animation-duration:0.7s;animation-duration:0.7s;}

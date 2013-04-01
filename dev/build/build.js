@@ -1,5 +1,5 @@
 /*!
- * 打包命令：node build.js -p [projectName] -v [version] -b [buildNumber]
+ * 打包命令：node build.js -p [projectName] -b [buildNumber]
  * 
  * node build.js -h 查看使用帮助
  * 
@@ -14,22 +14,19 @@ var program = require('commander'),
     pro = require("uglify-js").uglify;
 
 program
-    .usage('node build.js -p [projectName] -v [version] -b [buildNumber]')
+    .usage('node build.js -p [projectName] -b [buildNumber]')
     .option('-p, --project [value]', '项目名称')
-    .option('-v, --ver [value]', '版本号')
     .option('-b, --build [value]', '编译版本号')
     .parse(process.argv);
 
 var BASE_DIR = '../',
-    PACKAGE_DIR = BASE_DIR + 'packages/',
     SRC_DIR = BASE_DIR + 'src/',
     OUTPUT_DIR = BASE_DIR + 'tags/',
     ENCODING = 'utf8';
 
 var projectName = program.project,
-    version = program.ver,
     buildNumber = program.build,
-    tag = version + '.' + buildNumber,
+    tag,
     license,
     packageMap = {},
     outputDir = OUTPUT_DIR;
@@ -45,9 +42,6 @@ function err(msg) {
 
 if (!projectName) {
     err('缺少参数<-p or --project>');
-}
-if (!version) {
-    err('缺少参数<-b or --ver>');
 }
 if (!buildNumber) {
     err('缺少参数<-b or --build>');
@@ -221,7 +215,7 @@ function copyResource(resource) {
 }
 
 function buildProject() {
-    var packagePath = PACKAGE_DIR + 'package-' + projectName + '-' + version + '.json',
+    var packagePath = BASE_DIR + 'package-' + projectName + '.json',
         packageConfig,
         packages,
         builds,
@@ -240,6 +234,7 @@ function buildProject() {
         packages = packageConfig.packages;
         builds = packageConfig.builds;
         resources = packageConfig.resources;
+        tag = packageConfig.version + '.' + buildNumber,
         
         wrapLicense();
         

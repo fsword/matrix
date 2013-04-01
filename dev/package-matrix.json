@@ -1,6 +1,7 @@
 {
     "projectName": "Matrix",
     "license": "Matrix - A Mobile WebApp Framework\nhttp://github.com/mxjs/matrix\n\nAuthor: max<zhangdaiping@gmail.com>\n\nThis version of Matrix is licensed under the MIT License.\nhttp://github.com/mxjs/matrix/blob/master/MIT-LICENSE.md",
+    "version": "0.1",
     "packages": [
         {
             "name": "Third Party JavaScript Libraries",
@@ -141,11 +142,6 @@
             "filters": ".*"
         },
         {
-            "src": "packages/",
-            "dest": "packages/",
-            "filters": "package\\-matrix\\-0\\.1\\.json"
-        },
-        {
             "src": "src/",
             "dest": "src/",
             "filters": ".*"
@@ -163,6 +159,11 @@
         {
             "src": "test/",
             "dest": "test/",
+            "filters": ".*"
+        },
+        {
+            "src": "package-matrix.json",
+            "dest": "package-matrix.json",
             "filters": ".*"
         },
         {
