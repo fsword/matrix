@@ -100,4 +100,6 @@ MX.ready('jquery', function(X, $) {
             return new iScroll(wrapper[0] || wrapper, $.extend({}, options, config));
         }
     };
+    
+    X.reg('iscrollutil', X.util.iScrollUtil);
 });
