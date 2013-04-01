@@ -162,9 +162,8 @@
     
     var params = parseParams(bootstrapSrc),
         projectName = params.p,
-        version = params.v || '0.1',
         dependBuild = params.d,
-        packageFile = 'package-' + projectName + '-' + version + '.json',
+        packageFile = 'package-' + projectName + '.json',
         srcArr = bootstrapSrc.split('?'),
         jsBaseUrl = srcArr[0].substring(0, srcArr[0].length - 'bootstrap.js'.length),
         remoteBaseUrl = window.remoteBaseUrl || jsBaseUrl,
@@ -263,7 +262,7 @@
         }
     };
     
-    xhr.open('GET', remoteBaseUrl + 'packages/' + packageFile, true);
+    xhr.open('GET', remoteBaseUrl + packageFile, true);
     xhrTimeoutId = setTimeout(function() {
         if (xhr.readyState !== 4) {
             xhr.abort();
