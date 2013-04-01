@@ -16,6 +16,9 @@ function(X, $, Klass, LocalStorage, iScrollUtil, TouchHolder) {
         extend: 'controller',
         onPageShow: function() {
             var body = this.getBody();
+            var w = window.innerWidth;
+            body.find('.winBox').width(w * 2);
+            body.find('.winBox li').width(w);
             this.scroll = iScrollUtil.createScroll('h', body, {
                 snap: true,
                 momentum: false,
