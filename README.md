@@ -42,7 +42,7 @@ MX.ready('klass', function(X, Klass) {
 
 ## 一个比较完整的例子：手机搜狐
 
-你可以直接从手机浏览器打开[手机搜狐WebApp](http://mxjs.github.com/matrix/dev/examples/msohu/index.html "手机搜狐（向Zaker致敬）")，**为了达到最佳展示效果，请使用iphone safari打开，并将页面添加到你的桌面**。
+你可以直接从手机浏览器打开[手机搜狐WebApp](http://mxjs.github.com/matrix/dev/examples/msohu/index.html "手机搜狐（向Zaker致敬）")，__为了达到最佳展示效果，请使用iphone safari打开，并将页面添加到你的桌面__。
 
 直接用手机扫描下面的二维码，就可以访问[手机搜狐WebApp](http://mxjs.github.com/matrix/dev/examples/msohu/index.html "手机搜狐（向Zaker致敬）")
 

@@ -191,7 +191,7 @@ function(X, $, Klass, LocalStorage, iScrollUtil, TouchHolder) {
     
     LocalStorage.globalPrefix = 'msohu/';
     var config = {
-        templateVersion: '1.1',
+        templateVersion: '1.2',
         templateUrl: 'main.tmpl',
         models: [
             {
