@@ -342,15 +342,15 @@ ul {
 }
 
 @font-face {
-    font-family: "Transformers";
-    src: url("../Transformers.ttf") format("truetype");
+    font-family: "earth_normal";
+    src: url("../earth_normal.ttf") format("truetype");
 }
 
 .favourite .title {
     position: absolute;
     left: 30px;
     top: 30px;
-    font: bold 60px Transformers, Helvetica, sans-serif;
+    font: bold 60px earth_normal, Helvetica, sans-serif;
     color: #bbb;
     opacity: 0.8;
 }
