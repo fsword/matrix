@@ -68,9 +68,6 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                     this.header = $(document.createElement('div'));
                     this.header.attr('id', 'mx-app-page-header-' + this.id)
                                .attr('data' + $.mobile.ns + '-role', 'header');
-                    if (this.headerCls) {
-                        this.header.addClass(this.headerCls);
-                    }
                     this.renderHeaderTmpl.container = this.header;
                     this.renderHeaderTmpl.render();
                     container.append(this.header);
@@ -79,9 +76,6 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                 this.body = $(document.createElement('div'));
                 this.body.attr('id', 'mx-app-page-body-' + this.id)
                          .attr('data' + $.mobile.ns + '-role', 'content');
-                if (this.bodyCls) {
-                    this.body.addClass(this.bodyCls);
-                }
                 if (this.renderBodyTmpl) {
                     this.renderBodyTmpl.container = this.body;
                     this.renderBodyTmpl.render();
@@ -92,9 +86,6 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
 					this.footer = $(document.createElement('div'));
 					this.footer.attr('id', 'mx-app-page-footer-' + this.id)
 						.attr('data' + $.mobile.ns + '-role', 'footer');
-					if (this.footerCls) {
-						this.footer.addClass(this.footerCls);
-					}
 					this.renderFooterTmpl.container = this.footer;
 					this.renderFooterTmpl.render();
 					container.append(this.footer);

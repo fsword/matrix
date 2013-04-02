@@ -119,9 +119,7 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                 this.el.attr('id', 'mx-app-page-' + this.id)
                        .attr('data' + $.mobile.ns + '-role', 'page')
                        .attr('data' + $.mobile.ns + '-url', '#/' + this.hash);
-                if (this.cls) {
-                    this.el.addClass(this.cls);
-                }
+
                 container.append(this.el);
                 
                 if (this.view) {
@@ -152,6 +150,9 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         
         // private
         beforePageShow: function() {
+			if (this.cls) {
+				this.el.addClass(this.cls);
+			}
             if (this.controller) {
                 this.controller.beforePageShow();
                 this.controller.fireEvent('pagebeforeshow', this.controller);
@@ -160,6 +161,16 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         
         // private
         onPageShow: function() {
+			var view = this.view;
+			if (view.header && view.headerCls) {
+				view.header.addClass(view.headerCls);
+			}
+			if (view.footer && view.footerCls) {
+				view.footer.addClass(view.footerCls);
+			}
+			if (view.body && view.bodyCls) {
+				view.body.addClass(view.bodyCls);
+			}
             if (this.controller) {
                 this.controller.onPageShow();
                 this.controller.fireEvent('pageshow', this.controller);

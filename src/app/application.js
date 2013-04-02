@@ -503,6 +503,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 
 		// private
 		onPageChangeFailed: function() {
+			// TODO 处理页面切换失败的情况
 			this.fireEvent('pagechangefailed', this, this.nextPagelet, this.lastPagelet);
 		},
 
