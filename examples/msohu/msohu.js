@@ -12,7 +12,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 			}
 		]
 	});
-	var IndexController = Klass.define({
+	Klass.define({
 		alias: 'msohu.indexcontroller',
 		extend: 'controller',
 		onPageShow: function () {
@@ -176,7 +176,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 		count = count > 100 ? 100 : count;
 		numEl.html(count + '%');
 		if (count < 100) {
-			countDownTimeout = setTimeout(countDown, 70);
+			countDownTimeout = setTimeout(countDown, 70 + Math.random() * 70);
 		}
 	}
 
