@@ -142,6 +142,13 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         
         // private
         onRender: X.emptyFn,
+
+		// private
+		onViewRender: function() {
+			if (this.controller) {
+				this.controller.onViewRender();
+			}
+		},
         
         // private
         beforePageShow: function() {

@@ -56,14 +56,18 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 		databaseExpires: 3 * 24 * 60 * 60 * 1000,
 
 		/**
+		 * @cfg {Number} pageletCacheSize pagelet缓存大小，默认为30
+		 */
+		pageletCacheSize: 30,
+
+		/**
 		 * @cfg {String} startUpSelector 启动画面selector
 		 */
 		startUpSelector: 'div#startUpView',
 
 		/**
-		 * @cfg {Number} pageletCacheSize pagelet缓存大小，默认为30
+		 * @cfg {String} cls 添加到body元素上的扩展CSS样式
 		 */
-		pageletCacheSize: 30,
 
 		// private
 		init: function() {
@@ -77,25 +81,32 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 
 		// private
 		initEvents: function() {
-			this.addEvents(/**
-			 * @event beforelaunch
-			 */
-				'beforelaunch', /**
+			this.addEvents(
+				/**
+				 * @event beforelaunch
+				 */
+				'beforelaunch',
+				/**
 				 * @event launch
 				 */
-				'launch', /**
+				'launch',
+				/**
 				 * @event pagebeforechange
 				 */
-				'pagebeforechange', /**
+				'pagebeforechange',
+				/**
 				 * @event pagechange
 				 */
-				'pagechange', /**
+				'pagechange',
+				/**
 				 * @event pageafterchange
 				 */
-				'pageafterchange', /**
+				'pageafterchange',
+				/**
 				 * @event pagechangefailed
 				 */
-				'pagechangefailed');
+				'pagechangefailed'
+			);
 
 			// 监听hashchange，当hash发生改变时，切换Pagelet
 			this.mon(window, 'hashchange', this.onHashChange);
@@ -143,6 +154,10 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 		_launch: function(config) {
 			if (!this.isLaunched && this.beforeLaunch() !== false && this.fireEvent('beforelaunch', this) !== false) {
 				this.isLaunched = true;
+
+				if (this.cls) {
+					this.pageContainer.addClass(this.cls);
+				}
 
 				this.startUpView = $(this.startUpSelector);
 				if (this.startUpView.length == 0) {
