@@ -1,5 +1,5 @@
 MX.ready('klass', function(X, Klass) {
-    var DemoView = Klass.define({
+    Klass.define({
         alias: 'demo.view',
         extend: 'view',
         onRender: function() {
