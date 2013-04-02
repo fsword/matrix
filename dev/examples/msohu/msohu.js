@@ -16,6 +16,9 @@ function(X, $, Klass, LocalStorage, iScrollUtil, TouchHolder) {
         extend: 'controller',
         onPageShow: function() {
             var body = this.getBody();
+            var w = window.innerWidth;
+            body.find('.winBox').width(w * 2);
+            body.find('.winBox li').width(w);
             this.scroll = iScrollUtil.createScroll('h', body, {
                 snap: true,
                 momentum: false,
@@ -81,7 +84,7 @@ function(X, $, Klass, LocalStorage, iScrollUtil, TouchHolder) {
     var favEl, touchCoords, favCount = 0, resetFavCount, idiotMsg = ['姐姐，别玩了，有意思么', '有时间干点正事吧', '你也太无聊了吧'];
     function showFavourite() {
         if (!favEl) {
-            favEl = $('<div class="favourite"><div class="title">MATRIX</div><img src="favourite.png" class="img" /><a href="#0" class="download" data-message="true"></a></div>');
+            favEl = $('<div class="favourite"><div class="title">MATRIX</div><img src="favourite.jpg" class="img" /><a href="#0" class="download" data-message="true"></a></div>');
             $body.append(favEl);
         }
         favEl.one('webkitAnimationEnd animationend', function() {

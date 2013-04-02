@@ -15501,7 +15501,6 @@ if (typeof module !== 'undefined' && module.exports) {
 /**
  * @class MX
  */
-
 window.MX = {
     /**
      * The version of the framework
@@ -15830,7 +15829,7 @@ window.MX = {
         },
         
         /**
-         * 代理$.ready()函数
+         * 代理$.ready()函数，并引入MX.kindle类依赖机制
          */
         ready: function() {
             var args = X.toArray(arguments);
