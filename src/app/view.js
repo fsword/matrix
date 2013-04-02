@@ -76,18 +76,6 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                     container.append(this.header);
                 }
                 
-                if (this.renderFooterTmpl) {
-                    this.footer = $(document.createElement('div'));
-                    this.footer.attr('id', 'mx-app-page-footer-' + this.id)
-                               .attr('data' + $.mobile.ns + '-role', 'footer');
-                    if (this.footerCls) {
-                        this.footer.addClass(this.footerCls);
-                    }
-                    this.renderFooterTmpl.container = this.header;
-                    this.renderFooterTmpl.render();
-                    container.append(this.header);
-                }
-                
                 this.body = $(document.createElement('div'));
                 this.body.attr('id', 'mx-app-page-body-' + this.id)
                          .attr('data' + $.mobile.ns + '-role', 'content');
@@ -99,6 +87,18 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                     this.renderBodyTmpl.render();
                 }
                 container.append(this.body);
+
+				if (this.renderFooterTmpl) {
+					this.footer = $(document.createElement('div'));
+					this.footer.attr('id', 'mx-app-page-footer-' + this.id)
+						.attr('data' + $.mobile.ns + '-role', 'footer');
+					if (this.footerCls) {
+						this.footer.addClass(this.footerCls);
+					}
+					this.renderFooterTmpl.container = this.footer;
+					this.renderFooterTmpl.render();
+					container.append(this.footer);
+				}
                 
                 this.onRender(container);
                 this.fireEvent('render', this, container);

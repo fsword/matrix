@@ -1,4 +1,4 @@
-MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', function (X, $, Klass, LocalStorage, iScrollUtil, TouchHolder) {
+MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', function(X, $, Klass, LocalStorage, iScrollUtil, TouchHolder) {
 	var $body = $('body');
 
 	Klass.define({
@@ -15,7 +15,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 	Klass.define({
 		alias: 'msohu.indexcontroller',
 		extend: 'controller',
-		onPageShow: function () {
+		onPageCreate: function() {
 			var body = this.getBody();
 			var w = window.innerWidth;
 			body.find('.winBox').width(w * 2);
@@ -24,11 +24,11 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 				snap: true,
 				momentum: false,
 				hScrollbar: false,
-				onScrollMove: function () {
+				onScrollMove: function() {
 					var w = window.innerWidth, x = this.x, scale = Math.abs(x) / w;
 					body.css('background-position-x', x > 0 ? 0 : -scale * (w / 8));
 				},
-				onScrollEnd: function () {
+				onScrollEnd: function() {
 					var winPage = body.find('.winPage');
 					if (this.currPageX % 2 == 1) {
 						winPage.addClass('rotate');
@@ -36,21 +36,24 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 						winPage.removeClass('rotate');
 					}
 				},
-				onTouchEnd: function () {
-					body.one('webkitTransitionEnd transitionend', function () {
+				onTouchEnd: function() {
+					body.one('webkitTransitionEnd transitionend', function() {
 						body.removeClass('slip');
 					});
 					body.addClass('slip');
 					body.css('background-position-x', -this.currPageX * (window.innerWidth / 8));
 				}
 			});
+		},
+		onPageShow: function() {
+			this.scroll.refresh();
 			showFavourite();
 			this.initHolder();
 		},
-		onPageHide: function () {
+		onPageHide: function() {
 			this.destroyHolder();
 		},
-		initHolder: function () {
+		initHolder: function() {
 			if (!this.holder) {
 				this.holder = new TouchHolder({
 					target: this.getCt(),
@@ -60,17 +63,17 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 				});
 			}
 		},
-		onTouchEnd: function () {
+		onTouchEnd: function() {
 			if (this.holder.touchCoords.stopY - this.holder.touchCoords.startY > 100) {
-				showFavourite();
+				showFavourite(true);
 			}
 		},
-		destroyHolder: function () {
+		destroyHolder: function() {
 			if (this.holder) {
 				this.holder.destroy();
 			}
 		},
-		onDestroy: function () {
+		onDestroy: function() {
 			this.callParent();
 			this.scroll.destroy();
 			this.scroll = null;
@@ -79,31 +82,54 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 	});
 
 	Klass.define({
-		alias: 'demo.channelview',
+		alias: 'msohu.channelview',
 		extend: 'view',
-
-
+		headerCls: 'header',
+		footerCls: 'footer',
+		bodyCls: 'container',
+		templates: [
+			{
+				id: 'channel-header-template',
+				renderToHeader: true
+			},
+			{
+				id: 'channel-footer-template',
+				renderToFooter: true
+			},
+			{
+				id: 'channel-body-template',
+				renderToBody: true
+			}
+		]
+	});
+	Klass.define({
+		alias: 'msohu.channelcontroller',
+		extend: 'controller'
 	});
 
 	// 欢迎页 start *********************************************
-	var favEl, touchCoords, favCount = 0, resetFavCount, idiotMsg = ['姐姐，别玩了，有意思么', '有时间干点正事吧', '你也太无聊了吧'];
+	var favEl, isShow = false, touchCoords, favCount = 0, resetFavCount;
+	var idiotMsg = ['姐姐，别玩了，有意思么', '有时间干点正事吧', '你也太无聊了吧'];
 
-	function showFavourite() {
+	function showFavourite(force) {
 		if (!favEl) {
 			favEl = $('<div class="favourite"><div class="title">MATRIX</div><img src="images/favourite.jpg" class="img" /><a href="#0" class="download" data-message="true"></a></div>');
 			$body.append(favEl);
 		}
-		favEl.one('webkitAnimationEnd animationend', function () {
-			favEl.removeClass('animated bounceInDown');
-			favEl.css('-webkit-transform', 'translateY(0px)');
-			$body.on('touchstart', bodyTouchStart);
-		});
-		favEl.addClass('animated bounceInDown');
-		clearTimeout(resetFavCount);
-		favCount++;
-		if (favCount > 3) {
-			showMessage(idiotMsg[Math.floor(Math.random() * idiotMsg.length)]);
-			favCount = 1;
+		if (force === true || !isShow) {
+			isShow = true;
+			favEl.one('webkitAnimationEnd animationend', function() {
+				favEl.removeClass('animated bounceInDown');
+				favEl.css('-webkit-transform', 'translateY(0px)');
+				$body.on('touchstart', bodyTouchStart);
+			});
+			favEl.addClass('animated bounceInDown');
+			clearTimeout(resetFavCount);
+			favCount++;
+			if (favCount > 3) {
+				showMessage(idiotMsg[Math.floor(Math.random() * idiotMsg.length)]);
+				favCount = 1;
+			}
 		}
 	}
 
@@ -130,7 +156,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 		$body.off('touchmove', bodyTouchMove);
 		$body.off('touchend', bodyTouchEnd);
 		if (touchCoords.startY > touchCoords.stopY) {
-			favEl.one('webkitTransitionEnd transitionend', function () {
+			favEl.one('webkitTransitionEnd transitionend', function() {
 				favEl.removeClass('favouriteOut');
 			});
 			favEl.addClass('favouriteOut');
@@ -138,7 +164,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 		if ((touchCoords.stopY < touchCoords.startY && (e.timeStamp - touchCoords.timeStamp < 100)) || (touchCoords.stopY - touchCoords.startY < -100)) {
 			$body.off('touchstart', bodyTouchStart);
 			favEl.css('-webkit-transform', 'translateY(' + -favEl.height() + 'px)');
-			resetFavCount = setTimeout(function () {
+			resetFavCount = setTimeout(function() {
 				favCount = 0;
 			}, 2000);
 		} else {
@@ -158,8 +184,8 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 			isMsgElShow = true;
 			msgEl.find('.cnt').html(msg || '');
 			msgEl.css('visibility', 'visible');
-			msgEl.one('webkitTransitionEnd transitionend', function () {
-				msgElHideTimeout = setTimeout(function () {
+			msgEl.one('webkitTransitionEnd transitionend', function() {
+				msgElHideTimeout = setTimeout(function() {
 					msgEl.css('visibility', 'hidden').css('opacity', 0);
 					isMsgElShow = false;
 				}, 2000);
@@ -168,7 +194,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 		}
 	}
 
-	$body.delegate('[data-message]', 'click', function (e) {
+	$body.delegate('[data-message]', 'click', function(e) {
 		e.preventDefault();
 		var msg = $(e.target).attr('data-message');
 		showMessage(msg != 'true' ? msg : '这仅仅是一个demo，没有这个功能');
@@ -181,13 +207,13 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 		templateUrl: 'main.tmpl',
 		models: [
 			{
-				id: "list-model"
+				id: 'article-model'
 
 			}
 		],
 		stores: [
 			{
-				id: "list-store"
+				id: 'channel-store'
 
 			}
 		],
@@ -197,7 +223,20 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 				url: 'h',
 				view: 'msohu.indexview',
 				controller: 'msohu.indexcontroller',
-				transition: 'slidefade'
+				transition: 'fade',
+				singleton: true
+			},
+			{
+				id: 'channel-pagelet',
+				url: 'c/:id',
+				view: 'msohu.channelview',
+				controller: 'msohu.channelcontroller',
+				stores: 'channel-store',
+				cls: 'winContent',
+				transition: {
+					in: 'slideup',
+					out: 'slidedown'
+				}
 			}
 		],
 		welcome: 'h'

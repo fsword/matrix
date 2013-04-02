@@ -189,19 +189,9 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                             if (l.single === true) {
                                 i--;
                             }
-                            if (X.Console && X.Console.chrome) {
-                                if (l.listenerFn.apply(l.scope, args) === false) {
-                                    return false;
-                                }
-                            } else {
-                                try {
-                                    if (l.listenerFn.apply(l.scope, args) === false) {
-                                        return false;
-                                    }
-                                } catch(e) {
-                                    X.Console.error('Fire event callback error: the event name is "' + eventName + '": ' + e.message);
-                                }
-                            }
+							if (l.listenerFn.apply(l.scope, args) === false) {
+								return false;
+							}
                         }
                     }
                 }

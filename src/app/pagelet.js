@@ -52,6 +52,13 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
             
             // 解析URL中包含的参数值
             this.parseParams();
+
+			if (X.isString(this.transition)) {
+				this.transition = {
+					in: this.transition,
+					out: ''
+				}
+			}
             
             this.initView();
             this.initController();
@@ -88,6 +95,7 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         // private
         initView: function() {
             this.view = X.create(this.view || 'view', {});
+			this.mon(this.view, 'render', this.onViewRender);
         },
         
         // private
@@ -134,6 +142,13 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         
         // private
         onRender: X.emptyFn,
+
+		// private
+		onViewRender: function() {
+			if (this.controller) {
+				this.controller.onViewRender();
+			}
+		},
         
         // private
         beforePageShow: function() {
