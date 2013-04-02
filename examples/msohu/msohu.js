@@ -1,7 +1,7 @@
 MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', function (X, $, Klass, LocalStorage, iScrollUtil, TouchHolder) {
 	var $body = $('body');
 
-	var IndexView = Klass.define({
+	Klass.define({
 		alias: 'msohu.indexview',
 		extend: 'view',
 		bodyCls: 'index-content',
@@ -76,6 +76,13 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 			this.scroll = null;
 			this.destroyHolder();
 		}
+	});
+
+	Klass.define({
+		alias: 'demo.channelview',
+		extend: 'view',
+
+
 	});
 
 	// 欢迎页 start *********************************************
@@ -167,27 +174,6 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 		showMessage(msg != 'true' ? msg : '这仅仅是一个demo，没有这个功能');
 	});
 	// 消息提示 end *********************************************
-
-	// 模拟加载进度 start *********************************************
-	var numEl = $('#startUpView div.num'), count = 0, countDownTimeout;
-
-	function countDown() {
-		count += parseInt(Math.random() * 10 + 1);
-		count = count > 100 ? 100 : count;
-		numEl.html(count + '%');
-		if (count < 100) {
-			countDownTimeout = setTimeout(countDown, 70 + Math.random() * 70);
-		}
-	}
-
-	countDown();
-	X.App.on('pagechange', function () {
-		clearTimeout(countDownTimeout);
-		numEl.html('100%');
-	}, window, {
-		single: true
-	});
-	// 模拟加载进度 end *********************************************
 
 	LocalStorage.globalPrefix = 'msohu/';
 	var config = {

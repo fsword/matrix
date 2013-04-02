@@ -55,7 +55,7 @@ html, body, menu, ul, ol, li, p, div, form, h1, h2, h3, h4, h5, h6, img, a img, 
 }
 
 .pageStartup {
-    background: url("http://s2.rr.itc.cn/h5/css/msohu/v4/tags/1.3.18/i/pageStartup920.png") no-repeat center top, #f3f2e9 url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFMAAABSCAMAAAAfMBiXAAAAS1BMVEX069L069H079707djz8ebz8OTz8un07tzz7+D07NX07dr07Nf07NTz8ef069Pz79/z8OLz7+H079/z8ejz8uj07t3z8OP07dnz8OFnykcvAAABS0lEQVR4Xu3X2YrDMAyGUclb9nSd5f2fdKD6k1KlYoznyoy/m9ZUPSHggEOntbguPeq9fAZKEnU0FkbeNNdU2Fyz2Uzy0heA0aNegG9vDJBpXgbEMHnG2oNgWc96YHCWmVDYzf711kZsjE81gOo0mxl6yTG+mOY+8BGlxTI7pkfMhM7vzUho25/kTHNV9460+WyO+OHFbGYzeTfRcc/rgc1k5JVAIQhxD8g0aUF3MW7LFoQFUdLZZsqsArOZh0yTp8yoOxTem7dLbpSstJlfBWYzp0PR2J9TbjTo7HPIkBklnW2mzCowm+kuQtwcsk2HggBnhyAsDj3PDNln2v2ijPV+UQD5Z5v8jfFfzWayyv6LzjL//r4Js5nNvBLazW29mWwMUGeZHTnpCvPkUBQiOmNg/eXZLGmu2WwmD4WxaZ6n4k6Wmf5QtWYzfwDlO6s/5jeViwAAAABJRU5ErkJggg==") center;
+    background: url("../images/pageStartup920.png") no-repeat center top, #f3f2e9 url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFMAAABSCAMAAAAfMBiXAAAAS1BMVEX069L069H079707djz8ebz8OTz8un07tzz7+D07NX07dr07Nf07NTz8ef069Pz79/z8OLz7+H079/z8ejz8uj07t3z8OP07dnz8OFnykcvAAABS0lEQVR4Xu3X2YrDMAyGUclb9nSd5f2fdKD6k1KlYoznyoy/m9ZUPSHggEOntbguPeq9fAZKEnU0FkbeNNdU2Fyz2Uzy0heA0aNegG9vDJBpXgbEMHnG2oNgWc96YHCWmVDYzf711kZsjE81gOo0mxl6yTG+mOY+8BGlxTI7pkfMhM7vzUho25/kTHNV9460+WyO+OHFbGYzeTfRcc/rgc1k5JVAIQhxD8g0aUF3MW7LFoQFUdLZZsqsArOZh0yTp8yoOxTem7dLbpSstJlfBWYzp0PR2J9TbjTo7HPIkBklnW2mzCowm+kuQtwcsk2HggBnhyAsDj3PDNln2v2ijPV+UQD5Z5v8jfFfzWayyv6LzjL//r4Js5nNvBLazW29mWwMUGeZHTnpCvPkUBQiOmNg/eXZLGmu2WwmD4WxaZ6n4k6Wmf5QtWYzfwDlO6s/5jeViwAAAABJRU5ErkJggg==") center;
     position: relative;
     height: 100%;
     -webkit-background-size: 320px auto, auto 41px;
