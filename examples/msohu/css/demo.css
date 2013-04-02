@@ -141,14 +141,12 @@ ul {
     overflow: hidden;
     background: url("../images/background.jpg") no-repeat left center;
     background-size: 550px 600px;
-
     position: absolute;
     height: 100%;
     left: 0;
     right: 0;
     bottom: 0;
     top: 0;
-
     display: -webkit-box;
 }
 
@@ -343,16 +341,16 @@ ul {
 
 @font-face {
     font-family: "earth_normal";
-    src: url("../earth_normal.ttf") format("truetype");
+    src: url("earth_normal.ttf") format("truetype");
 }
 
 .favourite .title {
     position: absolute;
     left: 30px;
     top: 30px;
-    font: bold 60px earth_normal, Helvetica, sans-serif;
-    color: #bbb;
-    opacity: 0.8;
+    font: bold 36px earth_normal, Helvetica, sans-serif;
+    color: #a1a3a6;
+    opacity: 0.6;
 }
 
 .favourite .download {
@@ -362,8 +360,9 @@ ul {
     display: block;
     width: 24px;
     height: 24px;
+    text-indent: -999em;
     background-size: 24px 24px;
-    background: url(../../share/icons/download-48.png) center center no-repeat;
+    background-image: url(../../share/icons/download-48.png);
 }
 
 .animated {
