@@ -162,23 +162,31 @@ html {
 
 }
 
-.ui-body-c, .ui-overlay-c {
-    text-shadow: none;
-}
-
+/************************重置默认样式(及JQuery UI)*********************/
 ul {
     list-style: none;
 }
 
+.ui-body-c, .ui-overlay-c {
+    text-shadow: none;
+}
+
+.ui-mobile, .ui-mobile body {
+    /*解决出现滚动条bug*/
+    position: relative;
+    overflow: hidden;
+
+}
+
+/*********************************************/
 .index-content {
-    display: block;
     -webkit-box-sizing: border-box;
     width: 100%;
     overflow: hidden;
     background: url("../images/background.jpg") no-repeat left center;
     background-size: 550px 600px;
     position: absolute;
-    height: 100%;
+
     left: 0;
     right: 0;
     bottom: 0;
@@ -203,7 +211,8 @@ ul {
     width: 240px;
 }
 
-.winBox li:after, .winBox li .li_box:after {
+.winBox li:after,
+.winBox li .li_box:after {
     content: '.';
     clear: both;
     display: block;
@@ -294,7 +303,7 @@ ul {
     position: absolute;
     right: 24px;
     width: 24px;
-    bottom: 18px;
+    top: 268px;
 }
 
 .nav_tool a {
@@ -367,6 +376,7 @@ ul {
     height: 100%;
     left: 0;
     top: 0;
+    z-index: 9999;
     -webkit-transform: translateY(-1000px);
 }
 
@@ -387,6 +397,8 @@ ul {
     font: bold 36px earth_normal, Helvetica, sans-serif;
     color: #a1a3a6;
     opacity: 0.6;
+
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, .8);
 }
 
 .favourite .download {
@@ -494,15 +506,25 @@ ul {
 }
 
 /*内容页样 winContent 样式*/
-.winContent {
+
+.winContent.ui-page-active {
     display: -webkit-box;
-    height: 100%;
     -webkit-box-orient: vertical;
 }
 
 .winContent .header {
     height: 60px;
     position: relative;
+
+}
+
+.winContent .container {
+    padding: 0;
+    overflow: hidden;
+
+    display: -webkit-box;
+    height: 100%;
+    -webkit-box-orient: vertical;
 }
 
 .winContent .header .title {
@@ -511,13 +533,12 @@ ul {
     line-height: 50px;
     color: #FFF;
     padding: 0 10px;
-    margin-left: 10px;
-
     font-size: 18px;
     font-weight: bold;
     float: left;
     position: relative;
     z-index: 1;
+    margin: 0 0 0 10px;
 
 }
 
@@ -543,11 +564,44 @@ ul {
 .container {
     -webkit-box-flex: 1;
     -webkit-box-orient: vertical;
+    display: -webkit-box;
 
 }
 
-.footer, .container {
-    display: -webkit-box;
+.container .banner {
+    position: relative;
+    /*height: 160px;  高度不定  可能随机变化根据内容来定*/
+    /* -webkit-box-flex:0;*/
+}
+
+.container .banner img {
+    width: 320px;
+    height: 160px;
+    display: block;
+
+}
+.container .b_info .i_title {
+    position: absolute;
+    bottom: 5px;
+    left: 10px;
+    color: #FFF;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 rgba(0,0,0,.8);
+}
+.container .t_info{
+    color: #FFF;
+    padding:30px 10px;
+    background:#528CE0;
+}
+.container .t_info .i_title{
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.container .t_info p{
+    font-size: 10px;
+    line-height: 18px;
+    text-indent: 2px;
 }
 
 .container .article {
@@ -557,44 +611,17 @@ ul {
 
 .container .article:last-child {
     -webkit-box-flex: 1;
-
-}
-
-.container .banner {
-    position: relative;
-
-    height: 150px; /*高度不定  可能随机变化根据内容来定*/
-    /* -webkit-box-flex:0;*/
-
-}
-
-.container .banner img {
-    width: 320px;
-
-    height: 150px;
-    display: block;
-
-}
-
-.container .banner .banner_info_title {
-    position: absolute;
-    bottom: 5px;
-    left: 10px;
-    color: #FFF;
-    font-weight: bold;
 }
 
 .container .article_info {
-
     display: -webkit-box;
 }
 
 .container .article_info a {
     display: block;
     -webkit-box-flex: 1;
-
     border-bottom: 1px solid #e9e9e9;
-    padding: 12px 8px 12px 8px;
+    padding: 10px 8px 10px 8px;
     -webkit-box-sizing: border-box;
     color: #686868;
     font-size: 15px;
@@ -611,25 +638,27 @@ ul {
 
 .container .article_info a p {
     font-size: 12px;
-
 }
 
 .container .article_info  a:first-child {
     border-right: 1px solid #e9e9e9;
     padding-left: 0;
 }
-
+/*********放在下面 提高级层覆盖  *******/
 .container .article:last-child a {
     border-bottom: none;
 }
 
 .container .article a:only-child {
     border-right: 0;
+}
+/*********************************/
+.footer {
+    display: -webkit-box;
 
 }
 
 .footer .btn_ft {
-
     width: 24px;
     height: 24px;
     background-size: 48px 24px;
@@ -644,12 +673,10 @@ ul {
     -webkit-box-flex: 1;
     display: -webkit-box;
     -webkit-box-pack: center;
-
 }
 
 .footer .status_bar .s_time {
     display: block;
-
     font-size: 10px;
     color: #c1c1c1;
     line-height: 20px;
@@ -662,7 +689,6 @@ ul {
     background: url(../images/rule_bg.png) no-repeat left 8px;
     background-size: 106px 7px;
     position: relative;
-
 }
 
 .footer .status_bar .active {
@@ -699,16 +725,14 @@ ul {
     width: 20px;
     height: 25px;
     display: block;
-
 }
 
-.active_rel i {
+.footer  .active_rel i {
     position: absolute;
     background-color: #f26522;
-
 }
 
-.active_rel .ico_block {
+.footer  .active_rel .ico_block {
     width: 20px;
     height: 13px;
     left: 0;
