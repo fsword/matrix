@@ -42,7 +42,9 @@ MX.ready('klass', function(X, Klass) {
 
 ## 一个比较完整的例子：手机搜狐
 
-你可以直接从手机浏览器打开[手机搜狐WebApp](http://mxjs.github.com/matrix/dev/examples/msohu/index.html "手机搜狐（向Zaker致敬）")，为了达到最佳展示效果，请使用iphone safari打开，并将页面添加到你的桌面。
+[手机搜狐WebApp](http://mxjs.github.com/matrix/dev/examples/msohu/index.html "手机搜狐（向Zaker致敬）")的系统功能完全仿照Zaker for iPhone开发。
+
+你可以直接从手机浏览器打开[手机搜狐WebApp](http://mxjs.github.com/matrix/dev/examples/msohu/index.html "手机搜狐（向Zaker致敬）")，为了达到最佳展示效果，请使用iphone safari打开，并将页面添加到你的桌面，然后从桌面打开进入。
 
 直接用手机扫描下面的二维码，就可以访问[手机搜狐WebApp](http://mxjs.github.com/matrix/dev/examples/msohu/index.html "手机搜狐（向Zaker致敬）")
 

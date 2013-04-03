@@ -101,10 +101,10 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         // private
         initController: function() {
             this.controller = X.create(this.controller || 'controller', {
-                pagelet: this,
                 view: this.view,
                 models: this.models,
-                stores: this.stores
+                stores: this.stores,
+				params: this.params
             });
         },
         
@@ -209,7 +209,7 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         },
         
         // private
-        onDestory: function() {
+        onDestroy: function() {
             if (this.models && X.isObject(this.models)) {
                 X.each(this.models, function(i, model) {
                     model.destroy();

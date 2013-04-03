@@ -1,5 +1,62 @@
+/*
+ * 手机搜狐WebApp Example是一个基于AJAX的Single Page Web Application，基于Matrix框架构建。
+ *
+ * Example中的系统功能完全仿照Zaker for iPhone开发，为了达到最佳展示效果，请使用iphone safari打开，并将页面添加到你的桌面，然后从桌面打开进入。
+ */
 MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', function(X, $, Klass, LocalStorage, iScrollUtil, TouchHolder) {
-	var $body = $('body');
+	var $body = $('body'), isShowFavourite = false,
+		channels = [
+			{
+				name: '聚焦头条',
+				en: 'Top Stories',
+				bgColor: ''
+			},
+			{
+				name: '社会新闻',
+				en: 'News',
+				bgColor: ''
+			},
+			{
+				name: '财经频道',
+				en: 'Finance',
+				bgColor: ''
+			},
+			{
+				name: '娱乐频道',
+				en: 'Shine',
+				bgColor: ''
+			},
+			{
+				name: '体育频道',
+				en: 'Sports',
+				bgColor: ''
+			},
+			{
+				name: '科技频道',
+				en: 'Technology',
+				bgColor: ''
+			},
+			{
+				name: '女人频道',
+				en: 'Woman',
+				bgColor: ''
+			},
+			{
+				name: '汽车频道',
+				en: 'Autos',
+				bgColor: ''
+			},
+			{
+				name: '星座频道',
+				en: 'Astrology',
+				bgColor: ''
+			},
+			{
+				name: '笑话频道',
+				en: 'Joke',
+				bgColor: ''
+			}
+		];
 
 	Klass.define({
 		alias: 'msohu.indexview',
@@ -47,13 +104,10 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 		},
 		onPageShow: function() {
 			this.scroll.refresh();
-			showFavourite();
-			this.initHolder();
-		},
-		onPageHide: function() {
-			this.destroyHolder();
-		},
-		initHolder: function() {
+			if (!isShowFavourite) {
+				isShowFavourite = true;
+				showFavourite();
+			}
 			if (!this.holder) {
 				this.holder = new TouchHolder({
 					target: this.getCt(),
@@ -63,14 +117,21 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 				});
 			}
 		},
+		beforePageHide: function() {
+			hideFavourite();
+		},
+		onPageHide: function() {
+			this.destroyHolder();
+		},
 		onTouchEnd: function() {
 			if (this.holder.touchCoords.stopY - this.holder.touchCoords.startY > 100) {
-				showFavourite(true);
+				showFavourite();
 			}
 		},
 		destroyHolder: function() {
 			if (this.holder) {
 				this.holder.destroy();
+				this.holder = null;
 			}
 		},
 		onDestroy: function() {
@@ -79,6 +140,11 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 			this.scroll = null;
 			this.destroyHolder();
 		}
+	});
+	X.App.on('pagechange', function() {
+		isShowFavourite = true;
+	}, window, {
+		single: true
 	});
 
 	Klass.define({
@@ -104,32 +170,110 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 	});
 	Klass.define({
 		alias: 'msohu.channelcontroller',
-		extend: 'controller'
+		extend: 'controller',
+		delegates: {
+			'click .btn_back': 'back',
+			'click .btn_refresh': 'refresh'
+		},
+		beforePageShow: function() {
+			var channel = channels[this.getParams().id];
+			this.view.header.find('.title').html(channel.name);
+			this.view.header.find('.mark').html(channel.en);
+		},
+		onPageShow: function() {
+			if (!this.hHolder) {
+				this.hHolder = new TouchHolder({
+					target: this.getCt(),
+					type: 'h',
+					scope: this,
+					handleTouchEnd: this.onHorizontalTouchEnd
+				});
+			}
+			if (!this.vHolder) {
+				this.vHolder = new TouchHolder({
+					target: this.getCt(),
+					type: 'v',
+					scope: this,
+					handleTouchEnd: this.onVerticalTouchEnd
+				});
+			}
+		},
+		onHorizontalTouchEnd: function() {
+			var params = this.getParams();
+			if (this.hHolder.touchCoords.stopX - this.hHolder.touchCoords.startX > 100 && params.page > 1) {
+				X.App.go('c/' + params.id + '/' + (parseInt(params.page) - 1), {
+					reverse: true
+				});
+			} else if (this.hHolder.touchCoords.startX - this.hHolder.touchCoords.stopX > 100 && params.page < 10) {
+				X.App.go('c/' + params.id + '/' + (parseInt(params.page) + 1));
+			}
+		},
+		onVerticalTouchEnd: function() {
+			if (this.vHolder.touchCoords.stopY - this.vHolder.touchCoords.startY > 100) {
+				this.back();
+			}
+		},
+		onPageHide: function() {
+			this.destroyHolder();
+		},
+		back: function(e) {
+			e && e.preventDefault();
+			X.App.go('h');
+		},
+		refresh: function() {
+			// TODO
+		},
+		destroyHolder: function() {
+			if (this.hHolder) {
+				this.hHolder.destroy();
+				this.hHolder = null;
+			}
+			if (this.vHolder) {
+				this.vHolder.destroy();
+				this.vHolder = null;
+			}
+		},
+		getTransition: function(to, from) {
+			if (/^c\/.*/i.test(from) && /^c\/.*/i.test(to)) {
+				return 'slide';
+			}
+		},
+		onDestroy: function() {
+			this.callParent();
+			this.destroyHolder();
+		}
 	});
 
 	// 欢迎页 start *********************************************
-	var favEl, isShow = false, touchCoords, favCount = 0, resetFavCount;
+	var favEl, touchCoords, favCount = 0, resetFavCount;
 	var idiotMsg = ['姐姐，别玩了，有意思么', '有时间干点正事吧', '你也太无聊了吧'];
 
-	function showFavourite(force) {
+	function showFavourite() {
 		if (!favEl) {
 			favEl = $('<div class="favourite"><div class="title">MATRIX</div><img src="images/favourite.jpg" class="img" /><a href="#0" class="download" data-message="true"></a></div>');
 			$body.append(favEl);
 		}
-		if (force === true || !isShow) {
-			isShow = true;
-			favEl.one('webkitAnimationEnd animationend', function() {
-				favEl.removeClass('animated bounceInDown');
-				favEl.css('-webkit-transform', 'translateY(0px)');
-				$body.on('touchstart', bodyTouchStart);
-			});
-			favEl.addClass('animated bounceInDown');
-			clearTimeout(resetFavCount);
-			favCount++;
-			if (favCount > 3) {
-				showMessage(idiotMsg[Math.floor(Math.random() * idiotMsg.length)]);
-				favCount = 1;
-			}
+		favEl.height(window.innerHeight);
+		favEl.one('webkitAnimationEnd animationend', function() {
+			favEl.removeClass('animated bounceInDown');
+			favEl.css('-webkit-transform', 'translateY(0px)');
+			$body.on('touchstart', bodyTouchStart);
+		});
+		favEl.addClass('animated bounceInDown');
+		clearTimeout(resetFavCount);
+		favCount++;
+		if (favCount > 3) {
+			showMessage(idiotMsg[Math.floor(Math.random() * idiotMsg.length)]);
+			favCount = 1;
+		}
+	}
+	function hideFavourite() {
+		if (favEl) {
+			favEl.removeClass('animated bounceInDown');
+			favEl.css('-webkit-transform', 'translateY(' + -favEl.height() + 'px)');
+			$body.off('touchstart', bodyTouchStart);
+			$body.off('touchmove', bodyTouchMove);
+			$body.off('touchend', bodyTouchEnd);
 		}
 	}
 
@@ -143,7 +287,6 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 		touchCoords.startY = e.originalEvent.touches[0].pageY;
 		touchCoords.timeStamp = e.timeStamp;
 	}
-
 	function bodyTouchMove(e) {
 		e.preventDefault();
 		touchCoords.stopX = e.originalEvent.touches[0].pageX;
@@ -151,7 +294,6 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 		var y = touchCoords.stopY - touchCoords.startY;
 		favEl.css('-webkit-transform', 'translateY(' + (y > 0 ? 0 : y) + 'px)');
 	}
-
 	function bodyTouchEnd(e) {
 		$body.off('touchmove', bodyTouchMove);
 		$body.off('touchend', bodyTouchEnd);
@@ -171,7 +313,6 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 			favEl.css('-webkit-transform', 'translateY(0px)');
 		}
 	}
-
 	// 欢迎页 end *********************************************
 
 	// 消息提示 start *********************************************
@@ -196,14 +337,14 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 
 	$body.delegate('[data-message]', 'click', function(e) {
 		e.preventDefault();
-		var msg = $(e.target).attr('data-message');
+		var msg = $(e.currentTarget).attr('data-message');
 		showMessage(msg != 'true' ? msg : '这仅仅是一个demo，没有这个功能');
 	});
 	// 消息提示 end *********************************************
 
 	LocalStorage.globalPrefix = 'msohu/';
 	var config = {
-		templateVersion: '1.3',
+		templateVersion: '1.1',
 		templateUrl: 'main.tmpl',
 		models: [
 			{
@@ -228,13 +369,13 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
 			},
 			{
 				id: 'channel-pagelet',
-				url: 'c/:id',
+				url: 'c/:id/:page',
 				view: 'msohu.channelview',
 				controller: 'msohu.channelcontroller',
 				stores: 'channel-store',
 				cls: 'winContent',
 				transition: {
-					in: 'slideup',
+					in: 'pop',
 					out: 'slidedown'
 				}
 			}

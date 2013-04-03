@@ -138,7 +138,7 @@ html, body, menu, ul, ol, li, p, div, form, h1, h2, h3, h4, h5, h6, img, a img, 
     width: 220px;
     height: 40px;
     position: absolute;
-    z-index: 1000;
+    z-index: 10000;
     left: 50%;
     top: 50%;
     margin: -70px 0 0 -110px;
@@ -171,22 +171,13 @@ ul {
     text-shadow: none;
 }
 
-.ui-mobile, .ui-mobile body {
-    /*解决出现滚动条bug*/
-    position: relative;
-    overflow: hidden;
-
-}
-
 /*********************************************/
 .index-content {
     -webkit-box-sizing: border-box;
     width: 100%;
-    overflow: hidden;
     background: url("../images/background.jpg") no-repeat left center;
     background-size: 550px 600px;
     position: absolute;
-
     left: 0;
     right: 0;
     bottom: 0;
@@ -580,25 +571,28 @@ ul {
     display: block;
 
 }
+
 .container .b_info .i_title {
     position: absolute;
     bottom: 5px;
     left: 10px;
     color: #FFF;
     font-weight: bold;
-    text-shadow: 1px 1px 0 rgba(0,0,0,.8);
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, .8);
 }
-.container .t_info{
+
+.container .t_info {
     color: #FFF;
-    padding:30px 10px;
-    background:#528CE0;
+    padding: 30px 10px;
+    background: #528CE0;
 }
-.container .t_info .i_title{
+
+.container .t_info .i_title {
     font-size: 22px;
     font-weight: bold;
 }
 
-.container .t_info p{
+.container .t_info p {
     font-size: 10px;
     line-height: 18px;
     text-indent: 2px;
@@ -644,6 +638,7 @@ ul {
     border-right: 1px solid #e9e9e9;
     padding-left: 0;
 }
+
 /*********放在下面 提高级层覆盖  *******/
 .container .article:last-child a {
     border-bottom: none;
@@ -652,6 +647,7 @@ ul {
 .container .article a:only-child {
     border-right: 0;
 }
+
 /*********************************/
 .footer {
     display: -webkit-box;
@@ -696,10 +692,10 @@ ul {
     width: 20px;
     position: absolute;
     top: 5px;
-    left: 20px;
+    left: 0px;
 }
 
-.footer  .s_time:first-child {
+.footer .s_time:first-child {
     text-align: right;
     /* width:65px;*/
     margin-right: 15px;
@@ -727,12 +723,12 @@ ul {
     display: block;
 }
 
-.footer  .active_rel i {
+.footer .active_rel i {
     position: absolute;
     background-color: #f26522;
 }
 
-.footer  .active_rel .ico_block {
+.footer .active_rel .ico_block {
     width: 20px;
     height: 13px;
     left: 0;

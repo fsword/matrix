@@ -412,7 +412,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 					 * pagelet缓存池最大数量不超过pageletCacheSize，超出长度的pagelet进行销毁
 					 */
 					for (i = 0; i < len; i++) {
-						p = this.pageletCacheSize[i];
+						p = this.pageletCaches[i];
 						if (pagelet != p) {
 							this.pageletCaches.splice(i, 1);
 							p.destroy();
@@ -472,41 +472,73 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 		 * 转向到hash
 		 * @param {String} hash
 		 */
-		go: function(hash) {
-			window.location.hash = '#/' + hash;
+		go: function(hash, options) {
+			if (!this.isPageChanging) {
+				this.lastHash = hash;
+				this.pageChangeOptions = $.extend({}, options);
+				window.location.hash = '#/' + hash;
+			}
 		},
 
 		/**
 		 * 回退
 		 * @param {String} (optional) defaultHash 当访问路径历史没有上一页时，默认跳转hash
 		 */
-		back: function(defaultHash) {
+		back: function() {
 			$.mobile.back();
 		},
 
 		// private
 		onHashChange: function() {
 			var hash = this.getHash(),
-				pagelet = this.matchPagelet(hash);
-			if (pagelet) {
+				pagelet;
+
+			if (this.lastHash && this.lastHash != hash) {
+				this.pageChangeOptions = null;
+			}
+
+			if (!this.isPageChanging && (pagelet = this.matchPagelet(hash))) {
 				pagelet = this.createPagelet(pagelet, hash);
 				this.changePage(pagelet);
+			} else {
+				this.pageChangeOptions = null;
 			}
 		},
 
 		// private
 		changePage: function(pagelet) {
-			if (this.fireEvent('beforepagechange', this, pagelet) !== false) {
+			window.scrollTo(0, 1);
+			if (!this.isPageChanging && this.fireEvent('beforepagechange', this, pagelet) !== false) {
+				this.isPageChanging = true;
+				this.pageChangeOptions = this.pageChangeOptions || {};
+
 				var lp = this.lastPagelet,
-					np = this.nextPagelet = pagelet;
+					np = this.nextPagelet = pagelet,
+					transition;
 
 				np.render(this.pageContainer);
 				np.el.css('min-height', window.innerHeight + 'px');
 
-				$.mobile.changePage(np.el, {
-					transition: this.startUpView ? 'fade' : (lp.transition.out || np.transition.in || np.transition.out || 'fade'),
-					fromHashChange: true
-				});
+				if (this.startUpView) {
+					transition = 'fade';
+				}
+				if (!transition && np.controller.getTransition) {
+					transition = np.controller.getTransition(np.hash, lp ? lp.hash : '');
+				}
+				if (!transition && lp) {
+					transition = lp.transition.out;
+				}
+
+				if (!transition) {
+					transition = np.transition.in || np.transition.out || 'fade';
+				}
+
+				X.defer(function() {
+					$.mobile.changePage(np.el, $.extend({}, this.pageChangeOptions, {
+						transition: transition,
+						fromHashChange: true
+					}));
+				}, 100, this);
 			}
 		},
 
@@ -531,6 +563,10 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 
 			this.lastPagelet = this.nextPagelet;
 			this.nextPagelet = null;
+			this.isPageChanging = false;
+			this.pageChangeOptions = null;
+			this.lastHash = null;
+
 			this.fireEvent('pageafterchange', this, this.lastPagelet);
 		},
 
@@ -567,6 +603,7 @@ if ($ && $.mobile) {
 		// if defaultHomeScroll hasn't been set yet, see if scrollTop is 1
 		// it should be 1 in most browsers, but android treats 1 as 0 (for hiding addr bar)
 		// so if it's 1, use 0 from now on
-		defaultHomeScroll: ( !$.support.scrollTop || $(window).scrollTop() === 1 ) ? 0 : 1
+		//defaultHomeScroll: (!$.support.scrollTop || $(window).scrollTop() === 1) ? 0 : 1
+		defaultHomeScroll: 0
 	});
 }

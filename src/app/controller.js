@@ -154,6 +154,13 @@ MX.kindle('klass', function(X, Klass) {
         getCt: function() {
             return this.getContainer();
         },
+
+		/**
+		 * 获取hash中包含的参数
+		 */
+		getParams: function() {
+			 return this.params;
+		},
         
         // private
         onDestroy: function() {

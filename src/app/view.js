@@ -118,7 +118,7 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         },
         
         // private
-        onDestory: function() {
+        onDestroy: function() {
             if (this.header) {
                 this.header.remove();
                 this.header = null;
