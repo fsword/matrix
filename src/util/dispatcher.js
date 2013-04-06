@@ -189,9 +189,9 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                             if (l.single === true) {
                                 i--;
                             }
-							if (l.listenerFn.apply(l.scope, args) === false) {
-								return false;
-							}
+                            if (l.listenerFn.apply(l.scope, args) === false) {
+                                return false;
+                            }
                         }
                     }
                 }
