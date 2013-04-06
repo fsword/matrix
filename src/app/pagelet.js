@@ -53,12 +53,12 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
             // 解析URL中包含的参数值
             this.parseParams();
 
-			if (X.isString(this.transition)) {
-				this.transition = {
-					in: this.transition,
-					out: ''
-				}
-			}
+            if (X.isString(this.transition)) {
+                this.transition = {
+                    in: this.transition,
+                    out: ''
+                }
+            }
             
             this.initView();
             this.initController();
@@ -94,8 +94,10 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         
         // private
         initView: function() {
-            this.view = X.create(this.view || 'view', {});
-			this.mon(this.view, 'render', this.onViewRender);
+            this.view = X.create(this.view || 'view', {
+                params: this.params
+            });
+            this.mon(this.view, 'render', this.onViewRender);
         },
         
         // private
@@ -104,7 +106,7 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                 view: this.view,
                 models: this.models,
                 stores: this.stores,
-				params: this.params
+                params: this.params
             });
         },
         
@@ -143,12 +145,12 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         // private
         onRender: X.emptyFn,
 
-		// private
-		onViewRender: function() {
-			if (this.controller) {
-				this.controller.onViewRender();
-			}
-		},
+        // private
+        onViewRender: function() {
+            if (this.controller) {
+                this.controller.onViewRender();
+            }
+        },
         
         // private
         beforePageShow: function() {

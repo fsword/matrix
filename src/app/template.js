@@ -44,8 +44,15 @@ MX.kindle('jquery', 'arttemplate', 'klass', function(X, $, artTemplate, Klass) {
          * 渲染模版
          */
         render: function(container, data) {
+            if (X.isObject(container)) {
+                data = container;
+                container = null;
+            }
             container = container || this.container;
             container.html(this.applyTemplate(data));
-        }
+        },
+
+        // private
+        getData: X.emptyFn
     });
 });

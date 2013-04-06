@@ -21,10 +21,10 @@ MX.kindle('klass', function(X, Klass) {
         // private
         initEvents: function() {
             this.addEvents(
-				/**
-				 * @event pagecreate
-				 */
-				'pagecreate',
+                /**
+                 * @event pagecreate
+                 */
+                'pagecreate',
                 /**
                  * @event pagebeforeshow
                  */
@@ -79,18 +79,18 @@ MX.kindle('klass', function(X, Klass) {
             this.mon(root, eventName, selector, callbackFn, scope);
         },
 
-		// private
-		onViewRender: function() {
-			if (this.delegates) {
-				this.delegateEvent(this.view.container, this.delegates);
-				delete this.delegates;
-			}
-			this.onPageCreate();
-			this.fireEvent('pagecreate', this);
-		},
+        // private
+        onViewRender: function() {
+            if (this.delegates) {
+                this.delegateEvent(this.view.container, this.delegates);
+                delete this.delegates;
+            }
+            this.onPageCreate();
+            this.fireEvent('pagecreate', this);
+        },
 
-		// private
-		onPageCreate: X.emptyFn,
+        // private
+        onPageCreate: X.emptyFn,
         
         // private
         beforePageShow: X.emptyFn,
@@ -155,12 +155,12 @@ MX.kindle('klass', function(X, Klass) {
             return this.getContainer();
         },
 
-		/**
-		 * 获取hash中包含的参数
-		 */
-		getParams: function() {
-			 return this.params;
-		},
+        /**
+         * 获取hash中包含的参数
+         */
+        getParams: function() {
+             return this.params;
+        },
         
         // private
         onDestroy: function() {

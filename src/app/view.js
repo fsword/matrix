@@ -29,18 +29,23 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         // private
         initTemplate: function() {
             var templates = {}, tmpl;
-            X.each(this.templates, function(i, config) {
-                tmpl = X.create('template', $.extend({}, config));
-                if (tmpl.renderToBody) {
-                    this.renderBodyTmpl = tmpl;
-                } else if (tmpl.renderToHeader) {
-                    this.renderHeaderTmpl = tmpl;
-                } else if (tmpl.renderToFooter) {
-                    this.renderFooterTmpl = tmpl;
+            if (this.templates) {
+                if (!X.isArray(this.templates)) {
+                    this.templates = [this.templates];
                 }
-                templates[tmpl.id] = tmpl;
-            }, this);
-            this.templates = templates; 
+                X.each(this.templates, function(i, config) {
+                    tmpl = X.create('template', $.extend({}, config));
+                    if (tmpl.renderToBody) {
+                        this.renderBodyTmpl = tmpl;
+                    } else if (tmpl.renderToHeader) {
+                        this.renderHeaderTmpl = tmpl;
+                    } else if (tmpl.renderToFooter) {
+                        this.renderFooterTmpl = tmpl;
+                    }
+                    templates[tmpl.id] = tmpl;
+                }, this);
+            }
+            this.templates = templates;
         },
         
         // private
@@ -72,7 +77,7 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                         this.header.addClass(this.headerCls);
                     }
                     this.renderHeaderTmpl.container = this.header;
-                    this.renderHeaderTmpl.render();
+                    this.renderHeaderTmpl.render(this.renderHeaderTmpl.getData(this.params));
                     container.append(this.header);
                 }
                 
@@ -84,21 +89,21 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                 }
                 if (this.renderBodyTmpl) {
                     this.renderBodyTmpl.container = this.body;
-                    this.renderBodyTmpl.render();
+                    this.renderBodyTmpl.render(this.renderBodyTmpl.getData(this.params));
                 }
                 container.append(this.body);
 
-				if (this.renderFooterTmpl) {
-					this.footer = $(document.createElement('div'));
-					this.footer.attr('id', 'mx-app-page-footer-' + this.id)
-						.attr('data' + $.mobile.ns + '-role', 'footer');
-					if (this.footerCls) {
-						this.footer.addClass(this.footerCls);
-					}
-					this.renderFooterTmpl.container = this.footer;
-					this.renderFooterTmpl.render();
-					container.append(this.footer);
-				}
+                if (this.renderFooterTmpl) {
+                    this.footer = $(document.createElement('div'));
+                    this.footer.attr('id', 'mx-app-page-footer-' + this.id)
+                        .attr('data' + $.mobile.ns + '-role', 'footer');
+                    if (this.footerCls) {
+                        this.footer.addClass(this.footerCls);
+                    }
+                    this.renderFooterTmpl.container = this.footer;
+                    this.renderFooterTmpl.render(this.renderFooterTmpl.getData(this.params));
+                    container.append(this.footer);
+                }
                 
                 this.onRender(container);
                 this.fireEvent('render', this, container);
