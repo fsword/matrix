@@ -119,8 +119,8 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                 
                 this.el = $(document.createElement('div'));
                 this.el.attr('id', 'mx-app-page-' + this.id)
-                       .attr('data' + $.mobile.ns + '-role', 'page')
-                       .attr('data' + $.mobile.ns + '-url', '#/' + this.hash);
+                       .attr('data-' + $.mobile.ns + 'role', 'page')
+                       .attr('data-' + $.mobile.ns + 'url', '#/' + this.hash);
                 if (this.cls) {
                     this.el.addClass(this.cls);
                 }

@@ -27,6 +27,11 @@
      * @memberOf MX
      */
     X.reg = X.klass.KlassManager.register;
+
+	/**
+	 * @memberOf MX
+	 */
+	X.getClass = X.klass.KlassManager.get;
     
     /**
      * @memberOf MX

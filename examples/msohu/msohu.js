@@ -70,13 +70,10 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
     Klass.define({
         alias: 'msohu.indexview',
         extend: 'view',
-        bodyCls: 'index-content',
-        templates: [
-            {
-                id: 'index-body-template',
-                renderToBody: true
-            }
-        ]
+        bodyCfg: {
+			cls: 'index-content',
+			template: 'index-body-template'
+		}
     });
     Klass.define({
         alias: 'msohu.indexcontroller',
@@ -159,39 +156,34 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
     Klass.define({
         alias: 'msohu.channelview',
         extend: 'view',
-        headerCls: 'header',
-        footerCls: 'footer',
-        bodyCls: 'container',
-        templates: [
-            {
-                id: 'channel-header-template',
-                renderToHeader: true,
-                getData: function(params) {
-                    return channels[params.id];
-                }
-            },
-            {
-                id: 'channel-footer-template',
-                renderToFooter: true,
-                getData: function(params) {
-                    return {
-                        page: params.page,
-                        pageLeft: ((parseInt(params.page) - 1) * 9.55) + 'px'
-                    };
-                }
-            },
-            {
-                id: 'channel-body-template',
-                renderToBody: true,
-                getData: function(params) {
-                    return {
-                        bgColor: channels[params.id].bgColor,
-                        showHot: params.page < 4,
-                        randomTop: !Math.floor(Math.random() * 2)
-                    };
-                }
-            }
-        ]
+		headerCfg: {
+		  	cls: 'header',
+			template: 'channel-header-template',
+			getData: function(params) {
+				return channels[params.id];
+			}
+		},
+		footerCfg: {
+			cls: 'footer',
+			template: 'channel-footer-template',
+			getData: function(params) {
+				return {
+					page: params.page,
+					pageLeft: ((parseInt(params.page) - 1) * 9.55) + 'px'
+				};
+			}
+		},
+		bodyCfg: {
+			cls: 'container',
+			template: 'channel-body-template',
+			getData: function(params) {
+				return {
+					bgColor: channels[params.id].bgColor,
+					showHot: params.page < 4,
+					randomTop: !Math.floor(Math.random() * 2)
+				};
+			}
+		}
     });
     Klass.define({
         alias: 'msohu.channelcontroller',
@@ -273,18 +265,22 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
     Klass.define({
         alias: 'msohu.articleview',
         extend: 'view',
-        footerCls: 'footer',
-        bodyCls: 'container',
-        templates: [
-            {
-                id: 'article-footer-template',
-                renderToFooter: true
-            },
-            {
-                id: 'article-body-template',
-                renderToBody: true
-            }
-        ]
+		headerCfg: {
+			cls: 'banner',
+			template: 'article-header-template',
+			getData: function(params) {
+				return channels[params.id];
+			}
+		},
+        footerCfg: {
+			cls: 'footer',
+			template: 'article-footer-template',
+			fixed: true
+		},
+        bodyCfg: {
+			cls: 'container',
+			template: 'article-body-template'
+		}
     });
     Klass.define({
         alias: 'msohu.articlecontroller',
@@ -396,6 +392,8 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
     var config = {
         templateVersion: '1.1',
         templateUrl: 'main.tmpl',
+		databaseName: 'msohu_db',
+		databaseDescription: 'msohu offline database',
         models: [
             {
                 id: 'article-model'

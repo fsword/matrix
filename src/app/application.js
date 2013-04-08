@@ -36,9 +36,8 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
         databaseSize: 50 * 1024 * 1024,
 
         /**
-         * @cfg {String} databaseName 数据库名称，默认'matrix_data'
+         * @cfg {String} databaseName 数据库名称，默认undefined
          */
-        databaseName: 'matrix_database',
 
         /**
          * @cfg {String} databaseVersion 数据库版本，默认'1.0'
@@ -48,7 +47,6 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
         /**
          * @cfg {String} databaseDescription 数据库描述
          */
-        databaseDescription: 'offline database',
 
         /**
          * @cfg {Number} databaseExpires 数据过期时间，单位ms，默认 3 * 24 * 60 * 60 * 1000，3天后过期
