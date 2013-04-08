@@ -4,7 +4,9 @@
  * Example中的系统功能完全仿照Zaker for iPhone开发，为了达到最佳展示效果，请使用iphone safari打开，并将页面添加到你的桌面，然后从桌面打开进入。
  */
 MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', function(X, $, Klass, LocalStorage, iScrollUtil, TouchHolder) {
-    var $body = $('body'), isShowFavourite = false, channels = [
+    var $body = $('body'),
+        isShowFavourite = false,
+        channels = [
             {
                 name: '聚焦头条',
                 en: 'TOP STORIES',
@@ -71,9 +73,9 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
         alias: 'msohu.indexview',
         extend: 'view',
         bodyCfg: {
-			cls: 'index-content',
-			template: 'index-body-template'
-		}
+            cls: 'index-content',
+            template: 'index-body-template'
+        }
     });
     Klass.define({
         alias: 'msohu.indexcontroller',
@@ -156,34 +158,34 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
     Klass.define({
         alias: 'msohu.channelview',
         extend: 'view',
-		headerCfg: {
-		  	cls: 'header',
-			template: 'channel-header-template',
-			getData: function(params) {
-				return channels[params.id];
-			}
-		},
-		footerCfg: {
-			cls: 'footer',
-			template: 'channel-footer-template',
-			getData: function(params) {
-				return {
-					page: params.page,
-					pageLeft: ((parseInt(params.page) - 1) * 9.55) + 'px'
-				};
-			}
-		},
-		bodyCfg: {
-			cls: 'container',
-			template: 'channel-body-template',
-			getData: function(params) {
-				return {
-					bgColor: channels[params.id].bgColor,
-					showHot: params.page < 4,
-					randomTop: !Math.floor(Math.random() * 2)
-				};
-			}
-		}
+        headerCfg: {
+            cls: 'header',
+            template: 'channel-header-template',
+            getData: function(params) {
+                return channels[params.id];
+            }
+        },
+        footerCfg: {
+            cls: 'footer',
+            template: 'channel-footer-template',
+            getData: function(params) {
+                return {
+                    page: params.page,
+                    pageLeft: ((parseInt(params.page) - 1) * 9.55) + 'px'
+                };
+            }
+        },
+        bodyCfg: {
+            cls: 'container',
+            template: 'channel-body-template',
+            getData: function(params) {
+                return {
+                    bgColor: channels[params.id].bgColor,
+                    showHot: params.page < 4,
+                    randomTop: !Math.floor(Math.random() * 2)
+                };
+            }
+        }
     });
     Klass.define({
         alias: 'msohu.channelcontroller',
@@ -265,22 +267,22 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
     Klass.define({
         alias: 'msohu.articleview',
         extend: 'view',
-		headerCfg: {
-			cls: 'banner',
-			template: 'article-header-template',
-			getData: function(params) {
-				return channels[params.id];
-			}
-		},
+        headerCfg: {
+            cls: 'banner',
+            template: 'article-header-template',
+            getData: function(params) {
+                return channels[params.id];
+            }
+        },
         footerCfg: {
-			cls: 'footer',
-			template: 'article-footer-template',
-			fixed: true
-		},
+            cls: 'footer',
+            template: 'article-footer-template',
+            fixed: true
+        },
         bodyCfg: {
-			cls: 'container',
-			template: 'article-body-template'
-		}
+            cls: 'container',
+            template: 'article-body-template'
+        }
     });
     Klass.define({
         alias: 'msohu.articlecontroller',
@@ -359,6 +361,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
             favEl.css('-webkit-transform', 'translateY(0px)');
         }
     }
+
     // 欢迎页 end *********************************************
 
     // 消息提示 start *********************************************
@@ -392,8 +395,8 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
     var config = {
         templateVersion: '1.1',
         templateUrl: 'main.tmpl',
-		databaseName: 'msohu_db',
-		databaseDescription: 'msohu offline database',
+        databaseName: 'msohu_db',
+        databaseDescription: 'msohu offline database',
         models: [
             {
                 id: 'article-model'
