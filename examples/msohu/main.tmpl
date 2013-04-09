@@ -86,7 +86,7 @@
         </span>
         <span class="s_time">2天前</span>
     </div>
-    <a href="#0" class="btn_refresh btn_ft">刷新</a>
+    <a href="#0" class="btn_refresh btn_ft" data-message=true>刷新</a>
 </script>
 
 <script id="channel-body-template" type="text/tmpl">
@@ -135,27 +135,51 @@
             </div>
         <# } #>
     <# } else { #>
-        <div class="banner">
-            <div class="t_info" style="background-color: <#= bgColor #>">
-                <a href="#n/12345678">
-                    <span class="i_title">苹果发信致歉中国:我们错了我们错了</span>
-                    <p>IT之家 1天前</p>
-                </a>
-                <span class="h_line"></span>
+        <# if (randomTop) { #>
+            <div class="banner">
+                <div class="t_info" style="background-color: <#= bgColor #>">
+                    <a href="#n/12345678">
+                        <span class="i_title">苹果发信致歉中国:我们错了我们错了</span>
+                        <p>IT之家 1天前</p>
+                    </a>
+                    <span class="h_line"></span>
+                </div>
             </div>
-        </div>
-        <div class="article article_nopic">
-            <div class="article_info double_info">
-                <a href="#n/12345678">
-                    <span>苹果发苹果发信致歉中国</span>
-                    <p>IT之家 1天前</p>
-                </a>
-                <a href="#n/12345678">
-                    <span>苹果发苹果发信致歉中国</span>
-                    <p>IT之家 1天前</p>
-                </a>
+            <div class="article article_nopic">
+                <div class="article_info double_info">
+                    <a href="#n/12345678">
+                        <span>苹果发苹果发信致歉中国</span>
+                        <p>IT之家 1天前</p>
+                    </a>
+                    <a href="#n/12345678">
+                        <span>苹果发苹果发信致歉中国</span>
+                        <p>IT之家 1天前</p>
+                    </a>
+                </div>
             </div>
-        </div>
+        <# } else { #>
+            <div class="article article_nopic">
+                <div class="article_info double_info">
+                    <a href="#n/12345678">
+                        <span>苹果发苹果发信致歉中国</span>
+                        <p>IT之家 1天前</p>
+                    </a>
+                    <a href="#n/12345678">
+                        <span>苹果发苹果发信致歉中国</span>
+                        <p>IT之家 1天前</p>
+                    </a>
+                </div>
+            </div>
+            <div class="banner">
+                <div class="t_info" style="background-color: <#= bgColor #>">
+                    <a href="#n/12345678">
+                        <span class="i_title">苹果发信致歉中国:我们错了我们错了</span>
+                        <p>IT之家 1天前</p>
+                    </a>
+                    <span class="h_line"></span>
+                </div>
+            </div>
+        <# } #>
     <# } #>
     <div class="article <# if (!showHot) { #>article_nopic<# } #>">
         <div class="article_info double_info">
@@ -180,10 +204,8 @@
 </script>
 
 <script id="article-header-template" type="text/tmpl">
-    <div class="detail_t_info" style="background-color: <#= bgColor #>">
-        <h1 class="i_title">苹果发信致歉中国:我们错了我们错了!!</h1>
-        <p>IT之家 1天前</p>
-    </div>
+    <h1 class="i_title">苹果发信致歉中国:我们错了我们错了!!</h1>
+    <p>IT之家 1天前</p>
 </script>
 
 <script id="article-footer-template" type="text/tmpl">

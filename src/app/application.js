@@ -517,7 +517,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 
         // private
         changePage: function(pagelet) {
-            var path = $.mobile.path, url;
+            var path = $.mobile.path, url, lp, np, transition, transtionOptions;
             window.scrollTo(0, 1);
             url = path.getLocation();
             this.history.add(url, {
@@ -529,13 +529,15 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                 this.isPageChanging = true;
                 this.pageChangeOptions = this.pageChangeOptions || {};
 
-                var lp = this.lastPagelet,
-                    np = this.nextPagelet = pagelet,
-                    transition;
+                lp = this.lastPagelet;
+                np = this.nextPagelet = pagelet;
 
                 np.render(this.pageContainer);
                 np.el.css('min-height', window.innerHeight + 'px');
 
+                transtionOptions = $.extend({}, this.pageChangeOptions, {
+                    fromHashChange: true
+                });
                 if (this.startUpView) {
                     transition = 'fade';
                 }
@@ -543,17 +545,15 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                     transition = np.controller.getTransition(np.hash, lp ? lp.hash : '');
                 }
                 if (!transition && lp) {
-                    transition = lp.transition.out;
+                    transition = lp.transition.out.effect;
+                    transtionOptions.reverse = lp.transition.out.reverse;
                 }
-
                 if (!transition) {
-                    transition = np.transition.in || np.transition.out || 'fade';
+                    transition = np.transition.in.effect || np.transition.out.effect || 'fade';
+                    transtionOptions.reverse = np.transition.in.reverse;
                 }
-
-                $.mobile.changePage(np.el, $.extend({}, this.pageChangeOptions, {
-                    transition: transition,
-                    fromHashChange: true
-                }));
+                transtionOptions.transition = transition;
+                $.mobile.changePage(np.el, transtionOptions);
             }
         },
 

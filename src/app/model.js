@@ -31,6 +31,10 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
         /**
          * @cfg {Array} fields 开启useCache时，必须设置fields字段
          */
+
+        /**
+         * @cfg {String} url AJAX请求API
+         */
         
         /**
          * @cfg {String/Object} restful AJAX请求API
@@ -40,6 +44,11 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
          * @cfg {String} requestMethod AJAX请求类型，默认'GET'
          */
         requestMethod: 'GET',
+
+        /**
+         * @cfg {String} dataType 默认'json'
+         */
+        dataType: 'json',
         
         /**
          * @cfg {Object} baseParams AJAX请求提交给服务端的默认参数
@@ -103,7 +112,7 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
                 destroy: 'destroy'
             }, rest, rests;
             
-            this.restful = this.restful || {};
+            this.restful = this.restful || this.url || {};
             
             if (X.isString(this.restful)) {
                 this.restful = {
@@ -376,9 +385,10 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
                 params.data = params.data || {};
                 params.data = $.extend({}, this.baseParams, this.getFetchParams() || {}, params.data, {'_dt': $.now()});
                 params = $.extend({
-                    type: this.requestMethod
-                }, this.restful.read, params, {
-                    dataType: 'json'
+                    type: this.requestMethod,
+                    url: this.getUrl ? this.getUrl(this.params) : this.restful.read
+                }, params, {
+                    dataType: this.dataType || 'json'
                 });
                 
                 this.cancelFetch();
@@ -481,7 +491,7 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
                                 me.handleLoadSuccess(rs);
                             }
                         } else {
-                            me.handleLoadFailed();
+                            me.fetch(params);
                         }
                     });
                 }, function(error) {

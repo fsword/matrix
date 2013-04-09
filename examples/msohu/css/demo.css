@@ -2,6 +2,7 @@ html, body, menu, ul, ol, li, p, div, form, h1, h2, h3, h4, h5, h6, img, a img, 
     padding: 0;
     margin: 0;
     border: 0;
+    font-family: Helvetica, Arial;
 }
 
 .i {
@@ -172,6 +173,10 @@ ul {
 
 .ui-body-c, .ui-overlay-c {
     text-shadow: none;
+}
+
+.ui-mobile, .ui-mobile .ui-page {
+    min-height: 460px;
 }
 
 /*********************************************/
@@ -397,7 +402,7 @@ ul {
     position: absolute;
     left: 30px;
     top: 30px;
-    font: bold 36px earth_normal, Helvetica, sans-serif;
+    font: normal 36px earth_normal, Helvetica, sans-serif;
     color: #fffef9;
     opacity: 0.3;
     text-shadow: 1px 1px 0 rgb(79, 85, 85);
@@ -636,9 +641,10 @@ ul {
     position: absolute;
     bottom: 0;
     left: 10px;
+    margin-bottom: 3px;
     color: #FFF;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 20px;
     line-height: 1.5em;
     text-shadow: 1px 1px 0 rgba(0, 0, 0, .8);
 }
@@ -767,7 +773,7 @@ ul {
 }
 
 .article .single_info span {
-    font-size: 18px;
+    font-size: 20px;
     line-height: 26px;
 }
 
@@ -780,7 +786,6 @@ ul {
     box-sizing: border-box;
     color: #686868;
     text-decoration: none;
-    font-family: '微软黑体';
     border-bottom: 1px solid #e9e9e9;
     padding: 8px 8px;
     width: 50%;
@@ -798,7 +803,7 @@ ul {
 }
 
 .container .article_info a p {
-    font-size: 10px;
+    font-size: 9px;
     line-height: 18px;
 }
 
@@ -812,7 +817,7 @@ ul {
 }
 
 .container .article_nopic span {
-    font-size: 18px;
+    font-size: 16px;
     line-height: 24px;
 }
 

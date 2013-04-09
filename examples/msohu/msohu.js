@@ -191,8 +191,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
         alias: 'msohu.channelcontroller',
         extend: 'controller',
         delegates: {
-            'click .btn_back': 'back',
-            'click .btn_refresh': 'refresh'
+            'click .btn_back': 'back'
         },
         beforePageShow: function() {
             var params = this.getParams(), view = this.view;
@@ -216,6 +215,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
                     handleTouchEnd: this.onVerticalTouchEnd
                 });
             }
+            // TODO this.getStore('channel-store').load();
         },
         onHorizontalTouchEnd: function() {
             var params = this.getParams();
@@ -237,16 +237,12 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
         },
         getTransition: function(to, from) {
             if (/^c\/.*/i.test(from) && /^c\/.*/i.test(to)) {
-                return 'slide';
+                return 'slidefade';
             }
         },
         back: function(e) {
             e && e.preventDefault();
             X.App.go('h');
-        },
-        refresh: function(e) {
-            e && e.preventDefault();
-            // TODO
         },
         destroyHolder: function() {
             if (this.hHolder) {
@@ -269,13 +265,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
         extend: 'view',
         headerCfg: {
             cls: 'banner',
-            template: 'article-header-template',
-            getData: function(params) {
-                var colors = ['#2ca7ea', '#1d953f', '#c7a252', '#585eaa', '#853f04', '#dea32c', '#f05b72', '#5f5d46', '#c63c26', '#b4532a'];
-                return {
-                    bgColor: colors[Math.floor(Math.random() * colors.length)]
-                };
-            }
+            template: 'article-header-template'
         },
         footerCfg: {
             cls: 'footer',
@@ -292,6 +282,10 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
         extend: 'controller',
         delegates: {
             'click .btn_back': 'back'
+        },
+        onPageCreate: function() {
+            var colors = ['#2ca7ea', '#1d953f', '#c7a252', '#585eaa', '#853f04', '#dea32c', '#f05b72', '#5f5d46', '#c63c26', '#b4532a'];
+            this.getHeader().css('background-color', colors[Math.floor(Math.random() * colors.length)]);
         },
         back: function(e) {
             e && e.preventDefault();
@@ -408,21 +402,32 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
     // 消息提示 end *********************************************
 
     LocalStorage.globalPrefix = 'msohu/';
+
     var config = {
-        templateVersion: '1.1',
+        templateVersion: '1.2',
         templateUrl: 'main.tmpl',
         databaseName: 'msohu_db',
         databaseDescription: 'msohu offline database',
         models: [
             {
-                id: 'article-model'
-
+                id: 'article-model',
+                tableName: 'articles',
+                fields: ['title', 'content', 'create_time', 'media', 'page_count'],
+                useCache: true,
+                getUrl: function(params) {
+                    return '/wcms/news/' + params.id + '/';
+                }
             }
         ],
         stores: [
             {
-                id: 'channel-store'
-
+                id: 'channel-store',
+                url: '/wcms/news/',
+                useCache: true,
+                pageSize: 6,
+                meta: {
+                    pageSizeProperty: 'page_size'
+                }
             }
         ],
         pagelets: [
@@ -442,8 +447,11 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
                 stores: 'channel-store',
                 cls: 'winContent',
                 transition: {
-                    in: 'pop',
-                    out: 'slidedown'
+                    in: 'slideup',
+                    out: {
+                        effect: 'slideup',
+                        reverse: true
+                    }
                 }
             },
             {
@@ -455,7 +463,10 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
                 cls: 'winContent',
                 transition: {
                     in: 'slideup',
-                    out: 'slidedown'
+                    out: {
+                        effect: 'slideup',
+                        reverse: true
+                    }
                 }
             }
         ],

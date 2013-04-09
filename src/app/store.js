@@ -43,15 +43,20 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         /**
          * @cfg {Array} fields 赋值给model
          */
-        
+
         /**
-         * @cfg {String/Object} restful AJAX请求API
+         * @cfg {String} url AJAX请求API
          */
         
         /**
          * @cfg {String} requestMethod AJAX请求类型，默认'GET'
          */
         requestMethod: 'GET',
+
+        /**
+         * @cfg {String} dataType 默认'json'
+         */
+        dataType: 'json',
         
         /**
          * @cfg {Object} baseParams AJAX请求提交给服务端的默认参数
@@ -100,7 +105,6 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
                 totalProperty: 'total'
             });
             
-            this.initRestful();
             this.initTable();
             
             /**
@@ -125,46 +129,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
                 }
             });
         },
-        
-        // private
-        initRestful: function() {
-            var actions = {
-                create: 'create',
-                read: 'read',
-                update: 'update',
-                destroy: 'destroy'
-            }, rest, rests;
-            
-            this.restful = this.restful || {};
-            
-            if (X.isString(this.restful)) {
-                this.restful = {
-                    create: this.restful,
-                    read: this.restful,
-                    update: this.restful,
-                    destroy: this.restful
-                };
-            }
-            
-            rests = {};
-            X.each(actions, function(i, action) {
-                rest = this.restful[action];
-                if (X.isString(rest)) {
-                    rest = {
-                        url: rest,
-                        type: this.requestMethod
-                    };
-                } else {
-                    rest = $.extend({
-                        type: this.requestMethod
-                    }, rest)
-                }
-                rests[action] = rest;
-            }, this);
-            
-            this.restful = rests;
-        },
-        
+
         // private
         initTable: function() {
             var me = this;
@@ -251,9 +216,10 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
                 params.data['_dt'] = $.now(); // 时间戳，防止缓存
                 params.data = $.extend({}, me.baseParams, params.data);
                 params = $.extend({
-                    type: me.requestMethod
-                }, me.restful.read, params, {
-                    dataType: 'json'
+                    type: me.requestMethod,
+                    url: this.getUrl ? this.getUrl(this.params) : me.url
+                }, params, {
+                    dataType: me.dataType || 'json'
                 });
                 
                 me.cancelFetch();
@@ -491,7 +457,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
                                 }
                             }
                         } else {
-                            me.handleLoadFailed();
+                            me.fetch(params);
                         }
                     });
                 }, function(error) {

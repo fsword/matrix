@@ -53,17 +53,50 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
             // 解析URL中包含的参数值
             this.parseParams();
 
+            this.initTransition();
+            this.initModels();
+            this.initStores();
+            this.initView();
+            this.initController();
+        },
+
+        // private
+        initTransition: function() {
+            this.transition = this.transition || '';
             if (X.isString(this.transition)) {
                 this.transition = {
                     in: this.transition,
                     out: ''
                 }
             }
-            
-            this.initView();
-            this.initController();
+            if (X.isString(this.transition.in)) {
+                this.transition.in = {
+                    effect: this.transition.in
+                }
+            }
+            if (X.isString(this.transition.out)) {
+                this.transition.out = {
+                    effect: this.transition.out
+                }
+            }
         },
-        
+
+        // private
+        initModels: function() {
+            this.models = this.models || {};
+            X.each(this.models, function(i, model) {
+                model.params = this.params;
+            }, this);
+        },
+
+        // private
+        initStores: function() {
+            this.stores = this.stores || {};
+            X.each(this.stores, function(i, store) {
+                store.params = this.params;
+            }, this);
+        },
+
         // private
         // 将hash中包含的参数解析出来
         parseParams: function() {
