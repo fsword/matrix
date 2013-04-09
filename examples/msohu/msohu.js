@@ -264,7 +264,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
         alias: 'msohu.articleview',
         extend: 'view',
         headerCfg: {
-            cls: 'banner',
+            cls: 'detail_title',
             template: 'article-header-template'
         },
         footerCfg: {
