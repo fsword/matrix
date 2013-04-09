@@ -1,6 +1,6 @@
 /**
  * @class MX.klass.Klass
- * 
+ * @alias klass
  * 声明类，类的继承，重写类方法
  */
 MX.kindle('base', 'klassmanager', function(X, Base, KlassManager) {
@@ -42,7 +42,7 @@ MX.kindle('base', 'klassmanager', function(X, Base, KlassManager) {
     X.klass.Klass = {
         /**
          * 声明一个类，或继承自一个父类，子类拥有父类的所有prototype定义的特性，
-         * 如未定义extend属性，默认继承class.Base类，例子：
+         * 如未定义extend属性，默认继承MX.klass.Base类，例子：
          * <code>
          *  var Cls1 = Klass.define({
          *      constructor: function(name) {
@@ -119,12 +119,10 @@ MX.kindle('base', 'klassmanager', function(X, Base, KlassManager) {
          *  cls1.sayHello(); // 输出 'hello world!'
          * </code>
          * 
-         * 如果要为函数的某个方法定义别名，切忌使用override，应该像下面这样处理：
+         * 如果想为类的方法定义一个新的别名，应该使用下面的方式，不能使用override函数：
          * <code>
-         *  $.extend(Cls1.prototype, {
-         *      speak: Cls1.prototype.say
-         *  });
-         *  
+         *  Cls1.prototype.speak = Cls1.prototype.say;
+         *
          *  var cls1 = new Cls1();
          *  cls1.speak(); // 输出 'Max  say: hello, I'm Max, nice to meet you!'
          * </code>

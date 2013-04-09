@@ -13,9 +13,7 @@ window.MX = {
         toString = Object.prototype.toString,
         $ = window.jQuery,
         artTemplate = window.template,
-        iScroll = window.iScroll,
         ua = window.navigator.userAgent,
-        webkit = ua.match(/WebKit\/([\d.]+)/),
         android = ua.match(/(Android)[\/\s+]([\d.]+)/),
         ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
         iphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
@@ -56,12 +54,11 @@ window.MX = {
     
     // 命名空间函数的简写
     X.ns = X.namespace;
-    X.ns('MX.lib', 'MX.klass', 'MX.app', 'MX.lib', 'MX.util');
+    X.ns('MX.lib', 'MX.klass', 'MX.lib', 'MX.util', 'MX.app');
     
     $.extend(X.lib, {
         jQuery: $,
-        artTemplate: artTemplate,
-        iScroll: iScroll
+        artTemplate: artTemplate
     });
     if (artTemplate) {
         artTemplate.openTag = '<#';
@@ -298,6 +295,7 @@ window.MX = {
          * @param {Number} millis The number of milliseconds for the setTimeout call (if less than or equal to 0 the function is executed immediately)
          * @param {Object} scope (optional) The scope (<code><b>this</b></code> reference) in which the function is executed.
          * <b>If omitted, defaults to the browser window.</b>
+         * @param {Array} args 调用fn函数的形参
          * @return {Number} The timeout id that can be used with clearTimeout
          */
         defer: function(fn, millis, scope, args) {

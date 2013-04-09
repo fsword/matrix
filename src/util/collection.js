@@ -1,7 +1,7 @@
 /**
  * @class MX.util.Collection
  * 
- * Collection来自Ext3.4.0的源码
+ * Collection类来自Ext3.4.0的源码
  */
 MX.kindle('jquery', 'klass', function(X, $, Klass) {
     var escapeRe = function(s) {

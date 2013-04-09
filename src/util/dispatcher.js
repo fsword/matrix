@@ -104,7 +104,7 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                     if (X.isFunction(listener)) {
                         this.addListener(eName, listener, scope);
                     } else {
-                        this.addListener(eName, listener.fireFn, listener.scope || scope);
+                        this.addListener(eName, listener.fn, listener.scope || scope);
                     }
                 }
                 return;
