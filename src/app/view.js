@@ -34,17 +34,25 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         
         // private
         initTemplate: function() {
-            var templates = {}, tmpl;
-            if (this.templates) {
-                if (!X.isArray(this.templates)) {
-                    this.templates = [this.templates];
+            var templates = this.templates;
+            this.templates = [];
+            if (templates) {
+                if (!X.isArray(templates)) {
+                    templates = [templates];
                 }
-                X.each(this.templates, function(i, config) {
-                    tmpl = X.create('template', $.extend({}, config));
-                    templates[tmpl.id] = tmpl;
+                X.each(templates, function(i, config) {
+                    this.addTemplate($.extend({}, config));
                 }, this);
             }
-            this.templates = templates;
+            if (this.headerCfg && this.headerCfg.template) {
+                this.headerTmpl = this.addTemplate(X.isString(this.headerCfg.template) ? { id: this.headerCfg.template } : $.extend({}, this.headerCfg.template));
+            }
+            if (this.footerCfg && this.footerCfg.template) {
+                this.footerTmpl = this.addTemplate(X.isString(this.footerCfg.template) ? { id: this.footerCfg.template } : $.extend({}, this.footerCfg.template));
+            }
+            if (this.bodyCfg && this.bodyCfg.template) {
+                this.bodyTmpl = this.addTemplate(X.isString(this.bodyCfg.template) ? { id: this.bodyCfg.template } : $.extend({}, this.bodyCfg.template));
+            }
         },
         
         // private
@@ -68,7 +76,6 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
 
                 this.container = container = $(container);
 
-                var tmpl;
                 if (this.headerCfg) {
                     this.header = $(document.createElement('div'));
                     this.header.attr('id', 'mx-app-page-header-' + this.id)
@@ -79,10 +86,9 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                     if (this.headerCfg.cls) {
                         this.header.addClass(this.headerCfg.cls);
                     }
-                    if (this.headerCfg.template) {
-                        tmpl = this.addTemplate(X.isString(this.headerCfg.template) ? { id: this.headerCfg.template } : $.extend({}, this.headerCfg.template));
-                        tmpl.container = this.header;
-                        tmpl.render(this.headerCfg.getData && this.headerCfg.getData(this.params));
+                    if (this.headerTmpl) {
+                        this.headerTmpl.container = this.header;
+                        !this.headerTmpl.store && this.headerTmpl.render();
                     }
                     container.append(this.header);
                 }
@@ -97,10 +103,9 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                 if (bodyCfg.cls) {
                     this.body.addClass(bodyCfg.cls);
                 }
-                if (bodyCfg.template) {
-                    tmpl = this.addTemplate(X.isString(bodyCfg.template) ? { id: bodyCfg.template } : $.extend({}, bodyCfg.template));
-                    tmpl.container = this.body;
-                    tmpl.render(bodyCfg.getData && bodyCfg.getData(this.params));
+                if (this.bodyTmpl) {
+                    this.bodyTmpl.container = this.body;
+                    !this.bodyTmpl.store && this.bodyTmpl.render();
                 }
                 container.append(this.body);
 
@@ -115,10 +120,9 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                     if (this.footerCfg.cls) {
                         this.footer.addClass(this.footerCfg.cls);
                     }
-                    if (this.footerCfg.template) {
-                        tmpl = this.addTemplate(X.isString(this.footerCfg.template) ? { id: this.footerCfg.template } : $.extend({}, this.footerCfg.template));
-                        tmpl.container = this.footer;
-                        tmpl.render(this.footerCfg.getData && this.footerCfg.getData(this.params));
+                    if (this.footerTmpl) {
+                        this.footerTmpl.container = this.footer;
+                        !this.footerTmpl.store && this.footerTmpl.render();
                     }
                     container.append(this.footer);
                 }
@@ -133,6 +137,8 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
 
         // private
         addTemplate: function(config) {
+            config = config || {};
+            config.params = this.params;
             var tmpl = X.create('template', config);
             this.templates[tmpl.id] = tmpl;
             return tmpl;
@@ -162,6 +168,11 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                 this.body = null;
             }
             this.container = null;
+
+            X.each(this.templates, function(i, tmpl) {
+                tmpl.destroy();
+            });
+            this.templates = null;
         }
     });
 });

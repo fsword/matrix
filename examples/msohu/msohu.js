@@ -3,7 +3,7 @@
  *
  * Example中的系统功能完全仿照Zaker for iPhone开发，为了达到最佳展示效果，请使用iphone safari打开，并将页面添加到你的桌面，然后从桌面打开进入。
  */
-MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', function(X, $, Klass, LocalStorage, iScrollUtil, TouchHolder) {
+MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'dateformat', function(X, $, Klass, LocalStorage, iScrollUtil, TouchHolder, DateFormat) {
     var $window = $(window), $body = $('body'),
         isShowFavourite = false,
         channels = [
@@ -11,63 +11,74 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
                 name: '聚焦头条',
                 en: 'TOP STORIES',
                 bgColor: '#2ca7ea',
-                titleColor: '#009ad6'
+                titleColor: '#009ad6',
+                list: '2'
             },
             {
                 name: '社会新闻',
                 en: 'CHINA NEWS',
                 bgColor: '#1d953f',
-                titleColor: '#007d65'
+                titleColor: '#007d65',
+                list: '53'
             },
             {
                 name: '财经频道',
                 en: 'FINANCE',
                 bgColor: '#c7a252',
-                titleColor: '#dec674'
+                titleColor: '#dec674',
+                list: '5'
             },
             {
                 name: '娱乐频道',
                 en: 'SHINE',
                 bgColor: '#585eaa',
-                titleColor: '#494e8f'
+                titleColor: '#494e8f',
+                list: '4'
             },
             {
                 name: '体育频道',
                 en: 'SPORTS',
                 bgColor: '#853f04',
-                titleColor: '#a7573b'
+                titleColor: '#a7573b',
+                list: '3'
             },
             {
                 name: '科技频道',
                 en: 'TECHNOLOGY',
                 bgColor: '#dea32c',
-                titleColor: '#c88400'
+                titleColor: '#c88400',
+                list: '7'
             },
             {
                 name: '女人频道',
                 en: 'WOMAN',
                 bgColor: '#f05b72',
-                titleColor: '#ef5b9c'
+                titleColor: '#ef5b9c',
+                list: '326'
             },
             {
                 name: '汽车频道',
                 en: 'AUTOS',
                 bgColor: '#5f5d46',
-                titleColor: '#6e6b41'
+                titleColor: '#6e6b41',
+                list: '1592'
             },
             {
                 name: '星座频道',
                 en: 'ASTROLOGY',
                 bgColor: '#c63c26',
-                titleColor: '#ef4136'
+                titleColor: '#ef4136',
+                list: '9'
             },
             {
                 name: '笑话频道',
                 en: 'JOKE',
                 bgColor: '#b4532a',
-                titleColor: '#f36c21'
+                titleColor: '#f36c21',
+                list: '1393'
             }
-        ];
+        ],
+        channelTimes = {};
 
     Klass.define({
         alias: 'msohu.indexview',
@@ -160,30 +171,47 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
         extend: 'view',
         headerCfg: {
             cls: 'header',
-            template: 'channel-header-template',
-            getData: function(params) {
-                return channels[params.id];
+            template: {
+                id: 'channel-header-template',
+                getData: function(params) {
+                    return channels[params.id];
+                }
             }
         },
         footerCfg: {
             cls: 'footer',
-            template: 'channel-footer-template',
-            getData: function(params) {
-                return {
-                    page: params.page,
-                    pageLeft: ((parseInt(params.page) - 1) * 9.55) + 'px'
-                };
+            template: {
+                id: 'channel-footer-template',
+                getData: function(params) {
+                    var times = channelTimes[params.id] || {};
+                    return {
+                        page: params.page,
+                        pageLeft: ((parseInt(params.page) - 1) * 9.55) + 'px',
+                        sTime: times.st ? calcTime(times.st) : '1分钟前',
+                        eTime: times.et ? calcTime(times.et) : '1天前'
+                    };
+                }
             }
         },
         bodyCfg: {
             cls: 'container',
-            template: 'channel-body-template',
-            getData: function(params) {
-                return {
-                    bgColor: channels[params.id].bgColor,
-                    showHot: params.page < 4,
-                    randomTop: !Math.floor(Math.random() * 2)
-                };
+            template: {
+                id: 'channel-body-template',
+                getData: function(params, data) {
+                    var focusTop = true, showFocus = true;
+                    if (data.data[0] && data.data[0]['cover_image_url']) {
+                        focusTop = true;
+                    } else if (data.data[2] && data.data[2]['cover_image_url']) {
+                        focusTop = false;
+                    } else {
+                        showFocus = false;
+                    }
+                    return $.extend({
+                        bgColor: channels[params.id].bgColor,
+                        focusTop: focusTop,
+                        showFocus: showFocus
+                    }, data);
+                }
             }
         }
     });
@@ -191,7 +219,35 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
         alias: 'msohu.channelcontroller',
         extend: 'controller',
         delegates: {
-            'click .btn_back': 'back'
+            'click .btn_back': 'back',
+            'click .btn_refresh': 'refresh'
+        },
+        initEvents: function() {
+            this.mon(this.getStore('channel-store'), 'load', this.onStoreLoad);
+        },
+        onStoreLoad: function(store) {
+            var footer = this.view.footer, rs = store.get(true),
+                s_time = footer.find('.s_time'),
+                cid = this.getParams().id,
+                times = channelTimes[cid] || {},
+                st, et;
+            if (rs.length > 0) {
+                st = DateFormat.parse(rs[0]['create_time'], 'Y-m-d H:i:s').getTime();
+                et = DateFormat.parse(rs[rs.length - 1]['create_time'], 'Y-m-d H:i:s').getTime();
+                if (!times.st || st > times.st) {
+                    times.st = st;
+                } else {
+                    st = times.st;
+                }
+                if (!times.et || et < times.et) {
+                    times.et = et;
+                } else {
+                    et = times.et;
+                }
+                $(s_time[0]).html(calcTime(st));
+                $(s_time[1]).html(calcTime(et));
+                channelTimes[cid] = times;
+            }
         },
         beforePageShow: function() {
             var params = this.getParams(), view = this.view;
@@ -215,7 +271,9 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
                     handleTouchEnd: this.onVerticalTouchEnd
                 });
             }
-            // TODO this.getStore('channel-store').load();
+        },
+        onPageHide: function() {
+            this.destroyHolder();
         },
         onHorizontalTouchEnd: function() {
             var params = this.getParams();
@@ -232,9 +290,6 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
                 this.back();
             }
         },
-        onPageHide: function() {
-            this.destroyHolder();
-        },
         getTransition: function(to, from) {
             if (/^c\/.*/i.test(from) && /^c\/.*/i.test(to)) {
                 return 'slidefade';
@@ -243,6 +298,10 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
         back: function(e) {
             e && e.preventDefault();
             X.App.go('h');
+        },
+        refresh: function(e) {
+            e && e.preventDefault();
+            this.getStore('channel-store').reload();
         },
         destroyHolder: function() {
             if (this.hHolder) {
@@ -401,10 +460,29 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
     });
     // 消息提示 end *********************************************
 
+
+    function calcTime(val) {
+        var seconds, minutes, hours, days, months, time;
+        time = X.isString(val) ? DateFormat.parse(val, 'Y-m-d H:i:s').getTime() : val;
+        seconds = parseInt((Date.now() - time) / 1000, 10);
+        if (seconds > 0) {
+            minutes = parseInt(seconds / 60, 10);
+            hours = parseInt(minutes / 60, 10);
+            days = parseInt(hours / 24, 10);
+            months = parseInt(days / 30, 10);
+        }
+        if (months >= 1) return months + "月前";
+        if (days >= 1) return days + "天前";
+        if (hours >= 1) return hours + "小时前";
+        if (minutes >= 1) return minutes + "分钟前";
+        if (seconds >= 1) return seconds + '秒钟前';
+        return '1秒钟前';
+    }
+
     LocalStorage.globalPrefix = 'msohu/';
 
     var config = {
-        templateVersion: '1.2',
+        templateVersion: '1.4',
         templateUrl: 'main.tmpl',
         databaseName: 'msohu_db',
         databaseDescription: 'msohu offline database',
@@ -424,10 +502,15 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
                 id: 'channel-store',
                 url: '/wcms/news/',
                 useCache: true,
+                fields: ['id', 'title', {
+                    name: 'create_time',
+                    renderer: calcTime
+                }, 'cover_image_url','comment_count'],
                 pageSize: 6,
                 meta: {
                     pageSizeProperty: 'page_size'
-                }
+                },
+                showPageLoading: true
             }
         ],
         pagelets: [
@@ -444,7 +527,20 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
                 url: 'c/:id/:page',
                 view: 'msohu.channelview',
                 controller: 'msohu.channelcontroller',
-                stores: 'channel-store',
+                stores: {
+                    id: 'channel-store',
+                    autoLoad: true,
+                    bindTo: 'body',
+                    getOptions: function(params) {
+                        return {
+                            data: {
+                                'page': params.page,
+                                'channel_id': channels[params.id].list,
+                                'roll': 1
+                            }
+                        };
+                    }
+                },
                 cls: 'winContent',
                 transition: {
                     in: 'slideup',

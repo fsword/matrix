@@ -75,7 +75,7 @@
 <script id="channel-footer-template" type="text/tmpl">
     <a href="#0" class="btn_back btn_ft">返回</a>
     <div class="status_bar">
-        <span class="s_time">1小时前</span>
+        <span class="s_time"><#= sTime #></span>
         <span class="rel_bg">
             <a href="#0" class="active" style="left:<#= pageLeft #>">
                 <span class="active_rel">
@@ -84,123 +84,153 @@
                 </span>
             </a>
         </span>
-        <span class="s_time">2天前</span>
+        <span class="s_time"><#= eTime #></span>
     </div>
-    <a href="#0" class="btn_refresh btn_ft" data-message=true>刷新</a>
+    <a href="#0" class="btn_refresh btn_ft">刷新</a>
 </script>
 
 <script id="channel-body-template" type="text/tmpl">
-    <# if (showHot) { #>
-        <# if (randomTop) { #>
-            <div class="banner">
-                <div class="b_info">
-                    <a href="#n/12345678">
-                        <img src="images/banner.jpg" alt=""/>
-                        <span class="i_title">苹果发信致歉中国:我们错了</span>
-                    </a>
+    <# if (showFocus) { #>
+        <# if (focusTop) { #>
+            <# if (data[0]) { #>
+                <div class="banner">
+                    <div class="b_info">
+                        <a href="#n/<#= data[0]['id'] #>">
+                            <img src="<#= data[0]['cover_image_url'] #>" alt=""/>
+                            <span class="i_title"><#= data[0]['title'] #></span>
+                        </a>
+                    </div>
                 </div>
-            </div>
+            <# } #>
             <div class="article">
                 <div class="article_info double_info ">
-                    <a href="#n/12345678">
-                        <span>苹果发苹果发信致歉中国</span>
-                        <p>IT之家 1天前</p>
-                    </a>
-                    <a href="#n/12345678">
-                        <span>苹果发苹果发信致歉中国</span>
-                        <p>IT之家 1天前</p>
-                    </a>
+                    <# if (data[1]) { #>
+                        <a href="#n/<#= data[1]['id'] #>">
+                            <span><#= data[1]['title'] #></span>
+                            <p><#= data[1]['comment_count'] #>评论 <#= data[1]['create_time'] #></p>
+                        </a>
+                    <# } #>
+                    <# if (data[2]) { #>
+                       <a href="#n/<#= data[2]['id'] #>">
+                           <span><#= data[2]['title'] #></span>
+                           <p><#= data[2]['comment_count'] #>评论 <#= data[2]['create_time'] #></p>
+                       </a>
+                   <# } #>
                 </div>
             </div>
         <# } else { #>
             <div class="article">
-                <div class="article_info double_info">
-                    <a href="#n/12345678">
-                        <span>苹果发苹果发信致歉中国</span>
-                        <p>IT之家 1天前</p>
-                    </a>
-                    <a href="#n/12345678">
-                        <span>苹果发苹果发信致歉中国</span>
-                        <p>IT之家 1天前</p>
-                    </a>
+                <div class="article_info double_info ">
+                    <# if (data[0]) { #>
+                        <a href="#n/<#= data[0]['id'] #>">
+                            <span><#= data[0]['title'] #></span>
+                            <p><#= data[0]['comment_count'] #>评论 <#= data[0]['create_time'] #></p>
+                        </a>
+                    <# } #>
+                    <# if (data[1]) { #>
+                       <a href="#n/<#= data[1]['id'] #>">
+                           <span><#= data[1]['title'] #></span>
+                           <p><#= data[1]['comment_count'] #>评论 <#= data[1]['create_time'] #></p>
+                       </a>
+                   <# } #>
                 </div>
             </div>
-            <div class="banner">
-                <div class="b_info">
-                    <a href="#n/12345678">
-                        <img src="images/banner.jpg" alt=""/>
-                        <span class="i_title">苹果发信致歉中国:我们错了</span>
-                    </a>
+            <# if (data[2]) { #>
+                <div class="banner">
+                    <div class="b_info">
+                        <a href="#n/<#= data[2]['id'] #>">
+                            <img src="<#= data[2]['cover_image_url'] #>" alt=""/>
+                            <span class="i_title"><#= data[2]['title'] #></span>
+                        </a>
+                    </div>
                 </div>
-            </div>
+            <# } #>
         <# } #>
     <# } else { #>
-        <# if (randomTop) { #>
-            <div class="banner">
-                <div class="t_info" style="background-color: <#= bgColor #>">
-                    <a href="#n/12345678">
-                        <span class="i_title">苹果发信致歉中国:我们错了我们错了</span>
-                        <p>IT之家 1天前</p>
-                    </a>
-                    <span class="h_line"></span>
+        <# if (focusTop) { #>
+            <# if (data[0]) { #>
+                <div class="banner">
+                    <div class="t_info" style="background-color: <#= bgColor #>">
+                        <a href="#n/<#= data[0]['id'] #>">
+                            <span class="i_title"><#= data[0]['title'] #></span>
+                            <p><#= data[1]['comment_count'] #>评论 <#= data[1]['create_time'] #></p>
+                        </a>
+                        <span class="h_line"></span>
+                    </div>
                 </div>
-            </div>
+            <# } #>
             <div class="article article_nopic">
-                <div class="article_info double_info">
-                    <a href="#n/12345678">
-                        <span>苹果发苹果发信致歉中国</span>
-                        <p>IT之家 1天前</p>
-                    </a>
-                    <a href="#n/12345678">
-                        <span>苹果发苹果发信致歉中国</span>
-                        <p>IT之家 1天前</p>
-                    </a>
+                <div class="article_info double_info ">
+                    <# if (data[1]) { #>
+                        <a href="#n/<#= data[1]['id'] #>">
+                            <span><#= data[1]['title'] #></span>
+                            <p><#= data[1]['comment_count'] #>评论 <#= data[1]['create_time'] #></p>
+                        </a>
+                    <# } #>
+                    <# if (data[2]) { #>
+                       <a href="#n/<#= data[2]['id'] #>">
+                           <span><#= data[2]['title'] #></span>
+                           <p><#= data[2]['comment_count'] #>评论 <#= data[2]['create_time'] #></p>
+                       </a>
+                   <# } #>
                 </div>
             </div>
         <# } else { #>
             <div class="article article_nopic">
-                <div class="article_info double_info">
-                    <a href="#n/12345678">
-                        <span>苹果发苹果发信致歉中国</span>
-                        <p>IT之家 1天前</p>
-                    </a>
-                    <a href="#n/12345678">
-                        <span>苹果发苹果发信致歉中国</span>
-                        <p>IT之家 1天前</p>
-                    </a>
+                <div class="article_info double_info ">
+                    <# if (data[0]) { #>
+                        <a href="#n/<#= data[0]['id'] #>">
+                            <span><#= data[0]['title'] #></span>
+                            <p><#= data[0]['comment_count'] #>评论 <#= data[0]['create_time'] #></p>
+                        </a>
+                    <# } #>
+                    <# if (data[1]) { #>
+                       <a href="#n/<#= data[1]['id'] #>">
+                           <span><#= data[1]['title'] #></span>
+                           <p><#= data[1]['comment_count'] #>评论 <#= data[1]['create_time'] #></p>
+                       </a>
+                   <# } #>
                 </div>
             </div>
-            <div class="banner">
-                <div class="t_info" style="background-color: <#= bgColor #>">
-                    <a href="#n/12345678">
-                        <span class="i_title">苹果发信致歉中国:我们错了我们错了</span>
-                        <p>IT之家 1天前</p>
-                    </a>
-                    <span class="h_line"></span>
+            <# if (data[2]) { #>
+                <div class="banner">
+                    <div class="t_info" style="background-color: <#= bgColor #>">
+                        <a href="#n/<#= data[2]['id'] #>">
+                            <span class="i_title"><#= data[2]['title'] #></span>
+                            <p><#= data[2]['comment_count'] #>评论 <#= data[2]['create_time'] #></p>
+                        </a>
+                        <span class="h_line"></span>
+                    </div>
                 </div>
-            </div>
+            <# } #>
         <# } #>
     <# } #>
-    <div class="article <# if (!showHot) { #>article_nopic<# } #>">
-        <div class="article_info double_info">
-            <a href="#n/12345678">
-                <span>苹果发苹果发信致歉中国</span>
-                <p>IT之家 1天前</p>
-            </a>
-            <a href="#n/12345678">
-                <span>苹果发苹果发信致歉中国</span>
-                <p>IT之家 1天前</p>
-            </a>
+    <div class="article <# if (!showFocus) { #>article_nopic<# } #>">
+        <div class="article_info double_info ">
+            <# if (data[3]) { #>
+                <a href="#n/<#= data[3]['id'] #>">
+                    <span><#= data[3]['title'] #></span>
+                    <p><#= data[3]['comment_count'] #>评论 <#= data[3]['create_time'] #></p>
+                </a>
+            <# } #>
+            <# if (data[4]) { #>
+               <a href="#n/<#= data[4]['id'] #>">
+                   <span><#= data[4]['title'] #></span>
+                   <p><#= data[4]['comment_count'] #>评论 <#= data[4]['create_time'] #></p>
+               </a>
+           <# } #>
         </div>
     </div>
-    <div class="article">
-        <div class="article_info single_info">
-            <a href="#n/12345678">
-                <span>苹果发苹果发信致歉中国</span>
-                <p>IT之家 1天前</p>
-            </a>
+    <# if (data[5]) { #>
+        <div class="article">
+            <div class="article_info single_info">
+                <a href="#n/<#= data[5]['id'] #>">
+                    <span><#= data[5]['title'] #></span>
+                    <p><#= data[5]['comment_count'] #>评论 <#= data[5]['create_time'] #></p>
+                </a>
+            </div>
         </div>
-    </div>
+    <# } #>
 </script>
 
 <script id="article-header-template" type="text/tmpl">

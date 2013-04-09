@@ -156,7 +156,8 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
             var event,
                 type,
                 proxyFn,
-                isClass = true;
+                isClass = true,
+                data;
             
             this.createEventCache();
             
@@ -178,11 +179,10 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
             
             if (X.isFunction(selector)) {
                 // (item, type, fn, scope, options)
-                fn = selector;
-                scope = fn;
                 options = scope;
+                scope = fn;
+                fn = selector;
                 selector = undefined;
-                scope = undefined;
             }
             
             if (!item.$isInstance) {
@@ -198,6 +198,7 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
             
             scope = scope || this;
             options = options || {};
+            data = [options];
             if (!isClass) {
                 proxyFn = this.createListener(item, types, selector, fn, scope, options);
             }
@@ -209,13 +210,14 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
                 fn: fn,
                 proxyFn: proxyFn,
                 scope: scope,
-                options: options
+                options: options,
+                data: data
             });
             
             if (isClass) {
                 item.on && item.on(types, fn, scope, options);
             } else {
-                item.on(types, selector, undefined, proxyFn);
+                item.on(types, selector, data, proxyFn);
             }
         },
         
@@ -263,7 +265,7 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
                     }
                     event = types[type];
                     if (X.isFunction(event)) {
-                        this.mun(item, type, undefined, event, scope);
+                        this.mun(item, type, event.data, event, scope);
                     } else {
                         this.mun(item, type, event.selector, event.fn, event.scope || scope);
                     }

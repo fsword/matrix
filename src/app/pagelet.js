@@ -53,10 +53,11 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
             // 解析URL中包含的参数值
             this.parseParams();
 
+            // 这里必须严格按照这个初始化顺序
             this.initTransition();
+            this.initView();
             this.initModels();
             this.initStores();
-            this.initView();
             this.initController();
         },
 
@@ -86,6 +87,13 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
             this.models = this.models || {};
             X.each(this.models, function(i, model) {
                 model.params = this.params;
+                if (model.bindTo === 'header' && this.view.headerTmpl) {
+                    this.view.headerTmpl.bindStore(model);
+                } else if (model.bindTo === 'footer' && this.view.footerTmpl) {
+                    this.view.footerTmpl.bindStore(model);
+                } else if (model.bindTo === 'body' && this.view.bodyTmpl) {
+                    this.view.bodyTmpl.bindStore(model);
+                }
             }, this);
         },
 
@@ -94,6 +102,13 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
             this.stores = this.stores || {};
             X.each(this.stores, function(i, store) {
                 store.params = this.params;
+                if (store.bindTo === 'header' && this.view.headerTmpl) {
+                    this.view.headerTmpl.bindStore(store);
+                } else if (store.bindTo === 'footer' && this.view.footerTmpl) {
+                    this.view.footerTmpl.bindStore(store);
+                } else if (store.bindTo === 'body' && this.view.bodyTmpl) {
+                    this.view.bodyTmpl.bindStore(store);
+                }
             }, this);
         },
 
@@ -195,6 +210,8 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         
         // private
         onPageShow: function() {
+            this.loadModelOrStore(this.models);
+            this.loadModelOrStore(this.stores);
             if (this.controller) {
                 this.controller.onPageShow();
                 this.controller.fireEvent('pageshow', this.controller);
@@ -226,6 +243,15 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
             }, this);
             X.each(this.stores, function(id, store) {
                 store.cancelFetch();
+            }, this);
+        },
+
+        // private
+        loadModelOrStore: function(objects) {
+            X.each(objects, function(i, obj) {
+                if (obj.autoLoad === true) {
+                    obj.load(obj.getOptions ? obj.getOptions(this.params) : null);
+                }
             }, this);
         },
         

@@ -8,6 +8,9 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
         
         // private
         extend: 'utility',
+
+        // private
+        isModel: true,
         
         /**
          * @cfg {Boolean} useWebDatabase true启动web sql database缓存数据，默认true
@@ -67,6 +70,11 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
         /**
          * @cfg {Object} values 初始值
          */
+
+        /**
+         * @cfg {Boolean} showPageLoading true显示$.mobile.showPageLoadingMsg，默认false
+         */
+        showPageLoading: false,
         
         // private
         init: function() {
@@ -151,8 +159,8 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
                         field = {
                             name: field
                         };
-                        fields[field.name] = field;
                     }
+                    fields[field.name] = field;
                 }, this);
                 if (!fields[this.idProperty]) {
                     fields[this.idProperty] = {
@@ -238,7 +246,11 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
                 /**
                  * @event loadfailed
                  */
-                'loadfailed'
+                'loadfailed',
+                /**
+                 * @event loadcomplete
+                 */
+                'loadcomplete'
             );
         },
         
@@ -265,7 +277,7 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
             
             for (name in fields) {
                 if (values.hasOwnProperty(name)) {
-                    value = values[name] || '';
+                    value = X.isDefined(values[name]) ? values[name] : '';
                     currentValue = data[name];
                     
                     if (modified[name] === value) {
@@ -365,7 +377,12 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
          * 加载数据
          */
         load: function(params) {
-            if (!this.removed) {
+            if (!this.removed && !this.loading && this.fireEvent('beforeload', this) !== false) {
+                this.loading = true;
+                params = params || {};
+                if (this.showPageLoading) {
+                    this.showPageLoadingMsg();
+                }
                 if (this.useWebDatabase && this.useCache) {
                     this.loadStorage(params);
                 } else {
@@ -373,30 +390,35 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
                 }
             }
         },
-        
+
         /**
-         * 强制从服务端取得数据，并更新本地缓存
+         * 重新加载数据
          */
-        fetch: function(params) {
+        reload: function(params) {
             if (!this.removed && !this.loading && this.fireEvent('beforeload', this) !== false) {
                 this.loading = true;
-                
-                params = params || {};
-                params.data = params.data || {};
-                params.data = $.extend({}, this.baseParams, this.getFetchParams() || {}, params.data, {'_dt': $.now()});
-                params = $.extend({
-                    type: this.requestMethod,
-                    url: this.getUrl ? this.getUrl(this.params) : this.restful.read
-                }, params, {
-                    dataType: this.dataType || 'json'
-                });
-                
-                this.cancelFetch();
-                this.lastXmlRequest = $.ajax(params)
-                                       .done($.proxy(this.onFetchSuccess, this))
-                                       .fail($.proxy(this.handleLoadFailed, this))
-                                       .always($.proxy(this.handleRequestComplete, this));
+                if (this.showPageLoading) {
+                    this.showPageLoadingMsg();
+                }
+                this.fetch(params || {});
             }
+        },
+        
+        // private 强制从服务端取得数据，并更新本地缓存
+        fetch: function(params) {
+            params.data = params.data || {};
+            params.data = $.extend({}, this.baseParams, this.getFetchParams() || {}, params.data, {'_dt': $.now()});
+            params = $.extend({
+                type: this.requestMethod,
+                url: this.getUrl ? this.getUrl(this.params) : this.restful.read
+            }, params, {
+                dataType: this.dataType || 'json'
+            });
+            this.cancelFetch();
+            this.lastXmlRequest = $.ajax(params)
+                                   .done($.proxy(this.onFetchSuccess, this))
+                                   .fail($.proxy(this.handleLoadFailed, this))
+                                   .always($.proxy(this.handleRequestComplete, this));
         },
         
         // private
@@ -449,6 +471,10 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
         handleRequestComplete: function() {
             this.loading = false;
             this.lastXmlRequest = null;
+            if (this.showPageLoading) {
+                this.hidePageLoadingMsg();
+            }
+            this.fireEvent('loadcomplete', this);
         },
         
         /**
@@ -483,12 +509,17 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
                                 // 本地数据过期，从服务端重新加载
                                 me.fetch(params);
                             } else {
-                                for (name in me.fields) {
-                                    if (me.fields.hasOwnProperty(name)) {
-                                        rs[name] = JSON.parse(item[name]);
+                                try {
+                                    for (name in me.fields) {
+                                        if (me.fields.hasOwnProperty(name)) {
+                                            rs[name] = JSON.parse(item[name]);
+                                        }
                                     }
+                                    me.handleLoadSuccess(rs);
+                                } catch(e) {
+                                    me.handleLoadFailed();
                                 }
-                                me.handleLoadSuccess(rs);
+                                me.handleRequestComplete();
                             }
                         } else {
                             me.fetch(params);
@@ -496,6 +527,7 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
                     });
                 }, function(error) {
                     me.handleLoadFailed();
+                    me.handleRequestComplete();
                 });
             } else {
                 me.fetch(params);
@@ -514,9 +546,7 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
                             sql,
                             columns = [],
                             values = [],
-                            props = [],
-                            val;
-                        
+                            props = [];
                         if (result.rows.length > 0) { // 更新数据
                             for (name in fields) {
                                 if (name != me.idProperty) {

@@ -179,6 +179,12 @@ ul {
     min-height: 460px;
 }
 
+/* loading icon */
+.ui-icon-loading {
+    background: url(../images/ajax-loader.gif);
+    background-size: 46px 46px;
+}
+
 /*********************************************/
 .index-content {
     -webkit-box-sizing: border-box;

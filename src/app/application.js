@@ -427,21 +427,35 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 
         // private
         preparePageletConfig: function(config) {
-            var models, model, stores, store;
+            var models, model, stores, store, id;
             if (config.models) {
                 models = config.models;
                 config.models = {};
-                X.each(X.toArray(models), function(i, id) {
+                X.each(X.toArray(models), function(i, cfg) {
+                    if (X.isString(id)) {
+                        cfg = {
+                            id: cfg
+                        };
+                    }
+                    id = cfg.id;
                     model = this.models[id];
-                    config.models[id] = X.create(model.cls || 'model', $.extend({}, model));
+                    cfg = $.extend({}, cfg, model);
+                    config.models[id] = X.create(model.cls || 'model', cfg);
                 }, this);
             }
             if (config.stores) {
                 stores = config.stores;
                 config.stores = {};
-                X.each(X.toArray(stores), function(i, id) {
+                X.each(X.toArray(stores), function(i, cfg) {
+                    if (X.isString(cfg)) {
+                        cfg = {
+                            id: cfg
+                        };
+                    }
+                    id = cfg.id;
                     store = this.stores[id];
-                    config.stores[id] = X.create(store.cls || 'store', $.extend({}, store));
+                    cfg = $.extend({}, cfg, store);
+                    config.stores[id] = X.create(store.cls || 'store', cfg);
                 }, this);
             }
             return config;
