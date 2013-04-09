@@ -75,6 +75,8 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 
             // pagelet缓存池
             this.pageletCaches = this.pageletCaches || [];
+
+            this.history = new $.mobile.History();
         },
 
         // private
@@ -474,7 +476,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
             if (!this.isPageChanging) {
                 this.lastHash = hash;
                 this.pageChangeOptions = $.extend({}, options);
-                window.location.hash = '#/' + hash;
+                location.hash = '#/' + hash;
             }
         },
 
@@ -483,7 +485,17 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
          * @param {String} (optional) defaultHash 当访问路径历史没有上一页时，默认跳转hash
          */
         back: function() {
-            $.mobile.back();
+            var prev = this.history.getPrev(),
+                welcome = this.welcome;
+            this.history.direct({
+                url: prev ? prev.url : '',
+                back: function() {
+                    location.hash = prev.hash;
+                },
+                missing: function() {
+                    location.hash = '#/' + welcome;
+                }
+            });
         },
 
         // private
@@ -505,7 +517,14 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 
         // private
         changePage: function(pagelet) {
+            var path = $.mobile.path, url;
             window.scrollTo(0, 1);
+            url = path.getLocation();
+            this.history.add(url, {
+                url: url,
+                hash: pagelet.hash
+            });
+
             if (!this.isPageChanging && this.fireEvent('beforepagechange', this, pagelet) !== false) {
                 this.isPageChanging = true;
                 this.pageChangeOptions = this.pageChangeOptions || {};
@@ -531,12 +550,10 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                     transition = np.transition.in || np.transition.out || 'fade';
                 }
 
-                X.defer(function() {
-                    $.mobile.changePage(np.el, $.extend({}, this.pageChangeOptions, {
-                        transition: transition,
-                        fromHashChange: true
-                    }));
-                }, 100, this);
+                $.mobile.changePage(np.el, $.extend({}, this.pageChangeOptions, {
+                    transition: transition,
+                    fromHashChange: true
+                }));
             }
         },
 

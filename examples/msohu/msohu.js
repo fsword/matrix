@@ -4,7 +4,7 @@
  * Example中的系统功能完全仿照Zaker for iPhone开发，为了达到最佳展示效果，请使用iphone safari打开，并将页面添加到你的桌面，然后从桌面打开进入。
  */
 MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', function(X, $, Klass, LocalStorage, iScrollUtil, TouchHolder) {
-    var $body = $('body'),
+    var $window = $(window), $body = $('body'),
         isShowFavourite = false,
         channels = [
             {
@@ -271,7 +271,10 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
             cls: 'banner',
             template: 'article-header-template',
             getData: function(params) {
-                return channels[params.id];
+                var colors = ['#2ca7ea', '#1d953f', '#c7a252', '#585eaa', '#853f04', '#dea32c', '#f05b72', '#5f5d46', '#c63c26', '#b4532a'];
+                return {
+                    bgColor: colors[Math.floor(Math.random() * colors.length)]
+                };
             }
         },
         footerCfg: {
@@ -286,7 +289,17 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
     });
     Klass.define({
         alias: 'msohu.articlecontroller',
-        extend: 'controller'
+        extend: 'controller',
+        delegates: {
+            'click .btn_back': 'back'
+        },
+        back: function(e) {
+            e && e.preventDefault();
+            X.App.back();
+        },
+        getTransition: function(to, from) {
+            return 'slideup';
+        }
     });
 
     // 欢迎页 start *********************************************
@@ -365,15 +378,18 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
     // 欢迎页 end *********************************************
 
     // 消息提示 start *********************************************
-    var msgEl = $('<div class="lay miniPop" style="opacity: 0; top: 278.5px; visibility: hidden;"><div class="cnt"></div></div>');
+    var isMsgElShow, msgElHideTimeout,
+        msgEl = $('<div class="lay miniPop" style="opacity: 0; top: 278.5px; visibility: hidden;"><div class="cnt"></div></div>');
     $body.append(msgEl);
-    var isMsgElShow;
-
     function showMessage(msg) {
         if (!isMsgElShow) {
+            clearTimeout(msgElHideTimeout);
             isMsgElShow = true;
             msgEl.find('.cnt').html(msg || '');
-            msgEl.css('visibility', 'visible');
+            msgEl.css({
+                'visibility': 'visible',
+                'top': ($window.scrollTop() + window.innerHeight / 2 + msgEl.height() / 2) + 'px'
+            });
             msgEl.one('webkitTransitionEnd transitionend', function() {
                 msgElHideTimeout = setTimeout(function() {
                     msgEl.css('visibility', 'hidden').css('opacity', 0);
@@ -438,7 +454,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', functi
                 model: 'article-model',
                 cls: 'winContent',
                 transition: {
-                    in: 'pop',
+                    in: 'slideup',
                     out: 'slidedown'
                 }
             }
