@@ -659,7 +659,7 @@ ul {
 
 }
 
-.detail_t_info {
+.detail_title {
     color: #FFF;
     padding: 30px 10px;
     background: #528CE0;
@@ -695,19 +695,23 @@ ul {
 
 }
 
-.detail_t_info .i_title {
+.detail_title .i_title {
     font-size: 20px;
     line-height: 24px;
     font-weight: bold;
+    margin:0;
+    text-overflow: none;
+    text-align: left;
+    white-space:pre-wrap;
 }
 
-.container .t_info p, .detail_t_info p {
+.container .t_info p, .detail_title p {
     font-size: 10px;
     line-height: 15px;
     text-indent: 2px;
 }
 
-.detail_t_info p {
+.detail_title p {
     line-height: 18px;
 
 }
