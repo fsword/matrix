@@ -856,11 +856,9 @@ ul {
 .footer .btn_ft {
     width: 24px;
     height: 24px;
-    background-size: 48px 24px;
-    background-image: url(../images/btn_ft-48.png);
-    background-repeat: no-repeat;
     margin-bottom: 6px;
     display: block;
+    padding:0 10px;
     text-indent: -999em;
 }
 
@@ -875,32 +873,44 @@ ul {
     padding-top: 5px;
     overflow: hidden;
 }
+.footer a span{
+    background-size: 125px 24px;
+    background-image: url(../images/ico-bottom-btn.png);
+    background-repeat: no-repeat;
 
-.detail_footer span a {
-    background-size: 24px 24px;
+}
+.detail_footer span,.footer a span {
     margin: 0 auto;
     width: 24px;
     height: 24px;
     display: block;
+    text-indent: -9999em;
+
 }
 
-.detail_footer span {
+.detail_footer a {
     float: left;
     width: 20%;
     height: 30px;
 
 }
 
-.footer  .ico-approve {
-    background-image: url(../images/ico-approve-48.png);
+.footer .ico-back span{
+    background-position: 0 1px;
+}
+.footer  .ico-approve span{
+   background-position: -25px 1px;
 }
 
-.footer  .ico-turn {
-    background-image: url(../images/ico-turn-48.png);
+.footer  .ico-turn span{
+    background-position: -50px 1px;
 }
 
-.footer  .ico-comment {
-    background-image: url(../images/ico-comment-48.png);
+.footer  .ico-comment span{
+    background-position: -75px 1px;
+}
+.footer   .ico-refresh  span{
+    background-position: -100px 1px;
 }
 
 .footer .status_tools_bar {
@@ -952,29 +962,13 @@ ul {
     /*width:50px;*/
 }
 
-.footer .btn_back {
-    background-position: 0 0;
-    margin-left: 10px;
-}
-
-.footer .btn_refresh {
-    background-position: -24px 0;
-    margin-right: 10px;
-}
-
-.detail_footer .btn_refresh {
-    margin-right: auto;
-}
-
-.detail_footer .btn_back {
-    margin-left: auto;
-}
-
 .footer .active_rel {
     position: relative;
     width: 20px;
     height: 25px;
     display: block;
+    background: none;
+    text-indent: 0;
 }
 
 .footer .active_rel i {
