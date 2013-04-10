@@ -63,6 +63,20 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         },
 
         // private
+        // 将hash中包含的参数解析出来
+        parseParams: function() {
+            var values = this.urlRe.exec(this.hash).slice(1),
+                params = {};
+
+            X.each(this.urlParamNames, function(i, param) {
+                params[param.substr(1)] = values[i];
+            }, this);
+
+            this.params = params;
+            return params;
+        },
+
+        // private
         initTransition: function() {
             this.transition = this.transition || '';
             if (X.isString(this.transition)) {
@@ -112,23 +126,9 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                 }
             }, this);
         },
-
-        // private
-        // 将hash中包含的参数解析出来
-        parseParams: function() {
-            var values = this.urlRe.exec(this.hash).slice(1),
-                params = {};
-            
-            X.each(this.urlParamNames, function(i, param) {
-                params[param.substr(1)] = values[i];
-            }, this);
-            
-            this.params = params;
-            return params;
-        },
         
         // private
-        initEvent: function() {
+        initEvents: function() {
             this.addEvents(
                 /**
                  * @event beforerender
@@ -233,6 +233,14 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
             if (this.controller) {
                 this.controller.onPageHide();
                 this.controller.fireEvent('pagehide', this.controller);
+            }
+        },
+
+        // private
+        onOrientationChange: function() {
+            if (this.controller) {
+                this.controller.onOrientationChange();
+                this.controller.fireEvent('orientationchange', this.controller);
             }
         },
         

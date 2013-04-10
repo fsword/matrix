@@ -29,9 +29,9 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         useCache: false,
         
         /**
-         * @cfg {Number} 缓存过期时间，单位毫秒，默认60 * 60 * 1000（1小时）
+         * @cfg {Number} 缓存过期时间，单位毫秒，默认10 * 60 * 1000（10分钟）
          */
-        cacheExpires: 60 * 60 * 1000,
+        cacheExpires: 10 * 60 * 1000,
         
         /**
          * @cfg {String} storageKey 数据存储时，data record primary key
@@ -240,7 +240,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
             params = $.extend({}, params, this.getData ? this.getData(this.params) : null);
             options = $.extend({}, this.baseParams, {
                 type: this.requestMethod,
-                url: this.getUrl ? this.getUrl(this.params) : this.url,
+                url: this.getUrl ? this.getUrl(this.params, 'read') : this.url,
                 dataType: this.dataType || 'json',
                 data: params
             });

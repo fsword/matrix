@@ -41,7 +41,11 @@ MX.kindle('klass', function(X, Klass) {
                 /**
                  * @event pagehide
                  */
-                'pagehide'
+                'pagehide',
+                /**
+                 * @event orientationchange
+                 */
+                'orientationchange'
             );
         },
         
@@ -104,6 +108,9 @@ MX.kindle('klass', function(X, Klass) {
         
         // private
         onPageHide: X.emptyFn,
+
+        // private
+        onOrientationChange: X.emptyFn,
         
         /**
          * 获取Model

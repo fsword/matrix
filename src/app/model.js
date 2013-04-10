@@ -28,9 +28,9 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
         useCache: false,
         
         /**
-         * @cfg {Number} cacheExpires 缓存过期时间，单位毫秒，默认60 * 60 * 1000（1小时）
+         * @cfg {Number} cacheExpires 缓存过期时间，单位毫秒，默认10 * 60 * 1000（10分钟）
          */
-        cacheExpires: 60 * 60 * 1000,
+        cacheExpires: 10 * 60 * 1000,
         
         /**
          * @cfg {Array} fields 开启useCache时，必须设置fields字段
@@ -413,7 +413,7 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
             params = $.extend({}, params, this.getFetchData(), this.getData ? this.getData(this.params) : null);
             options = $.extend({}, this.baseParams, {
                 type: this.requestMethod,
-                url: this.getUrl ? this.getUrl(this.params) : this.restful.read,
+                url: this.getUrl ? this.getUrl(this.params, 'read') : this.restful.read,
                 dataType: this.dataType || 'json',
                 data: params
             });
