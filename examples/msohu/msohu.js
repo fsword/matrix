@@ -306,7 +306,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
         },
         getTransition: function(to, from) {
             if (/^c\/.*/i.test(from) && /^c\/.*/i.test(to)) {
-                return 'slidefade';
+                return 'slide';
             }
         },
         back: function(e) {
@@ -572,13 +572,11 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
                     id: 'channel-store',
                     autoLoad: true,
                     bindTo: 'body',
-                    getOptions: function(params) {
+                    getData: function(params) {
                         return {
-                            data: {
-                                'page': params.page,
-                                'channel_id': channels[params.id].list,
-                                'roll': 1
-                            }
+                            'page': params.page,
+                            'channel_id': channels[params.id].list,
+                            'roll': 1
                         };
                     }
                 },
@@ -600,13 +598,11 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
                     id: 'article-model',
                     autoLoad: true,
                     bindTo: 'body',
-                    getOptions: function(params) {
+                    getData: function(params) {
                         return {
-                            data: {
-                                'page': 1,
-                                'page_size': 1800,
-                                'rest': '0'
-                            }
+                            'page': 1,
+                            'page_size': 1800,
+                            'rest': '0'
                         };
                     }
                 },

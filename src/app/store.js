@@ -194,10 +194,9 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         load: function(params) {
             var maxPage = this.maxPage, pageNumber;
             params = params || {};
-            params.data = params.data || {};
-            pageNumber = params.data.page || this.currentPage;
+            pageNumber = params.page || this.currentPage;
             pageNumber = pageNumber < 1 ? 1 : pageNumber;
-            params.data.page = pageNumber;
+            params.page = pageNumber;
             if (!this.removed && !this.loading && pageNumber <= maxPage && this.fireEvent('beforeload', this, pageNumber) !== false) {
                 this.loading = true;
                 this.toPage = pageNumber;
@@ -218,10 +217,9 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         reload: function(params) {
             var pageNumber;
             params = params || {};
-            params.data = params.data || {};
-            pageNumber = params.data.page || this.currentPage;
+            pageNumber = params.page || this.currentPage;
             pageNumber = pageNumber < 1 ? 1 : pageNumber;
-            params.data.page = pageNumber;
+            params.page = pageNumber;
             if (!this.removed && !this.loading && this.fireEvent('beforeload', this, pageNumber) !== false) {
                 this.loading = true;
                 this.toPage = pageNumber;
@@ -234,20 +232,20 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         
         // private 强制从服务端取得数据，并更新本地缓存
         fetch: function(params) {
-            var meta = this.meta, pageNumber = params.data.page;
-            params.data[meta.pageNumberProperty] = pageNumber;
-            params.data[meta.pageSizeProperty] = this.pageSize;
-            params.data[meta.pageStartProperty] = (pageNumber - 1) * this.pageSize;
-            params.data['_dt'] = $.now(); // 时间戳，防止缓存
-            params.data = $.extend({}, this.baseParams, params.data);
-            params = $.extend(this.getOptions ? this.getOptions(this.params) : {}, {
+            var meta = this.meta, pageNumber = params.page, options;
+            params[meta.pageNumberProperty] = pageNumber;
+            params[meta.pageSizeProperty] = this.pageSize;
+            params[meta.pageStartProperty] = (pageNumber - 1) * this.pageSize;
+            params['_dt'] = $.now(); // 时间戳，防止缓存
+            params = $.extend({}, params, this.getData ? this.getData(this.params) : null);
+            options = $.extend({}, this.baseParams, {
                 type: this.requestMethod,
-                url: this.getUrl ? this.getUrl(this.params) : this.url
-            }, params, {
-                dataType: this.dataType || 'json'
+                url: this.getUrl ? this.getUrl(this.params) : this.url,
+                dataType: this.dataType || 'json',
+                data: params
             });
             this.cancelFetch();
-            this.lastXmlRequest = $.ajax(params)
+            this.lastXmlRequest = $.ajax(options)
                                    .done($.proxy(this.onFetchSuccess, this))
                                    .fail($.proxy(this.handleLoadFailed, this))
                                    .always($.proxy(this.handleRequestComplete, this));
@@ -339,9 +337,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
          */
         first: function() {
             this.load({
-                data: {
-                    page: 1
-                }
+                page: 1
             });
         },
         
@@ -352,9 +348,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
             if (X.isDefined(this.total)) {
                 var pageCount = this.getPageData().pageCount;
                 this.load({
-                    data: {
-                        page: pageCount
-                    }
+                    page: pageCount
                 });
             }
         },
@@ -364,9 +358,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
          */
         prev: function() {
             this.load({
-                data: {
-                    page: this.currentPage - 1
-                }
+                page: this.currentPage - 1
             });
         },
         
@@ -379,9 +371,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
                 this.first();
             } else {
                 this.load({
-                    data: {
-                        page: this.currentPage + 1
-                    }
+                    page: this.currentPage + 1
                 });
             }
         },
@@ -468,7 +458,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         // private
         loadStorage: function(params) {
             var me = this, 
-                pageNumber = params.data.page,
+                pageNumber = params.page,
                 id;
             if (me.useWebDatabase) {
                 id = me.getStorageKey(pageNumber);

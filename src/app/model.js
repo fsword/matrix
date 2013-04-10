@@ -401,29 +401,31 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
                 if (this.showPageLoading) {
                     this.showPageLoadingMsg();
                 }
-                this.fetch(params || {});
+                this.fetch(params);
             }
         },
         
         // private 强制从服务端取得数据，并更新本地缓存
         fetch: function(params) {
-            params.data = params.data || {};
-            params.data = $.extend({}, this.baseParams, this.getFetchParams() || {}, params.data, {'_dt': $.now()});
-            params = $.extend(this.getOptions ? this.getOptions(this.params) : {}, {
+            var options;
+            params = params || {};
+            params['_dt'] = $.now(); // 时间戳，防止缓存
+            params = $.extend({}, params, this.getFetchData(), this.getData ? this.getData(this.params) : null);
+            options = $.extend({}, this.baseParams, {
                 type: this.requestMethod,
-                url: this.getUrl ? this.getUrl(this.params) : this.restful.read
-            }, params, {
-                dataType: this.dataType || 'json'
+                url: this.getUrl ? this.getUrl(this.params) : this.restful.read,
+                dataType: this.dataType || 'json',
+                data: params
             });
             this.cancelFetch();
-            this.lastXmlRequest = $.ajax(params)
+            this.lastXmlRequest = $.ajax(options)
                                    .done($.proxy(this.onFetchSuccess, this))
                                    .fail($.proxy(this.handleLoadFailed, this))
                                    .always($.proxy(this.handleRequestComplete, this));
         },
         
         // private
-        getFetchParams: function() {
+        getFetchData: function() {
             var params = {};
             params[this.idProperty] = this.get(this.idProperty, true);
             return params;
@@ -505,7 +507,7 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
                 me.db.transaction(function(t) {
                     t.executeSql('SELECT * FROM ' + me.tableName + ' WHERE ' + me.idProperty + ' = ?', [id], function(t, result) {
                         if (result.rows.length > 0) {
-                            var name, field, rs = {}, item = result.rows.item(0);
+                            var name, rs = {}, item = result.rows.item(0);
                             if ((item['_last_updated'] + me.cacheExpires) < $.now()) {
                                 // 本地数据过期，从服务端重新加载
                                 me.fetch(params);
