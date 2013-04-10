@@ -76,7 +76,7 @@ MX.ready('klass', function(X, Klass) {
 
 ## Downloads
 
-[v0.1.1](http://mxjs.github.io/matrix/tags/matrix-0.1.1.zip "matrix-0.1.1.zip")(latest version)
+* [v0.1.1](http://mxjs.github.io/matrix/tags/matrix-0.1.1.zip "matrix-0.1.1.zip")(latest version)
 
 ## Change Log
 
