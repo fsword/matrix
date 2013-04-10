@@ -16,6 +16,12 @@ Matrix集成了[artTemplate](https://github.com/aui/artTemplate)模版引擎，�
 ### 页面实时响应数据更改
 Model/Store数据更改之后，模版会自动更新绑定的页面视图区域，无需更多的额外编码。
 
+## 支持平台
+
+* iOS 5+
+* Android 4+
+* Windows Phone 8+ (建设中)
+
 ## Hello World!
 
 使用Matrix非常简单，从第一个例子[Hello World](https://github.com/mxjs/matrix/tree/master/examples/helloworld/ "Example")开始吧
