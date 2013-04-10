@@ -1,5 +1,6 @@
 /**
  * @class MX.util.DateFormatFormat
+ * @alias dateformat
  * 
  * DateFormat类来自Ext3.4.0的源码
  * 

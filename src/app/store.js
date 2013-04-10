@@ -1,5 +1,6 @@
 /**
  * @class MX.app.Store
+ * @alias store
  */
 MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
     X.app.Store = Klass.define({

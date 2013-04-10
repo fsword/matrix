@@ -1,5 +1,6 @@
 /**
  * @class MX.util.Collection
+ * @alias collection
  * 
  * Collection类来自Ext3.4.0的源码
  */

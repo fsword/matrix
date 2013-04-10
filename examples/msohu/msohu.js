@@ -1,7 +1,10 @@
 /*
- * 手机搜狐WebApp Example是一个基于AJAX的Single Page Web Application，基于Matrix框架构建。
+ * 手机搜狐WebApp是一个基于Matrix框架构建的Single Page Web Application，完整的展现了Matrix框架在WebApp领域的使用技巧。
  *
- * Example中的系统功能完全仿照Zaker for iPhone开发，为了达到最佳展示效果，请使用iphone safari打开，并将页面添加到你的桌面，然后从桌面打开进入。
+ * Example中的功能完全仿照ZAKER for iPhone开发，为了达到最佳展示效果，请使用iOS Safari，并将页面添加到你的桌面，然后从桌面打开进入。
+ *
+ * 由于例子中的数据访问存在跨域安全问题，所以本例托管在搜狐的服务器上，访问地址如下：
+ * http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html
  */
 MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'dateformat', function(X, $, Klass, LocalStorage, iScrollUtil, TouchHolder, DateFormat) {
     var $window = $(window), $body = $('body'),

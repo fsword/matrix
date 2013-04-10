@@ -1,5 +1,6 @@
 /**
  * @class MX.app.Model
+ * @alias model
  */
 MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
     X.app.Model = Klass.define({

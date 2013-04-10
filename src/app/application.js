@@ -1,5 +1,8 @@
 /**
  * @class MX.app.Application
+ * @alias application
+ *
+ * Appliaction主程序类，整合WebApp中使用的资源，管理页面视图
  */
 MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, LocalStorage, Pagelet) {
     var $window = $(window),
@@ -613,26 +616,68 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
      * @class MX.App
      * @singleton
      *
-     * Application类的单例对象。在大多数应用场景中，不需要单独对Application实例化，直接使用X.App单例对象既可。
+     * Application类的单例对象。在大多数应用场景中，不需要单独对Application实例化，直接使用X.App单例对象既可
+     *
+     * <code>
+     *  // 启动WebApp之后，页面视图才能正常访问
+     *  X.App.launch({
+     *
+     *      // 传入App所需要的配置参数
+     *
+     *  });
+     * </code>
      */
     X.App = new X.app.Application();
 });
 
-// 初始化jquery mobile配置
+/*
+ * Matrix框架的Appliaction，摒弃了jQuery mobile的初始化机制，而且，不能兼容包含jquery mobile core init模块的库，
+ * Appliaction重新定义了，jquery mobile的初始化过程，抛弃了Navigation对window.history的时间'pushState'以及'hashchange'事件的处理，
+ * 框架自身定义了一套完整的页面导航机制
+ *
+ * 在引入jquery mobile的js库时，一定要使用定制下载的代码，这部分代码不能包括core init模块，
+ * jquery mobile定制下载地址：http://jquerymobile.com/download-builder/
+ *
+ * Matrix框架默认包含两个定制的jquery mobile的js文件，jquery.mobile-1.3.0.js和jquery.mobile-1.3.0-lite.js
+ *
+ * jquery.mobile-1.3.0.js包含除core init模块之外的所有jqmobile代码
+ *
+ * jquery.mobile-1.3.0-lite.js则只包含以下模块的代码：
+ *  - Core，除init之外的部分
+ *  - Events
+ *  - Navigation
+ *  - Transitions
+ *  - Utilities，仅包含以下部分
+ *      - match media polyfill
+ *      - zoom handling
+ *      - ios orientation change fix
+ *  - Widgets
+ *      - toolbars fixed
+ *      - toolbars fixed workarounds
+ *      - loading message
+ */
 if ($ && $.mobile) {
     $('html').addClass("ui-mobile");
 
     window.scrollTo(0, 1);
 
     $.extend($.mobile, {
+        // 禁用jquery mobile自动初始化页面配置
         autoInitializePage: false,
+
+        // 禁用jquery mobile Navigation监听window.history的pushState事件
         pushStateEnabled: false,
+
+        // 禁用jquery mobile Navigation监听hashchange事件
         hashListeningEnabled: false,
 
         // if defaultHomeScroll hasn't been set yet, see if scrollTop is 1
         // it should be 1 in most browsers, but android treats 1 as 0 (for hiding addr bar)
         // so if it's 1, use 0 from now on
         //defaultHomeScroll: (!$.support.scrollTop || $(window).scrollTop() === 1) ? 0 : 1
+
+        // 以上是jquery mobile对defaultHomeScroll属性的默认实现
+        // 初始化时定义为0，防止页面视图切换时滚回顶部出现抖动
         defaultHomeScroll: 0
     });
 }

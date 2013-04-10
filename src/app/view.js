@@ -1,5 +1,6 @@
 /**
  * @class MX.app.View
+ * @alias view
  */
 MX.kindle('jquery', 'klass', function(X, $, Klass) {
     X.app.View = Klass.define({

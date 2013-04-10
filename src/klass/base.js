@@ -1,6 +1,7 @@
 /**
  * @class MX.klass.Base
  * @alias base
+ *
  * Class基类，使用Klass.define()方法声明类继承的顶级父类
  */
 MX.kindle('jquery', function(X, $) {

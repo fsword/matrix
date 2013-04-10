@@ -1,6 +1,7 @@
 /**
  * @class MX.klass.KlassManager
  * @alias klassmanager
+ *
  * 类管理器，管理类对象与alias的映射关系
  *
  * Matrix框架的几个依赖库的alias分别是：

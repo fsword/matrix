@@ -1,5 +1,6 @@
 /**
  * @class MX.app.Controller
+ * @alias controller
  */
 MX.kindle('klass', function(X, Klass) {
     X.app.Controller = Klass.define({

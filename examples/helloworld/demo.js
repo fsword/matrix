@@ -24,11 +24,11 @@ MX.ready('klass', function(X, Klass) {
             {
                 id: 'demo-pagelet', // pagelet唯一标识
                 url: 'h', // pagelet访问路径
-                view: 'demo.view' // 设置view
+                view: 'demo.view' // 为pagelet设置一个View
             }
         ],
 
-        // App的欢迎页
+        // App的默认欢迎页
         welcome: 'h'
     });
 });

@@ -1,5 +1,6 @@
 /**
  * @class MX.app.Pagelet
+ * @alias pagelet
  */
 MX.kindle('jquery', 'klass', function(X, $, Klass) {
     var paramNameRe = /(:|\*)\w+/g; // 匹配URL中的参数名

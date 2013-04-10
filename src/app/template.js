@@ -1,5 +1,6 @@
 /**
  * @class MX.app.Template
+ * @alias template
  */
 MX.kindle('jquery', 'arttemplate', 'klass', function(X, $, artTemplate, Klass) {
     X.app.Template = Klass.define({
