@@ -1,5 +1,6 @@
 /**
  * @class MX.app.Template
+ * @alias template
  */
 MX.kindle('jquery', 'arttemplate', 'klass', function(X, $, artTemplate, Klass) {
     X.app.Template = Klass.define({
@@ -28,6 +29,10 @@ MX.kindle('jquery', 'arttemplate', 'klass', function(X, $, artTemplate, Klass) {
             } else if (X.isString(this.template)) {
                 this.template = artTemplate(this.template);
             }
+            if (this.store) {
+                this.bindStore(this.store, true);
+                delete this.store;
+            }
         },
         
         /**
@@ -44,13 +49,69 @@ MX.kindle('jquery', 'arttemplate', 'klass', function(X, $, artTemplate, Klass) {
          * 渲染模版
          */
         render: function(container, data) {
+            if (X.isObject(container)) {
+                data = container;
+                container = null;
+            }
             container = container || this.container;
+
+            // getData()与this.params这两个接口是从View中调用
+            // 在View.render()中会设置
+            data = this.getData(this.params, data || {});
+
             container.html(this.applyTemplate(data));
+        },
+
+        // private
+        getData: function(params, data) {
+            return data;
+        },
+
+        /**
+         * 绑定store
+         */
+        bindStore: function(store, /*private*/initial) {
+            if (initial !== true) {
+                this.unbindStore();
+            }
+            if (store) {
+                this.store = store;
+                // TODO 是否应当绑定datachanged事件？实时响应数据更改，刷新页面
+                this.mon(this.store, 'load', this.onStoreLoad);
+            }
+        },
+
+        /**
+         * 移除绑定store
+         */
+        unbindStore: function() {
+            if (this.store) {
+                this.mun(this.store, 'load', this.onStoreLoad);
+                this.store = null;
+            }
+        },
+
+        // private
+        onStoreLoad: function() {
+            var data, store = this.store;
+            if (store.isModel) {
+                data = store.get();
+            } else {
+                data = {};
+                data[store.dataProperty] = store.get();
+            }
+            this.render(data);
+        },
+
+        // private
+        onDestroy: function() {
+            this.unbindStore();
         }
     });
 });
 /**
  * @class MX.app.Model
+ * @alias model
  */
 MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
     X.app.Model = Klass.define({
@@ -59,6 +120,9 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
         
         // private
         extend: 'utility',
+
+        // private
+        isModel: true,
         
         /**
          * @cfg {Boolean} useWebDatabase true启动web sql database缓存数据，默认true
@@ -82,6 +146,10 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
         /**
          * @cfg {Array} fields 开启useCache时，必须设置fields字段
          */
+
+        /**
+         * @cfg {String} url AJAX请求API
+         */
         
         /**
          * @cfg {String/Object} restful AJAX请求API
@@ -91,6 +159,11 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
          * @cfg {String} requestMethod AJAX请求类型，默认'GET'
          */
         requestMethod: 'GET',
+
+        /**
+         * @cfg {String} dataType 默认'json'
+         */
+        dataType: 'json',
         
         /**
          * @cfg {Object} baseParams AJAX请求提交给服务端的默认参数
@@ -109,6 +182,11 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
         /**
          * @cfg {Object} values 初始值
          */
+
+        /**
+         * @cfg {Boolean} showPageLoading true显示$.mobile.showPageLoadingMsg，默认false
+         */
+        showPageLoading: false,
         
         // private
         init: function() {
@@ -154,7 +232,7 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
                 destroy: 'destroy'
             }, rest, rests;
             
-            this.restful = this.restful || {};
+            this.restful = this.restful || this.url || {};
             
             if (X.isString(this.restful)) {
                 this.restful = {
@@ -193,8 +271,8 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
                         field = {
                             name: field
                         };
-                        fields[field.name] = field;
                     }
+                    fields[field.name] = field;
                 }, this);
                 if (!fields[this.idProperty]) {
                     fields[this.idProperty] = {
@@ -280,7 +358,11 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
                 /**
                  * @event loadfailed
                  */
-                'loadfailed'
+                'loadfailed',
+                /**
+                 * @event loadcomplete
+                 */
+                'loadcomplete'
             );
         },
         
@@ -307,7 +389,7 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
             
             for (name in fields) {
                 if (values.hasOwnProperty(name)) {
-                    value = values[name] || '';
+                    value = X.isDefined(values[name]) ? values[name] : '';
                     currentValue = data[name];
                     
                     if (modified[name] === value) {
@@ -407,7 +489,12 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
          * 加载数据
          */
         load: function(params) {
-            if (!this.removed) {
+            if (!this.removed && !this.loading && this.fireEvent('beforeload', this) !== false) {
+                this.loading = true;
+                params = params || {};
+                if (this.showPageLoading) {
+                    this.showPageLoadingMsg();
+                }
                 if (this.useWebDatabase && this.useCache) {
                     this.loadStorage(params);
                 } else {
@@ -415,33 +502,41 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
                 }
             }
         },
-        
+
         /**
-         * 强制从服务端取得数据，并更新本地缓存
+         * 重新加载数据
          */
-        fetch: function(params) {
+        reload: function(params) {
             if (!this.removed && !this.loading && this.fireEvent('beforeload', this) !== false) {
                 this.loading = true;
-                
-                params = params || {};
-                params.data = params.data || {};
-                params.data = $.extend({}, this.baseParams, this.getFetchParams() || {}, params.data, {'_dt': $.now()});
-                params = $.extend({
-                    type: this.requestMethod
-                }, this.restful.read, params, {
-                    dataType: 'json'
-                });
-                
-                this.cancelFetch();
-                this.lastXmlRequest = $.ajax(params)
-                                       .done($.proxy(this.onFetchSuccess, this))
-                                       .fail($.proxy(this.handleLoadFailed, this))
-                                       .always($.proxy(this.handleRequestComplete, this));
+                if (this.showPageLoading) {
+                    this.showPageLoadingMsg();
+                }
+                this.fetch(params);
             }
         },
         
+        // private 强制从服务端取得数据，并更新本地缓存
+        fetch: function(params) {
+            var options;
+            params = params || {};
+            params['_dt'] = $.now(); // 时间戳，防止缓存
+            params = $.extend({}, params, this.getFetchData(), this.getData ? this.getData(this.params) : null);
+            options = $.extend({}, this.baseParams, {
+                type: this.requestMethod,
+                url: this.getUrl ? this.getUrl(this.params) : this.restful.read,
+                dataType: this.dataType || 'json',
+                data: params
+            });
+            this.cancelFetch();
+            this.lastXmlRequest = $.ajax(options)
+                                   .done($.proxy(this.onFetchSuccess, this))
+                                   .fail($.proxy(this.handleLoadFailed, this))
+                                   .always($.proxy(this.handleRequestComplete, this));
+        },
+        
         // private
-        getFetchParams: function() {
+        getFetchData: function() {
             var params = {};
             params[this.idProperty] = this.get(this.idProperty, true);
             return params;
@@ -490,6 +585,10 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
         handleRequestComplete: function() {
             this.loading = false;
             this.lastXmlRequest = null;
+            if (this.showPageLoading) {
+                this.hidePageLoadingMsg();
+            }
+            this.fireEvent('loadcomplete', this);
         },
         
         /**
@@ -519,24 +618,30 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
                 me.db.transaction(function(t) {
                     t.executeSql('SELECT * FROM ' + me.tableName + ' WHERE ' + me.idProperty + ' = ?', [id], function(t, result) {
                         if (result.rows.length > 0) {
-                            var name, field, rs = {}, item = result.rows.item(0);
+                            var name, rs = {}, item = result.rows.item(0);
                             if ((item['_last_updated'] + me.cacheExpires) < $.now()) {
                                 // 本地数据过期，从服务端重新加载
                                 me.fetch(params);
                             } else {
-                                for (name in me.fields) {
-                                    if (me.fields.hasOwnProperty(name)) {
-                                        rs[name] = JSON.parse(item[name]);
+                                try {
+                                    for (name in me.fields) {
+                                        if (me.fields.hasOwnProperty(name)) {
+                                            rs[name] = JSON.parse(item[name]);
+                                        }
                                     }
+                                    me.handleLoadSuccess(rs);
+                                } catch(e) {
+                                    me.handleLoadFailed();
                                 }
-                                me.handleLoadSuccess(rs);
+                                me.handleRequestComplete();
                             }
                         } else {
-                            me.handleLoadFailed();
+                            me.fetch(params);
                         }
                     });
                 }, function(error) {
                     me.handleLoadFailed();
+                    me.handleRequestComplete();
                 });
             } else {
                 me.fetch(params);
@@ -555,9 +660,7 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
                             sql,
                             columns = [],
                             values = [],
-                            props = [],
-                            val;
-                        
+                            props = [];
                         if (result.rows.length > 0) { // 更新数据
                             for (name in fields) {
                                 if (name != me.idProperty) {
@@ -593,6 +696,16 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
                 });
             }
         },
+
+        // private
+        showPageLoadingMsg: function() {
+            $.mobile.showPageLoadingMsg();
+        },
+
+        // private
+        hidePageLoadingMsg: function() {
+            $.mobile.hidePageLoadingMsg();
+        },
         
         // private
         onDestroy: function() {
@@ -602,6 +715,7 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
 });
 /**
  * @class MX.app.Store
+ * @alias store
  */
 MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
     X.app.Store = Klass.define({
@@ -610,6 +724,9 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         
         // private
         extend: 'utility',
+
+        // private
+        isStore: true,
         
         /**
          * @cfg {Boolean} useWebDatabase true启动web sql database缓存数据，默认true
@@ -645,15 +762,20 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         /**
          * @cfg {Array} fields 赋值给model
          */
-        
+
         /**
-         * @cfg {String/Object} restful AJAX请求API
+         * @cfg {String} url AJAX请求API
          */
         
         /**
          * @cfg {String} requestMethod AJAX请求类型，默认'GET'
          */
         requestMethod: 'GET',
+
+        /**
+         * @cfg {String} dataType 默认'json'
+         */
+        dataType: 'json',
         
         /**
          * @cfg {Object} baseParams AJAX请求提交给服务端的默认参数
@@ -689,11 +811,16 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
          * @cfg {Number} maxPage store翻页的最大页数
          */
         maxPage: Number.MAX_VALUE,
+
+        /**
+         * @cfg {Boolean} showPageLoading true显示$.mobile.showPageLoadingMsg，默认false
+         */
+        showPageLoading: false,
         
         // private
         init: function() {
             this.baseParams = this.baseParams || {};
-            this.storageKey = this.storageKey || this.alias;
+            this.storageKey = this.storageKey || this.id;
             this.meta = this.meta || {};
             X.applyIf(this.meta, {
                 pageNumberProperty: 'page',
@@ -702,7 +829,6 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
                 totalProperty: 'total'
             });
             
-            this.initRestful();
             this.initTable();
             
             /**
@@ -727,46 +853,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
                 }
             });
         },
-        
-        // private
-        initRestful: function() {
-            var actions = {
-                create: 'create',
-                read: 'read',
-                update: 'update',
-                destroy: 'destroy'
-            }, rest, rests;
-            
-            this.restful = this.restful || {};
-            
-            if (X.isString(this.restful)) {
-                this.restful = {
-                    create: this.restful,
-                    read: this.restful,
-                    update: this.restful,
-                    destroy: this.restful
-                };
-            }
-            
-            rests = {};
-            X.each(actions, function(i, action) {
-                rest = this.restful[action];
-                if (X.isString(rest)) {
-                    rest = {
-                        url: rest,
-                        type: this.requestMethod
-                    };
-                } else {
-                    rest = $.extend({
-                        type: this.requestMethod
-                    }, rest)
-                }
-                rests[action] = rest;
-            }, this);
-            
-            this.restful = rests;
-        },
-        
+
         // private
         initTable: function() {
             var me = this;
@@ -808,7 +895,11 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
                 /**
                  * @event loadfailed
                  */
-                'loadfailed'
+                'loadfailed',
+                /**
+                 * @event loadcomplete
+                 */
+                'loadcomplete'
             );
         },
         
@@ -816,10 +907,17 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
          * 加载数据
          */
         load: function(params) {
-            if (!this.removed) {
-                params = params || {};
-                params.data = params.data || {};
-                params.data.page = params.data.page || this.currentPage;
+            var maxPage = this.maxPage, pageNumber;
+            params = params || {};
+            pageNumber = params.page || this.currentPage;
+            pageNumber = pageNumber < 1 ? 1 : pageNumber;
+            params.page = pageNumber;
+            if (!this.removed && !this.loading && pageNumber <= maxPage && this.fireEvent('beforeload', this, pageNumber) !== false) {
+                this.loading = true;
+                this.toPage = pageNumber;
+                if (this.showPageLoading) {
+                    this.showPageLoadingMsg();
+                }
                 if (this.useWebDatabase && this.useCache) {
                     this.loadStorage(params);
                 } else {
@@ -827,43 +925,45 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
                 }
             }
         },
-        
+
         /**
-         * 强制从服务端取得数据，并更新本地缓存
+         * 重新加载数据
          */
-        fetch: function(params) {
-            var me = this,
-                meta = me.meta,
-                maxPage = me.maxPage,
-                pageNumber;
-            
+        reload: function(params) {
+            var pageNumber;
             params = params || {};
-            params.data = params.data || {};
-            pageNumber = params.data.page || me.currentPage;
+            pageNumber = params.page || this.currentPage;
             pageNumber = pageNumber < 1 ? 1 : pageNumber;
-            params.data.page = pageNumber;
-            
-            if (!me.loading && pageNumber <= maxPage && me.fireEvent('beforeload', me, pageNumber) !== false) {
-                me.loading = true;
-                me.toPage = pageNumber;
-                
-                params.data[meta.pageNumberProperty] = pageNumber;
-                params.data[meta.pageSizeProperty] = me.pageSize;
-                params.data[meta.pageStartProperty] = (pageNumber - 1) * me.pageSize;
-                params.data['_dt'] = $.now(); // 时间戳，防止缓存
-                params.data = $.extend({}, me.baseParams, params.data);
-                params = $.extend({
-                    type: me.requestMethod
-                }, me.restful.read, params, {
-                    dataType: 'json'
-                });
-                
-                me.cancelFetch();
-                me.lastXmlRequest = $.ajax(params)
-                                     .done($.proxy(me.onFetchSuccess, me))
-                                     .fail($.proxy(me.handleLoadFailed, me))
-                                     .always($.proxy(me.handleRequestComplete, me));
+            params.page = pageNumber;
+            if (!this.removed && !this.loading && this.fireEvent('beforeload', this, pageNumber) !== false) {
+                this.loading = true;
+                this.toPage = pageNumber;
+                if (this.showPageLoading) {
+                    this.showPageLoadingMsg();
+                }
+                this.fetch(params);
             }
+        },
+        
+        // private 强制从服务端取得数据，并更新本地缓存
+        fetch: function(params) {
+            var meta = this.meta, pageNumber = params.page, options;
+            params[meta.pageNumberProperty] = pageNumber;
+            params[meta.pageSizeProperty] = this.pageSize;
+            params[meta.pageStartProperty] = (pageNumber - 1) * this.pageSize;
+            params['_dt'] = $.now(); // 时间戳，防止缓存
+            params = $.extend({}, params, this.getData ? this.getData(this.params) : null);
+            options = $.extend({}, this.baseParams, {
+                type: this.requestMethod,
+                url: this.getUrl ? this.getUrl(this.params) : this.url,
+                dataType: this.dataType || 'json',
+                data: params
+            });
+            this.cancelFetch();
+            this.lastXmlRequest = $.ajax(options)
+                                   .done($.proxy(this.onFetchSuccess, this))
+                                   .fail($.proxy(this.handleLoadFailed, this))
+                                   .always($.proxy(this.handleRequestComplete, this));
         },
         
         // private
@@ -913,7 +1013,11 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         // private
         handleRequestComplete: function() {
             this.loading = false;
-            delete this.lastXhr;
+            this.lastXmlRequest = null;
+            if (this.showPageLoading) {
+                this.hidePageLoadingMsg();
+            }
+            this.fireEvent('loadcomplete', this);
         },
         
         // private
@@ -932,8 +1036,12 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
                 values: value,
                 listeners: {
                     scope: this,
+                    'datachanged': function(model) {
+                        this.fireEvent('datachanged', this, model);
+                    },
                     'destroy': function(model) {
                         this.data.remove(model);
+                        this.fireEvent('datachanged', this, model);
                     }
                 }
             });
@@ -944,9 +1052,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
          */
         first: function() {
             this.load({
-                data: {
-                    page: 1
-                }
+                page: 1
             });
         },
         
@@ -957,9 +1063,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
             if (X.isDefined(this.total)) {
                 var pageCount = this.getPageData().pageCount;
                 this.load({
-                    data: {
-                        page: pageCount
-                    }
+                    page: pageCount
                 });
             }
         },
@@ -969,9 +1073,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
          */
         prev: function() {
             this.load({
-                data: {
-                    page: this.currentPage - 1
-                }
+                page: this.currentPage - 1
             });
         },
         
@@ -984,9 +1086,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
                 this.first();
             } else {
                 this.load({
-                    data: {
-                        page: this.currentPage + 1
-                    }
+                    page: this.currentPage + 1
                 });
             }
         },
@@ -1073,10 +1173,9 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         // private
         loadStorage: function(params) {
             var me = this, 
-                pageNumber = params.data.page,
+                pageNumber = params.page,
                 id;
             if (me.useWebDatabase) {
-                me.toPage = pageNumber; // 记录翻页页码
                 id = me.getStorageKey(pageNumber);
                 me.db.transaction(function(t) {
                     t.executeSql('SELECT * FROM ' + me.tableName + ' WHERE id = ?', [id], function(t, result) {
@@ -1091,13 +1190,15 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
                                 } catch (e) {
                                     me.handleLoadFailed();
                                 }
+                                me.handleRequestComplete();
                             }
                         } else {
-                            me.handleLoadFailed();
+                            me.fetch(params);
                         }
                     });
                 }, function(error) {
                     me.handleLoadFailed();
+                    me.handleRequestComplete();
                 });
             } else {
                 me.fetch(params);
@@ -1114,8 +1215,8 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
                     t.executeSql('SELECT * FROM ' + me.tableName + ' WHERE id = ?', [id], function(t, result) {
                         try {
                             var props = [],
-                                value = JSON.stringify(me.get(null, true));
-                            
+                                value = JSON.stringify(me.get(null, true)),
+                                sql;
                             if (result.rows.length > 0) { // 更新数据
                                 sql = 'UPDATE ' + me.tableName + ' SET value = ?, _last_updated = ? WHERE id = ?';
                                 props.push(value);
@@ -1127,7 +1228,6 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
                                 props.push(value);
                                 props.push($.now());
                             }
-                            
                             t.executeSql(sql, props);
                         } catch(e) {
                             // ignore
@@ -1138,6 +1238,16 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
                 });
             }
         },
+
+        // private
+        showPageLoadingMsg: function() {
+            $.mobile.showPageLoadingMsg();
+        },
+
+        // private
+        hidePageLoadingMsg: function() {
+            $.mobile.hidePageLoadingMsg();
+        },
         
         // private
         onDestroy: function() {
@@ -1147,6 +1257,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
 });
 /**
  * @class MX.app.View
+ * @alias view
  */
 MX.kindle('jquery', 'klass', function(X, $, Klass) {
     X.app.View = Klass.define({
@@ -1157,15 +1268,21 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         extend: 'utility',
         
         /**
-         * @cfg {String} headerCls 添加到header元素上的扩展CSS样式
+         * @cfg {String} headerCfg
+         * String : cls 添加到header元素上的扩展CSS样式
+         * String : template 模版
          */
         
         /**
-         * @cfg {String} footerCls 添加到footer元素上的扩展CSS样式
+         * @cfg {String} footerCfg
+         * String : cls 添加到footer元素上的扩展CSS样式
+         * String : template 模版
          */
         
         /**
-         * @cfg {String} bodyCls 添加到body元素上的扩展CSS样式
+         * @cfg {String} bodyCfg
+         * String : cls 添加到body元素上的扩展CSS样式
+         * String : template 模版
          */
         
         // private
@@ -1175,19 +1292,25 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         
         // private
         initTemplate: function() {
-            var templates = {}, tmpl;
-            X.each(this.templates, function(i, config) {
-                tmpl = X.create('template', $.extend({}, config));
-                if (tmpl.renderToBody) {
-                    this.renderBodyTmpl = tmpl;
-                } else if (tmpl.renderToHeader) {
-                    this.renderHeaderTmpl = tmpl;
-                } else if (tmpl.renderToFooter) {
-                    this.renderFooterTmpl = tmpl;
+            var templates = this.templates;
+            this.templates = [];
+            if (templates) {
+                if (!X.isArray(templates)) {
+                    templates = [templates];
                 }
-                templates[tmpl.id] = tmpl;
-            }, this);
-            this.templates = templates; 
+                X.each(templates, function(i, config) {
+                    this.addTemplate($.extend({}, config));
+                }, this);
+            }
+            if (this.headerCfg && this.headerCfg.template) {
+                this.headerTmpl = this.addTemplate(X.isString(this.headerCfg.template) ? { id: this.headerCfg.template } : $.extend({}, this.headerCfg.template));
+            }
+            if (this.footerCfg && this.footerCfg.template) {
+                this.footerTmpl = this.addTemplate(X.isString(this.footerCfg.template) ? { id: this.footerCfg.template } : $.extend({}, this.footerCfg.template));
+            }
+            if (this.bodyCfg && this.bodyCfg.template) {
+                this.bodyTmpl = this.addTemplate(X.isString(this.bodyCfg.template) ? { id: this.bodyCfg.template } : $.extend({}, this.bodyCfg.template));
+            }
         },
         
         // private
@@ -1208,44 +1331,59 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         render: function(container) {
             if (!this.rendered && this.fireEvent('beforerender', this) !== false) {
                 this.rendered = true;
-                
+
                 this.container = container = $(container);
-                
-                if (this.renderHeaderTmpl) {
+
+                if (this.headerCfg) {
                     this.header = $(document.createElement('div'));
                     this.header.attr('id', 'mx-app-page-header-' + this.id)
-                               .attr('data' + $.mobile.ns + '-role', 'header');
-                    if (this.headerCls) {
-                        this.header.addClass(this.headerCls);
+                               .attr('data-' + $.mobile.ns + 'role', 'header');
+                    if (this.headerCfg.fixed) {
+                        this.header.attr('data-' + $.mobile.ns + 'position', 'fixed');
                     }
-                    this.renderHeaderTmpl.container = this.header;
-                    this.renderHeaderTmpl.render();
+                    if (this.headerCfg.cls) {
+                        this.header.addClass(this.headerCfg.cls);
+                    }
+                    if (this.headerTmpl) {
+                        this.headerTmpl.container = this.header;
+                        !this.headerTmpl.store && this.headerTmpl.render();
+                    }
                     container.append(this.header);
                 }
-                
-                if (this.renderFooterTmpl) {
-                    this.footer = $(document.createElement('div'));
-                    this.footer.attr('id', 'mx-app-page-footer-' + this.id)
-                               .attr('data' + $.mobile.ns + '-role', 'footer');
-                    if (this.footerCls) {
-                        this.footer.addClass(this.footerCls);
-                    }
-                    this.renderFooterTmpl.container = this.header;
-                    this.renderFooterTmpl.render();
-                    container.append(this.header);
-                }
-                
+
+                var bodyCfg = this.bodyCfg || {};
                 this.body = $(document.createElement('div'));
                 this.body.attr('id', 'mx-app-page-body-' + this.id)
-                         .attr('data' + $.mobile.ns + '-role', 'content');
-                if (this.bodyCls) {
-                    this.body.addClass(this.bodyCls);
+                         .attr('data-' + $.mobile.ns + 'role', 'content');
+                if (bodyCfg.fixed) {
+                    this.body.attr('data-' + $.mobile.ns + 'position', 'fixed');
                 }
-                if (this.renderBodyTmpl) {
-                    this.renderBodyTmpl.container = this.body;
-                    this.renderBodyTmpl.render();
+                if (bodyCfg.cls) {
+                    this.body.addClass(bodyCfg.cls);
+                }
+                if (this.bodyTmpl) {
+                    this.bodyTmpl.container = this.body;
+                    !this.bodyTmpl.store && this.bodyTmpl.render();
                 }
                 container.append(this.body);
+
+                if (this.footerCfg) {
+                    this.footer = $(document.createElement('div'));
+                    this.footer.attr('id', 'mx-app-page-footer-' + this.id)
+                               .attr('data-' + $.mobile.ns + 'role', 'footer');
+
+                    if (this.footerCfg.fixed) {
+                        this.footer.attr('data-' + $.mobile.ns + 'position', 'fixed');
+                    }
+                    if (this.footerCfg.cls) {
+                        this.footer.addClass(this.footerCfg.cls);
+                    }
+                    if (this.footerTmpl) {
+                        this.footerTmpl.container = this.footer;
+                        !this.footerTmpl.store && this.footerTmpl.render();
+                    }
+                    container.append(this.footer);
+                }
                 
                 this.onRender(container);
                 this.fireEvent('render', this, container);
@@ -1254,6 +1392,15 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         
         // private
         onRender: X.emptyFn,
+
+        // private
+        addTemplate: function(config) {
+            config = config || {};
+            config.params = this.params;
+            var tmpl = X.create('template', config);
+            this.templates[tmpl.id] = tmpl;
+            return tmpl;
+        },
         
         /**
          * 获取模版
@@ -1265,7 +1412,7 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         },
         
         // private
-        onDestory: function() {
+        onDestroy: function() {
             if (this.header) {
                 this.header.remove();
                 this.header = null;
@@ -1279,11 +1426,17 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                 this.body = null;
             }
             this.container = null;
+
+            X.each(this.templates, function(i, tmpl) {
+                tmpl.destroy();
+            });
+            this.templates = null;
         }
     });
 });
 /**
  * @class MX.app.Controller
+ * @alias controller
  */
 MX.kindle('klass', function(X, Klass) {
     X.app.Controller = Klass.define({
@@ -1306,6 +1459,10 @@ MX.kindle('klass', function(X, Klass) {
         initEvents: function() {
             this.addEvents(
                 /**
+                 * @event pagecreate
+                 */
+                'pagecreate',
+                /**
                  * @event pagebeforeshow
                  */
                 'pagebeforeshow',
@@ -1322,13 +1479,6 @@ MX.kindle('klass', function(X, Klass) {
                  */
                 'pagehide'
             );
-            
-            this.mon(this.view, 'render', function() {
-                if (this.delegates) {
-                    this.delegateEvent(this.view.container, this.delegates);
-                    delete this.delegates;
-                }
-            });
         },
         
         /**
@@ -1365,6 +1515,19 @@ MX.kindle('klass', function(X, Klass) {
             
             this.mon(root, eventName, selector, callbackFn, scope);
         },
+
+        // private
+        onViewRender: function() {
+            if (this.delegates) {
+                this.delegateEvent(this.view.container, this.delegates);
+                delete this.delegates;
+            }
+            this.onPageCreate();
+            this.fireEvent('pagecreate', this);
+        },
+
+        // private
+        onPageCreate: X.emptyFn,
         
         // private
         beforePageShow: X.emptyFn,
@@ -1428,6 +1591,13 @@ MX.kindle('klass', function(X, Klass) {
         getCt: function() {
             return this.getContainer();
         },
+
+        /**
+         * 获取hash中包含的参数
+         */
+        getParams: function() {
+             return this.params;
+        },
         
         // private
         onDestroy: function() {
@@ -1438,6 +1608,7 @@ MX.kindle('klass', function(X, Klass) {
 });
 /**
  * @class MX.app.Pagelet
+ * @alias pagelet
  */
 MX.kindle('jquery', 'klass', function(X, $, Klass) {
     var paramNameRe = /(:|\*)\w+/g; // 匹配URL中的参数名
@@ -1490,11 +1661,66 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
             
             // 解析URL中包含的参数值
             this.parseParams();
-            
+
+            // 这里必须严格按照这个初始化顺序
+            this.initTransition();
             this.initView();
+            this.initModels();
+            this.initStores();
             this.initController();
         },
-        
+
+        // private
+        initTransition: function() {
+            this.transition = this.transition || '';
+            if (X.isString(this.transition)) {
+                this.transition = {
+                    in: this.transition,
+                    out: ''
+                }
+            }
+            if (X.isString(this.transition.in)) {
+                this.transition.in = {
+                    effect: this.transition.in
+                }
+            }
+            if (X.isString(this.transition.out)) {
+                this.transition.out = {
+                    effect: this.transition.out
+                }
+            }
+        },
+
+        // private
+        initModels: function() {
+            this.models = this.models || {};
+            X.each(this.models, function(i, model) {
+                model.params = this.params;
+                if (model.bindTo === 'header' && this.view.headerTmpl) {
+                    this.view.headerTmpl.bindStore(model);
+                } else if (model.bindTo === 'footer' && this.view.footerTmpl) {
+                    this.view.footerTmpl.bindStore(model);
+                } else if (model.bindTo === 'body' && this.view.bodyTmpl) {
+                    this.view.bodyTmpl.bindStore(model);
+                }
+            }, this);
+        },
+
+        // private
+        initStores: function() {
+            this.stores = this.stores || {};
+            X.each(this.stores, function(i, store) {
+                store.params = this.params;
+                if (store.bindTo === 'header' && this.view.headerTmpl) {
+                    this.view.headerTmpl.bindStore(store);
+                } else if (store.bindTo === 'footer' && this.view.footerTmpl) {
+                    this.view.footerTmpl.bindStore(store);
+                } else if (store.bindTo === 'body' && this.view.bodyTmpl) {
+                    this.view.bodyTmpl.bindStore(store);
+                }
+            }, this);
+        },
+
         // private
         // 将hash中包含的参数解析出来
         parseParams: function() {
@@ -1525,16 +1751,19 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         
         // private
         initView: function() {
-            this.view = X.create(this.view || 'view', {});
+            this.view = X.create(this.view || 'view', {
+                params: this.params
+            });
+            this.mon(this.view, 'render', this.onViewRender);
         },
         
         // private
         initController: function() {
             this.controller = X.create(this.controller || 'controller', {
-                pagelet: this,
                 view: this.view,
                 models: this.models,
-                stores: this.stores
+                stores: this.stores,
+                params: this.params
             });
         },
         
@@ -1547,8 +1776,8 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                 
                 this.el = $(document.createElement('div'));
                 this.el.attr('id', 'mx-app-page-' + this.id)
-                       .attr('data' + $.mobile.ns + '-role', 'page')
-                       .attr('data' + $.mobile.ns + '-url', '#/' + this.hash);
+                       .attr('data-' + $.mobile.ns + 'role', 'page')
+                       .attr('data-' + $.mobile.ns + 'url', '#/' + this.hash);
                 if (this.cls) {
                     this.el.addClass(this.cls);
                 }
@@ -1572,6 +1801,13 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         
         // private
         onRender: X.emptyFn,
+
+        // private
+        onViewRender: function() {
+            if (this.controller) {
+                this.controller.onViewRender();
+            }
+        },
         
         // private
         beforePageShow: function() {
@@ -1583,6 +1819,8 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         
         // private
         onPageShow: function() {
+            this.loadModelOrStore(this.models);
+            this.loadModelOrStore(this.stores);
             if (this.controller) {
                 this.controller.onPageShow();
                 this.controller.fireEvent('pageshow', this.controller);
@@ -1616,6 +1854,15 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                 store.cancelFetch();
             }, this);
         },
+
+        // private
+        loadModelOrStore: function(objects) {
+            X.each(objects, function(i, obj) {
+                if (obj.autoLoad === true) {
+                    obj.load();
+                }
+            }, this);
+        },
         
         /**
          * 获得view对象
@@ -1632,7 +1879,7 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         },
         
         // private
-        onDestory: function() {
+        onDestroy: function() {
             if (this.models && X.isObject(this.models)) {
                 X.each(this.models, function(i, model) {
                     model.destroy();
@@ -1661,6 +1908,9 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
 });
 /**
  * @class MX.app.Application
+ * @alias application
+ *
+ * Appliaction主程序类，整合WebApp中使用的资源，管理页面视图
  */
 MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, LocalStorage, Pagelet) {
     var $window = $(window),
@@ -1670,72 +1920,76 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
         namedParamRe = /:\w+/g, // 匹配hash中的parameter
         splatParamRe = /\*\w+/g, // 匹配hash一段url字符串
         escapeRe = /[-[\]{}()+?.,\\^$|#\s]/g; // 过滤hash中的特殊字符
-    
+
     X.app.Application = Klass.define({
         // private
         alias: 'application',
-        
+
         // private
         extend: 'utility',
-        
+
         /**
          * @cfg {String} templateVersion 模版库版本号
          */
-        
+
         /**
          * @cfg {String} templateUrl 模版更新URL
          */
-        
+
         /**
          * @cfg {Boolean} useWebDatabase true启动Web SQL Database缓存，全局配置参数，影响model、store调用db接口
          */
         useWebDatabase: true,
-        
+
         /**
          * @cfg {Number} databaseSize 数据库大小，默认50M
          */
         databaseSize: 50 * 1024 * 1024,
-        
+
         /**
-         * @cfg {String} databaseName 数据库名称，默认'matrix_data'
+         * @cfg {String} databaseName 数据库名称，默认undefined
          */
-        databaseName: 'matrix_database',
-        
+
         /**
          * @cfg {String} databaseVersion 数据库版本，默认'1.0'
          */
         databaseVersion: '1.0',
-        
+
         /**
          * @cfg {String} databaseDescription 数据库描述
          */
-        databaseDescription: 'offline database',
-        
+
         /**
          * @cfg {Number} databaseExpires 数据过期时间，单位ms，默认 3 * 24 * 60 * 60 * 1000，3天后过期
          */
         databaseExpires: 3 * 24 * 60 * 60 * 1000,
-        
-        /**
-         * @cfg {String} startUpSelector 启动画面selector
-         */
-        startUpSelector: 'div#startUpView',
-        
+
         /**
          * @cfg {Number} pageletCacheSize pagelet缓存大小，默认为30
          */
         pageletCacheSize: 30,
-        
+
+        /**
+         * @cfg {String} startUpSelector 启动画面selector
+         */
+        startUpSelector: 'div#startUpView',
+
+        /**
+         * @cfg {String} cls 添加到body元素上的扩展CSS样式
+         */
+
         // private
         init: function() {
             this.models = {};
             this.stores = {};
             this.pagelets = {};
-            
+
             // pagelet缓存池
             this.pageletCaches = this.pageletCaches || [];
+
+            this.history = new $.mobile.History();
         },
-        
+
         // private
         initEvents: function() {
             this.addEvents(
@@ -1764,11 +2018,11 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                  */
                 'pagechangefailed'
             );
-            
+
             // 监听hashchange，当hash发生改变时，切换Pagelet
             this.mon(window, 'hashchange', this.onHashChange);
         },
-        
+
         /**
          * 运行WebApp
          * @param {Object} config
@@ -1776,7 +2030,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
         launch: function(config) {
             config = config || {};
             this.setConfig(config);
-            
+
             var templates = LocalStorage.get('mx-app/templates'),
                 lastTemplateVersion = LocalStorage.get('mx-app/template-version'),
                 dt = $.now();
@@ -1787,31 +2041,35 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                     dataType: 'text',
                     context: this
                 }).done(function(response) {
-                    LocalStorage.set('mx-app/template-version', this.templateVersion);
-                    LocalStorage.set('mx-app/templates', response);
-                    this.createTemplateElement(response);
-                    
-                    if ($.now() - dt > 200) {
-                        this._launch(config);
-                    } else {
-                        X.defer(this._launch, 200, this, [config]);
-                    }
-                }).fail(function() {
-                    // TODO 加载模版失败
-                });
+                        LocalStorage.set('mx-app/template-version', this.templateVersion);
+                        LocalStorage.set('mx-app/templates', response);
+                        this.createTemplateElement(response);
+
+                        if ($.now() - dt > 200) {
+                            this._launch(config);
+                        } else {
+                            X.defer(this._launch, 200, this, [config]);
+                        }
+                    }).fail(function() {
+                        // TODO 加载模版失败
+                    });
             } else {
                 this.createTemplateElement(templates);
-                
+
                 // iScroll加载需要延迟200毫秒，防止iScroll加载失败
                 X.defer(this._launch, 200, this, [config]);
             }
         },
-        
+
         // private
         _launch: function(config) {
             if (!this.isLaunched && this.beforeLaunch() !== false && this.fireEvent('beforelaunch', this) !== false) {
                 this.isLaunched = true;
-                
+
+                if (this.cls) {
+                    this.pageContainer.addClass(this.cls);
+                }
+
                 this.startUpView = $(this.startUpSelector);
                 if (this.startUpView.length == 0) {
                     this.startUpView = null;
@@ -1822,7 +2080,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                     this.startUpView.page();
                     this.startUpView.css('min-height', window.innerHeight + 'px');
                 }
-            
+
                 // 初始化jquery mobile配置
                 // start ---------------------------------------------------
                 $.extend($.mobile, {
@@ -1836,16 +2094,16 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                     'pagechangefailed': this.onPageChangeFailed
                 });
                 // end -----------------------------------------------------
-                
+
                 this.initDatabase();
-                
+
                 this.addModel(config.models);
                 this.addStore(config.stores);
                 this.addPagelet(config.pagelets);
-                
+
                 this.onLaunch();
                 this.fireEvent('launch', this);
-                
+
                 var hash = this.getHash(),
                     pagelet = this.matchPagelet(hash);
                 if (pagelet) {
@@ -1856,13 +2114,13 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                 }
             }
         },
-        
+
         // private
         beforeLaunch: X.emptyFn,
-        
+
         // private
         onLaunch: X.emptyFn,
-        
+
         // private
         createTemplateElement: function(templates) {
             this.templateCt = $(document.createElement('div'));
@@ -1870,7 +2128,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
             this.templateCt.html(templates);
             $('body').append(this.templateCt);
         },
-        
+
         // private
         setConfig: function(config) {
             config = $.extend({}, config);
@@ -1878,16 +2136,16 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
             delete config.stores;
             delete config.pagelets;
             $.extend(this, config);
-            
+
             this.pageContainer = $('body');
-            
+
             if (this.useWebDatabase) {
                 // 没有设置数据库名称，则禁用web sql database
                 this.useWebDatabase = !!this.databaseName;
             }
             this.welcome = this.welcome || '';
         },
-        
+
         // private
         initDatabase: function() {
             var me = this, isErr = false;
@@ -1897,7 +2155,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                         me.db = window.openDatabase(me.databaseName, me.databaseVersion, me.databaseDescription, me.databaseSize, function(db) {
                             // ignore
                         });
-                    } catch(e) {
+                    } catch (e) {
                         // 在iOS下提示增加数据库容量时，如果选择“取消”，那么会抛异常“无权限访问数据库”
                         isErr = true;
                     }
@@ -1915,8 +2173,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                             var lastClear = LocalStorage.get('mx-app/database-last-cleaned'),
                                 isToday = false,
                                 now = new Date(),
-                                date,
-                                expires;
+                                date, expires;
                             if (lastClear) {
                                 date = new Date();
                                 date.setTime(lastClear);
@@ -1927,12 +2184,11 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                                 now = now.getTime();
                                 expires = now - me.databaseExpires;
                                 t.executeSql('SELECT table_name FROM systables', [], function(t, result) {
-                                    var rows = result.rows,
-                                        i, len,
-                                        tableName;
+                                    var rows = result.rows, i, len, tableName;
                                     for (i = 0, len = rows.length; i < len; i++) {
                                         tableName = rows.item(i)['table_name'];
-                                        t.executeSql('DELETE FROM ' + tableName + ' WHERE _last_updated < ?', [expires]);
+                                        t.executeSql('DELETE FROM ' + tableName + ' WHERE _last_updated < ?', [expires
+                                        ]);
                                     }
                                 });
                                 LocalStorage.set('mx-app/database-last-cleaned', now);
@@ -1948,7 +2204,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                 me.useWebDatabase = !isErr;
             }
         },
-        
+
         // private
         addModel: function(models) {
             if (models) {
@@ -1958,7 +2214,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                     }, this);
                     return;
                 }
-                
+
                 var props = $.extend({}, models, { id: null }),
                     id = models.id;
                 props.useWebDatabase = this.useWebDatabase ? props.useWebDatabase : false;
@@ -1966,7 +2222,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                 this.models[id] = props;
             }
         },
-        
+
         // private
         addStore: function(stores) {
             if (stores) {
@@ -1976,7 +2232,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                     }, this);
                     return;
                 }
-                
+
                 var props = $.extend({}, stores, { id: null }),
                     id = stores.id;
                 props.useWebDatabase = this.useWebDatabase ? props.useWebDatabase : false;
@@ -1984,7 +2240,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                 this.stores[id] = props;
             }
         },
-        
+
         // private
         addPagelet: function(pagelets) {
             if (pagelets) {
@@ -1994,26 +2250,26 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                     }, this);
                     return;
                 }
-                
+
                 var props = $.extend({}, pagelets);
-                
+
                 /*
                  * For example, a route of "search/:query/p:page" will match a fragment of #/search/obama/p2,
-                 * passing "obama" and "2" to the action. A route of "file/*path" will match #file/nested/folder/file.txt, 
+                 * passing "obama" and "2" to the action. A route of "file/*path" will match #file/nested/folder/file.txt,
                  * passing "nested/folder/file.txt" to the action.
                  */
                 props.urlRe = new RegExp('^' + props.url.replace(escapeRe, '\\$&').replace(namedParamRe, '([^\/]+)').replace(splatParamRe, '(.*?)') + '$');
-                
+
                 this.pagelets[props.id] = props;
             }
         },
-        
+
         // private
         getHash: function() {
             var match = location.href.match(matchHashRe);
             return match ? match[1].replace(hashStripperRe, '') : '';
         },
-        
+
         // private
         // 使用hash匹配pagelet
         matchPagelet: function(hash) {
@@ -2026,7 +2282,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
             });
             return pagelet;
         },
-        
+
         /*
          * @private
          * 创建pagelet，系统维持一个pagelet缓冲池，缓冲池仅包含非单例的pagelet，
@@ -2034,9 +2290,9 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
          */
         createPagelet: function(config, hash) {
             var pagelet, p, i, len;
-            
+
             config.hash = hash;
-            
+
             if (config.singleton) {
                 if (!config.instance) {
                     config.instance = new Pagelet(this.preparePageletConfig($.extend({}, config)));
@@ -2067,7 +2323,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                      * pagelet缓存池最大数量不超过pageletCacheSize，超出长度的pagelet进行销毁
                      */
                     for (i = 0; i < len; i++) {
-                        p = this.pageletCacheSize[i];
+                        p = this.pageletCaches[i];
                         if (pagelet != p) {
                             this.pageletCaches.splice(i, 1);
                             p.destroy();
@@ -2076,33 +2332,46 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                     }
                 }
             }
-            
+
             return pagelet;
         },
-        
+
         // private
         preparePageletConfig: function(config) {
-            var models, model,
-                stores, store;
+            var models, model, stores, store, id;
             if (config.models) {
                 models = config.models;
                 config.models = {};
-                X.each(X.toArray(models), function(i, id) {
+                X.each(X.toArray(models), function(i, cfg) {
+                    if (X.isString(id)) {
+                        cfg = {
+                            id: cfg
+                        };
+                    }
+                    id = cfg.id;
                     model = this.models[id];
-                    config.models[id] = X.create(model.cls || 'model', $.extend({}, model));
+                    cfg = $.extend({}, cfg, model);
+                    config.models[id] = X.create(model.cls || 'model', cfg);
                 }, this);
             }
             if (config.stores) {
                 stores = config.stores;
                 config.stores = {};
-                X.each(X.toArray(stores), function(i, id) {
+                X.each(X.toArray(stores), function(i, cfg) {
+                    if (X.isString(cfg)) {
+                        cfg = {
+                            id: cfg
+                        };
+                    }
+                    id = cfg.id;
                     store = this.stores[id];
-                    config.stores[id] = X.create(store.cls || 'store', $.extend({}, store));
+                    cfg = $.extend({}, cfg, store);
+                    config.stores[id] = X.create(store.cls || 'store', cfg);
                 }, this);
             }
             return config;
         },
-        
+
         // private
         getPagelet: function(hash) {
             var p, i, len;
@@ -2118,77 +2387,129 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
             }
             return null;
         },
-        
+
         // private
         existPagelet: function(hash) {
             return !!this.getPagelet(hash);
         },
-        
+
         /**
          * 转向到hash
          * @param {String} hash
          */
-        go: function(hash) {
-            window.location.hash = '#/' + hash;
+        go: function(hash, options) {
+            if (!this.isPageChanging) {
+                this.lastHash = hash;
+                this.pageChangeOptions = $.extend({}, options);
+                location.hash = '#/' + hash;
+            }
         },
-        
+
         /**
          * 回退
          * @param {String} (optional) defaultHash 当访问路径历史没有上一页时，默认跳转hash
          */
-        back: function(defaultHash) {
-            $.mobile.back();
+        back: function() {
+            var prev = this.history.getPrev(),
+                welcome = this.welcome;
+            this.history.direct({
+                url: prev ? prev.url : '',
+                back: function() {
+                    location.hash = prev.hash;
+                },
+                missing: function() {
+                    location.hash = '#/' + welcome;
+                }
+            });
         },
-        
+
         // private
         onHashChange: function() {
             var hash = this.getHash(),
-                pagelet = this.matchPagelet(hash);
-            if (pagelet) {
+                pagelet;
+
+            if (this.lastHash && this.lastHash != hash) {
+                this.pageChangeOptions = null;
+            }
+
+            if (!this.isPageChanging && (pagelet = this.matchPagelet(hash))) {
                 pagelet = this.createPagelet(pagelet, hash);
                 this.changePage(pagelet);
+            } else {
+                this.pageChangeOptions = null;
             }
         },
-        
+
         // private
         changePage: function(pagelet) {
-            if (this.fireEvent('beforepagechange', this, pagelet) !== false) {
-                var lp = this.lastPagelet,
-                    np = this.nextPagelet = pagelet;
-                
+            var path = $.mobile.path, url, lp, np, transition, transtionOptions;
+            window.scrollTo(0, 1);
+            url = path.getLocation();
+            this.history.add(url, {
+                url: url,
+                hash: pagelet.hash
+            });
+
+            if (!this.isPageChanging && this.fireEvent('beforepagechange', this, pagelet) !== false) {
+                this.isPageChanging = true;
+                this.pageChangeOptions = this.pageChangeOptions || {};
+
+                lp = this.lastPagelet;
+                np = this.nextPagelet = pagelet;
+
                 np.render(this.pageContainer);
                 np.el.css('min-height', window.innerHeight + 'px');
-                
-                $.mobile.changePage(np.el, {
-                    transition: this.startUpView ? 'fade' : np.transition,
+
+                transtionOptions = $.extend({}, this.pageChangeOptions, {
                     fromHashChange: true
                 });
+                if (this.startUpView) {
+                    transition = 'fade';
+                }
+                if (!transition && np.controller.getTransition) {
+                    transition = np.controller.getTransition(np.hash, lp ? lp.hash : '');
+                }
+                if (!transition && lp) {
+                    transition = lp.transition.out.effect;
+                    transtionOptions.reverse = lp.transition.out.reverse;
+                }
+                if (!transition) {
+                    transition = np.transition.in.effect || np.transition.out.effect || 'fade';
+                    transtionOptions.reverse = np.transition.in.reverse;
+                }
+                transtionOptions.transition = transition;
+                $.mobile.changePage(np.el, transtionOptions);
             }
         },
-        
+
         // private
         onPageChange: function() {
             this.fireEvent('pagechange', this, this.nextPagelet, this.lastPagelet);
             this.afterChangePage();
         },
-        
+
         // private
         onPageChangeFailed: function() {
+            // TODO 处理页面切换失败的情况
             this.fireEvent('pagechangefailed', this, this.nextPagelet, this.lastPagelet);
         },
-        
+
         // private
         afterChangePage: function() {
             if (this.startUpView) {
                 this.startUpView.remove();
                 this.startUpView = null;
             }
-            
+
             this.lastPagelet = this.nextPagelet;
             this.nextPagelet = null;
+            this.isPageChanging = false;
+            this.pageChangeOptions = null;
+            this.lastHash = null;
+
             this.fireEvent('pageafterchange', this, this.lastPagelet);
         },
-        
+
         // private
         onDestroy: function() {
             X.each(this.pageletCaches, function(i, pagelet) {
@@ -2198,30 +2519,73 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
             this.pageContainer = null;
         }
     });
-    
+
     /**
      * @class MX.App
      * @singleton
-     * 
-     * Application类的单例对象。在大多数应用场景中，不需要单独对Application实例化，直接使用X.App单例对象既可。
+     *
+     * Application类的单例对象。在大多数应用场景中，不需要单独对Application实例化，直接使用X.App单例对象既可
+     *
+     * <code>
+     *  // 启动WebApp之后，页面视图才能正常访问
+     *  X.App.launch({
+     *
+     *      // 传入App所需要的配置参数
+     *
+     *  });
+     * </code>
      */
     X.App = new X.app.Application();
 });
 
-// 初始化jquery mobile配置
+/*
+ * Matrix框架的Appliaction，摒弃了jQuery mobile的初始化机制，而且，不能兼容包含jquery mobile core init模块的库，
+ * Appliaction重新定义了，jquery mobile的初始化过程，抛弃了Navigation对window.history的时间'pushState'以及'hashchange'事件的处理，
+ * 框架自身定义了一套完整的页面导航机制
+ *
+ * 在引入jquery mobile的js库时，一定要使用定制下载的代码，这部分代码不能包括core init模块，
+ * jquery mobile定制下载地址：http://jquerymobile.com/download-builder/
+ *
+ * Matrix框架默认包含两个定制的jquery mobile的js文件，jquery.mobile-1.3.0.js和jquery.mobile-1.3.0-lite.js
+ *
+ * jquery.mobile-1.3.0.js包含除core init模块之外的所有jqmobile代码
+ *
+ * jquery.mobile-1.3.0-lite.js则只包含以下模块的代码：
+ *  - Core，除init之外的部分
+ *  - Events
+ *  - Navigation
+ *  - Transitions
+ *  - Utilities，仅包含以下部分
+ *      - match media polyfill
+ *      - zoom handling
+ *      - ios orientation change fix
+ *  - Widgets
+ *      - toolbars fixed
+ *      - toolbars fixed workarounds
+ *      - loading message
+ */
 if ($ && $.mobile) {
-    $('html').addClass( "ui-mobile" );
-    
-    window.scrollTo( 0, 1 );
-    
+    $('html').addClass("ui-mobile");
+
+    window.scrollTo(0, 1);
+
     $.extend($.mobile, {
+        // 禁用jquery mobile自动初始化页面配置
         autoInitializePage: false,
+
+        // 禁用jquery mobile Navigation监听window.history的pushState事件
         pushStateEnabled: false,
+
+        // 禁用jquery mobile Navigation监听hashchange事件
         hashListeningEnabled: false,
-        
+
         // if defaultHomeScroll hasn't been set yet, see if scrollTop is 1
         // it should be 1 in most browsers, but android treats 1 as 0 (for hiding addr bar)
         // so if it's 1, use 0 from now on
-        defaultHomeScroll: ( !$.support.scrollTop || $(window).scrollTop() === 1 ) ? 0 : 1
+        //defaultHomeScroll: (!$.support.scrollTop || $(window).scrollTop() === 1) ? 0 : 1
+
+        // 以上是jquery mobile对defaultHomeScroll属性的默认实现
+        // 初始化时定义为0，防止页面视图切换时滚回顶部出现抖动
+        defaultHomeScroll: 0
     });
 }

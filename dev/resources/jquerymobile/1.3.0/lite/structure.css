@@ -28,10 +28,10 @@ div.ui-mobile-viewport { overflow-x: hidden; }
 
 /*orientations from js are available */
 @media screen and (orientation: portrait){
-.ui-mobile, .ui-mobile .ui-page { min-height: 420px; }
+    .ui-mobile, .ui-mobile .ui-page { min-height: 420px; }
 }
 @media screen and (orientation: landscape){
-.ui-mobile, .ui-mobile .ui-page { min-height: 300px; }
+    .ui-mobile, .ui-mobile .ui-page { min-height: 300px; }
 }
 
 /* loading screen */
@@ -257,17 +257,17 @@ div.ui-mobile-viewport { overflow-x: hidden; }
 .flow {
     -webkit-transform-origin: 50% 30%;
     -webkit-box-shadow: 0 0 20px rgba(0,0,0,.4);
-    -moz-transform-origin: 50% 30%; 
+    -moz-transform-origin: 50% 30%;
     -moz-box-shadow: 0 0 20px rgba(0,0,0,.4);
-    transform-origin: 50% 30%;  
+    transform-origin: 50% 30%;
     box-shadow: 0 0 20px rgba(0,0,0,.4);
 }
 .ui-dialog.flow {
     -webkit-transform-origin: none;
     -webkit-box-shadow: none;
-    -moz-transform-origin: none;    
+    -moz-transform-origin: none;
     -moz-box-shadow: none;
-    transform-origin: none; 
+    transform-origin: none;
     box-shadow: none;
 }
 .flow.out {
@@ -864,11 +864,11 @@ div.ui-mobile-viewport { overflow-x: hidden; }
     -webkit-backface-visibility: hidden;
     -webkit-transform: translateX(0); /* Needed to work around an iOS 3.1 bug that causes listview thumbs to disappear when -webkit-visibility:hidden is used. */
     -webkit-transform-origin: 0;
-    
+
     -moz-backface-visibility: hidden;
     -moz-transform: translateX(0);
     -moz-transform-origin: 0;
-    
+
     backface-visibility :hidden;
     transform: translateX(0);
     transform-origin: 0;
@@ -893,7 +893,7 @@ div.ui-mobile-viewport { overflow-x: hidden; }
     -moz-animation-duration: 250ms;
     animation-name: flipintoright;
     animation-duration: 250ms;
-    
+
 }
 
 .turn.out.reverse {
@@ -958,4 +958,61 @@ div.ui-mobile-viewport { overflow-x: hidden; }
 @keyframes flipintoright {
     from { transform: rotateY(90deg) scale(.9); }
     to { transform: rotateY(0); }
+}
+
+
+/* fixed page header & footer configuration */
+.ui-header-fixed,
+.ui-footer-fixed {
+    left: 0;
+    right: 0;
+    width: 100%;
+    position: fixed;
+    z-index: 1000;
+}
+.ui-header-fixed {
+    top: -1px;
+    padding-top: 1px;
+}
+.ui-header-fixed.ui-fixed-hidden {
+    top: 0;
+    padding-top: 0;
+}
+.ui-footer-fixed {
+    bottom: -1px;
+    padding-bottom: 1px;
+}
+.ui-footer-fixed.ui-fixed-hidden {
+    bottom: 0;
+    padding-bottom: 0;
+}
+.ui-header-fullscreen,
+.ui-footer-fullscreen {
+    filter: Alpha(Opacity=90);
+    opacity: .9;
+}
+.ui-page-header-fixed {
+    padding-top: 2.6875em;
+}
+.ui-page-footer-fixed {
+    padding-bottom: 2.6875em;
+}
+.ui-page-header-fullscreen > .ui-content,
+.ui-page-footer-fullscreen > .ui-content {
+    padding: 0;
+}
+.ui-fixed-hidden {
+    position: absolute;
+}
+.ui-page-header-fullscreen .ui-fixed-hidden,
+.ui-page-footer-fullscreen .ui-fixed-hidden {
+    left: -9999px;
+}
+.ui-header-fixed .ui-btn,
+.ui-footer-fixed .ui-btn {
+    z-index: 10;
+}
+/* workarounds for other widgets */
+.ui-android-2x-fixed .ui-li-has-thumb {
+    -webkit-transform: translate3d(0,0,0);
 }

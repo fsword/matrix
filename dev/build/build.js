@@ -1,5 +1,6 @@
 /*!
  * 打包命令：node build.js -p [projectName] -b [buildNumber]
+ * Example: node build.js -p matrix -b 1
  * 
  * node build.js -h 查看使用帮助
  * 

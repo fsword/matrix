@@ -1,10 +1,13 @@
 /**
  * @class MX.util.Dispatcher
+ * @alias dispatcher
  * 
- * 事件派发者，使用方法如下：
+ * 事件派发者，帮助类声明、管理自定义事件
+ *
+ * 使用方法如下：
  * 
  * <code>
- *  MX.kindle('dispatcher', function(Dispatcher) {
+ *  MX.kindle('dispatcher', function(X, Dispatcher) {
  *      // 实例化一个派发者
  *      var ob = new Dispatcher();
  *      
@@ -14,14 +17,12 @@
  *      // 添加事件监听
  *      ob.addListener('init', function() {
  *          // 监听回调函数
- *          // 当执行ob.fireEvent('init');时，被调用
  *      });
+ *
+ *      // 执行事件，调用事件监听回调函数
+ *      ob.fireEvent('init');
  *  });
  * </code>
- *  
- * 构造函数有两个参数：
- *  {Object} : listeners 实例化派发者时，增加事件监听
- *  {Object} : defaultScope 事件监听函数的执行作用域，如果未定义，则默认为window
  * 
  */
 MX.kindle('jquery', 'klass', function(X, $, Klass) {
@@ -38,7 +39,12 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         // private
         alias: 'dispatcher',
         
-        // private
+        /*
+         * @private
+         * 构造函数
+         * @param {Object} listeners 事件监听
+         * @param {Object} defaultScope 事件监听回调函数作用域，默认为window
+         */
         constructor: function(listeners, defaultScope) {
             this.events = {};
             this.defaultScope = defaultScope || window;
@@ -58,16 +64,15 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
          *  
          *  ob.addEvents({
          *      'event1': true,
-         *      'event2': true,
+         *      'event2': true
          *  });
          * </code>
          * 
-         * @param {String/Object} eventName 事件名称
+         * @param {String} eventName 事件名称
          * @param {String...} eventName1...n (optional)
          */
         addEvents: function(o) {
             var args,
-                len,
                 i,
                 events = this.events;
     
@@ -89,7 +94,10 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
          * 增加事件监听
          * @param {String} eventName 事件名称
          * @param {String} fireFn 事件监听回调函数
-         * @param {String} scope 回调函数作用域
+         * @param {String} scope (optional) 回调函数作用域
+         * @param {Object} options (optional) 事件监听选项
+         *  可选的选项参数包括：
+         *      Boolean : single true表示只执行一次
          */
         addListener: function(eventName, fireFn, scope, options) {
             if (!X.isString(eventName)) {
@@ -104,7 +112,7 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                     if (X.isFunction(listener)) {
                         this.addListener(eName, listener, scope);
                     } else {
-                        this.addListener(eName, listener.fireFn, listener.scope || scope);
+                        this.addListener(eName, listener.fn, listener.scope || scope);
                     }
                 }
                 return;
@@ -162,7 +170,7 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         },
         
         /**
-         * 校验一个是否包含监听函数，返回true则表示此事件有监听
+         * 校验一个事件是否含有监听函数，返回true则表示此事件有监听
          * @param {String} eventName 事件名称
          * @return {Booolean} 
          */
@@ -172,7 +180,7 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         },
         
         /**
-         * fire某一个事件，调用监听回调
+         * 执行事件，调用事件监听回调函数
          * @param {String} eventName 事件名称
          */
         fireEvent: function(eventName) {
@@ -189,18 +197,8 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                             if (l.single === true) {
                                 i--;
                             }
-                            if (X.Console && X.Console.chrome) {
-                                if (l.listenerFn.apply(l.scope, args) === false) {
-                                    return false;
-                                }
-                            } else {
-                                try {
-                                    if (l.listenerFn.apply(l.scope, args) === false) {
-                                        return false;
-                                    }
-                                } catch(e) {
-                                    X.Console.error('Fire event callback error: the event name is "' + eventName + '": ' + e.message);
-                                }
+                            if (l.listenerFn.apply(l.scope, args) === false) {
+                                return false;
                             }
                         }
                     }
@@ -221,21 +219,24 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
     
     $.extend(Dispatcher.prototype, {
         /**
-         * 增加事件监听
+         * 增加事件监听，addListener的缩写方法名
          * @param {String} eventName 事件名称
          * @param {String} fireFn 事件监听回调函数
-         * @param {String} scope 回调函数作用域
+         * @param {String} scope (optional) 回调函数作用域
+         * @param {Object} options (optional) 事件监听选项
+         *  可选的选项参数包括：
+         *      Boolean : single true表示只执行一次
          */
         on: Dispatcher.prototype.addListener,
-        
+
         /**
-         * 移除事件监听
+         * 移除事件监听，removeListener的缩写方法名
          * @param {String} eventName 事件名称
          * @param {String} fireFn 事件监听回调函数
          * @param {String} scope 回调函数作用域
          */
         un: Dispatcher.prototype.removeListener
     });
-    
+
     X.util.Dispatcher = Dispatcher;
 });

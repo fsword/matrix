@@ -1,5 +1,6 @@
 /**
  * @class MX.app.Controller
+ * @alias controller
  */
 MX.kindle('klass', function(X, Klass) {
     X.app.Controller = Klass.define({
@@ -22,6 +23,10 @@ MX.kindle('klass', function(X, Klass) {
         initEvents: function() {
             this.addEvents(
                 /**
+                 * @event pagecreate
+                 */
+                'pagecreate',
+                /**
                  * @event pagebeforeshow
                  */
                 'pagebeforeshow',
@@ -38,13 +43,6 @@ MX.kindle('klass', function(X, Klass) {
                  */
                 'pagehide'
             );
-            
-            this.mon(this.view, 'render', function() {
-                if (this.delegates) {
-                    this.delegateEvent(this.view.container, this.delegates);
-                    delete this.delegates;
-                }
-            });
         },
         
         /**
@@ -81,6 +79,19 @@ MX.kindle('klass', function(X, Klass) {
             
             this.mon(root, eventName, selector, callbackFn, scope);
         },
+
+        // private
+        onViewRender: function() {
+            if (this.delegates) {
+                this.delegateEvent(this.view.container, this.delegates);
+                delete this.delegates;
+            }
+            this.onPageCreate();
+            this.fireEvent('pagecreate', this);
+        },
+
+        // private
+        onPageCreate: X.emptyFn,
         
         // private
         beforePageShow: X.emptyFn,
@@ -143,6 +154,13 @@ MX.kindle('klass', function(X, Klass) {
          */
         getCt: function() {
             return this.getContainer();
+        },
+
+        /**
+         * 获取hash中包含的参数
+         */
+        getParams: function() {
+             return this.params;
         },
         
         // private

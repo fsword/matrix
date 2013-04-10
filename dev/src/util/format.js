@@ -1,13 +1,16 @@
 /**
  * @class MX.util.Format
+ * @alias format
+ *
+ * 常用格式化工具函数，包括：格式化String、格式化Number
  */
 MX.kindle('jquery', function(X, $) {
     var formatRe = /\{(\d+)\}/g,
         escapeRe = /('|\\)/g,
         escapeRegexRe = /([-.*+?\^${}()|\[\]\/\\])/g,
         isToFixedBroken = (0.9).toFixed() !== '1';
-    
-    var toCamelCase = function(str) {
+
+    function toCamelCase(str) {
         if (str && str.length > 0) {
             var arr = str.split('-'),
                 i = 1,
@@ -20,7 +23,7 @@ MX.kindle('jquery', function(X, $) {
             str = newStr.join('');
         }
         return str;
-    };
+    }
     
     var UtilFormat = X.util.Format = {
         /* string format */
@@ -49,7 +52,6 @@ MX.kindle('jquery', function(X, $) {
         
         /**
          * 格式化一个字符串，例如：
-         * 
          * <code>
          *  var str = MX.util.Format.format('Hi, {0}! {1}!', 'Max', 'Welcome');
          *  
@@ -57,14 +59,14 @@ MX.kindle('jquery', function(X, $) {
          *  alert(str);
          * </code>
          * 
-         * @param {String} formateString 被格式化的字符串
+         * @param {String} formatString 被格式化的字符串
          * @param {String} value1 被替换的值
          * @param {String...} value2...n (optional)
-         * @return {String} string 格式化完成的字符串
+         * @return {String} 格式化完成的字符串
          */
-        format: function(format) {
+        format: function(formatString) {
             var args = Array.prototype.slice.call(arguments, 1);
-            return format.replace(formatRe, function(m, i) {
+            return formatString.replace(formatRe, function(m, i) {
                 return args[i];
             });
         },
@@ -88,7 +90,7 @@ MX.kindle('jquery', function(X, $) {
         },
         
         /**
-         * 将一个data-info-text类型的字符串转换成，一个符合驼峰命名法的字符串并返回
+         * 将一个'data-info-text'格式的字符串转换成，一个符合驼峰命名法的字符串并返回
          * 
          * 如果参数是一个String，例如：
          *      
@@ -109,7 +111,7 @@ MX.kindle('jquery', function(X, $) {
          *          dataErrorText: 'error',
          *      }
          * 
-         * @param {String/Object} string
+         * @param {String/Object} obj
          * @return {String/Object}
          */
         toCamelCase: function(obj) {

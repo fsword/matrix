@@ -1,7 +1,29 @@
 /**
  * @class MX.klass.Utility
- * 
- * 抽象类，实现了类事件，对象实例化与销毁生命周期
+ * @alias utility
+ *
+ * Utility类是非常实用的一个类，一般情况下，声明类都应该继承Utility类。
+ * 它定义了类的两个常用生命周期：初始化、销毁。
+ * 除此之外，它还能处理类的自定义事件以及HTMLElement事件，并且事件的销毁由类的实例对象托管，在实例被销毁时，事件监听自动销毁。
+ *
+ * 以下是Utility类生命周期的几个模板方法，由子类继承实现
+ * <code>
+ *  var Cls1 = Klass.define({
+ *      extend: 'utility',
+ *      init: function() {
+ *          // 初始化函数，在类被实例化执行构造函数时调用
+ *      },
+ *      initEvents: function() {
+ *          // 初始化事件，在init()函数之后调用
+ *      },
+ *      beforeDestroy: function() {
+ *          // 销毁实例，在destroy()函数最初调用
+ *      },
+ *      onDestroy: function() {
+ *          // 销毁实例，在destroy()函数之后调用
+ *      }
+ *  });
+ * </code>
  */
 MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
     var idSeed = 1000,
@@ -9,29 +31,51 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
     
     function makeId(prefix) {
         return (prefix || 'gen-id') + (++idSeed);
-    };
+    }
     
     function createSingle(obj, item, types, selector, fn, scope){
         return function(){
             obj.mun(item, types, selector, fn, scope);
             return fn.apply(scope, arguments);
         };
-    };
+    }
     
     X.klass.Utility = Klass.define({
         // private
         alias: 'utility',
         
         /**
-         * @cfg {String} idPrefix
-         * id前缀，默认'gen-id'
+         * @cfg {String} idPrefix id前缀，默认'gen-id'
+         * 继承自Utility的子类，在实例化时，会自动生成一个id
+         */
+
+        /**
+         * @cfg {Object} listeners 自定义事件监听回调函数
+         * 参数格式如下：
+         * <code>
+         *  Klass.define({
+         *      extend: 'utility',
+         *      listeners: {
+         *          scope: this, // 设置回调函数的作用域，如果未设置，默认为当前类的实例对象
+         *          'custom1': function() {
+         *              // 第一种写法
+         *          },
+         *          'custom2': {
+         *              fn: function() {
+         *                  // 第二种写法
+         *              },
+         *              scope: this // 为当前事件监听回调函数设置指定的作用域
+         *          }
+         *      }
+         *  });
+         * </code>
          */
         
         /*
          * @private
-         * 构造函数，AbstractClass实现了类实例化的生命周期，实例化的几个过程：
-         *  1、初始化配置参数
-         *  2、实例化ob对象，注册事件
+         * 构造函数，实现了Utility类的初始化生命周期，初始化的几个过程：
+         *  1、初始化配置参数，生成id
+         *  2、实例化Dispatcher对象，将自定义事件函数委派给当前实例
          *  3、调用init()方法
          *  4、调用initEvents()方法
          * 
@@ -46,26 +90,34 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
              * 初始化配置参数
              */
             this.initialConfig = config;
-            
+
+            /**
+             * @property {String} id
+             * 实例对象id
+             */
             if (!this.id) {
                 this.id = makeId(this.idPrefix || '');
             }
-            
+
+            /**
+             * @property {MX.util.Dispatcher} ob
+             * 自定义事件实例对象
+             */
             this.ob = new Dispatcher(this.listeners, this);
             delete this.listeners;
             this.relayMethod(this.ob, 'addEvents', 'fireEvent', 'addListener', 'removeListener', 'on', 'un');
-            
+
             this.addEvents(
                 /**
                  * @event beforedestroy
-                 * 当调用destroy方法时触发，返回true则中断销毁动作
-                 * @param {Class} this
+                 * 当调用destroy()函数时，在destroy最初触发，返回true则中断销毁动作
+                 * @param {Object} this
                  */
-                'beforedestroy', 
+                'beforedestroy',
                 /**
                  * @event destroy
-                 * 当调用destroy方法时触发
-                 * @param {Class} this
+                 * 当调用destroy()函数时触发
+                 * @param {Object} this
                  */
                 'destroy'
             );
@@ -81,9 +133,37 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
         initEvents: X.emptyFn,
         
         /**
-         * 将指定对象的方法映射给this实例，使this实例也拥有指定的方法，例如：
-         * @param {Object} obj 指定映射方法的对象
-         * @param {Array} methods 方法名称
+         * 将指定对象的方法委派给当前类的实例对象this，使this实例也拥有这些方法，例如：
+         * <code>
+         *  var Cls1 = Klass.define({
+         *      str: 'max',
+         *      method1: function() {
+         *          alert(this.str + 1);
+         *      },
+         *      method2: function() {
+         *          alert(this.str + 2);
+         *      }
+         *  });
+         *  var obj1 = new Cls1();
+         *
+         *  var Cls2 = Klass.define({
+         *      str: 'none',
+         *      constructor: function() {
+         *          this.relayMethod(obj1, 'method1', 'method2');
+         *      },
+         *      method3: function() {
+         *          alert(this.str + 3);
+         *      }
+         *  });
+         *  var obj2 = new Cls2();
+         *
+         *  obj2.method1(); // alert 'max1';
+         *  obj2.method2(); // alert 'max2';
+         *  obj2.method3(); // alert 'none3';
+         * </code>
+         *
+         * @param {Object} obj 源对象
+         * @param {String...} methodName 方法名称
          */
         relayMethod: function(obj) {
             var methods = Array.prototype.slice.call(arguments, 1),
@@ -124,33 +204,101 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
         },
         
         /**
-         * 为指定Element绑定一个dom事件处理函数，例如：
+         * 事件监听，为指定对象（item）绑定一个事件处理函数，item可以是一个Utility子类的实例对象，
+         * 也可以是一个jQuery element或浏览器对象（浏览器对象会被自动封装成一个jQuery element对象）.
+         *
+         * 当item是一个Utility子类实例对象时，selector参数无效，可以使用以下几种方式进行事件监听：
          * <code>
-         *  this.mon(this.el, 'mouseenter', function() {
-         *      // 如果未指定scope，回调函数的scope默认为模型实例对象
+         *  // 传入两个参数
+         *  this.mon(this.view, {
+         *      scope: this,
+         *      'render': function() {
+         *          // 第一种写法
+         *      },
+         *      'destroy': {
+         *          fn: function() {
+         *              // 第二种写法
+         *          },
+         *          options: {
+         *              single: true
+         *          },
+         *          scope: this // 为当前事件监听回调函数指定作用域
+         *      }
          *  });
-         *  
-         *  // 同时绑定多个监听
+         *
+         *  // 传入三个参数
+         *  this.mon(this.view, 'render', function() {});
+         *
+         *  // 传入四个参数
+         *  this.mon(this.view, 'render', function() {}, this);
+         *
+         *  // 传入五个参数
+         *  this.mon(this.view, 'render', function() {}, this, { single: true });
+         * </code>
+         *
+         * 当item是jquery element对象时，可以使用以下几种方式进行事件监听：
+         * <code>
+         *  // 传入两个参数
          *  this.mon(this.el, {
+         *      scope: this,
          *      'mouseenter': function() {
+         *          // 第一种写法
          *      },
-         *      'mouseleave': function() {
-         *      },
-         *      scope: this // 定义回调函数scope
-         *  })
-         *  
-         *  // 同时也可以绑定委托事件
-         *  this.mon(this.el, 'mouseenter', 'a.btn', function() {
-         *      
-         *  }, this);
+         *      'mouseleave': {
+         *          fn: function() {
+         *              // 第二种写法
+         *          },
+         *          options: {
+         *              single: true
+         *          },
+         *          scope: this // 为当前事件监听回调函数指定作用域
+         *      }
+         *  });
+         *
+         *  // 传入三个参数
+         *  this.mon(this.el, 'mouseenter', function() {});
+         *
+         *  // 传入四个参数
+         *  this.mon(this.el, 'mouseenter', function() {}, this);
+         *
+         *  // 传入五个参数
+         *  this.mon(this.el, 'mouseenter', function() {}, this, { single: true });
+         * </code>
+         *
+         * 处理item为jquery element对象的委托事件使用如下方式：
+         * <code>
+         *  // 传入两个参数
+         *  this.mon(this.el, {
+         *      scope: this,
+         *      'click': {
+         *          fn: function() {
+         *          },
+         *          selector: 'a.btn'
+         *          options: {
+         *              single: true
+         *          },
+         *          scope: this // 为当前事件监听回调函数指定作用域
+         *      }
+         *  });
+         *
+         *  // 传入四个参数
+         *  this.mon(this.el, 'mouseenter', 'a.btn', function() {});
+         *
+         *  // 传入五个参数
+         *  this.mon(this.el, 'mouseenter', 'a.btn', function() {}, this);
+         *
+         *  // 传入六个参数
+         *  this.mon(this.el, 'mouseenter', 'a.btn', function() {}, this, { single: true });
          * </code>
          * 
-         * @param {Element/Object} item
-         * @param {String/Object} events 事件类型，当为Object时，表示绑定一组处理事件
-         * @param {String} selector (options) 一个选择器字符串
-         * @param {Function} handler (optional) 事件处理函数
-         * @param {Object} scope (optional) 处理函数作用域
-         * @param {Object} options (optional) 
+         * @param {Element/Object} item 指定对象，Utility子类实例对象或一个jquery element对象
+         * @param {String/Object} types 事件类型，当为Object类型时，表示监听一组事件
+         * @param {String} selector (options) 一个选择器字符串，仅对jquery element对象有效
+         * @param {Function} fn (optional) 事件监听回调函数
+         * @param {Object} scope (optional) 回调函数作用域
+         * @param {Object} options (optional) 事件监听选项
+         *  可选的选项参数包括：
+         *      Boolean : single true表示只执行一次
          */
         mon: function(item, types, selector, fn, scope, options) {
             var event,
@@ -170,7 +318,7 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
                     if (X.isFunction(event)) {
                         this.mon(item, type, undefined, event, scope, undefined);
                     } else {
-                        this.mon(item, type, event.selector, event.fn, event.scope || scope, options);
+                        this.mon(item, type, event.selector, event.fn, event.scope || scope, event.options || options);
                     }
                 }
                 return;
@@ -178,11 +326,10 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
             
             if (X.isFunction(selector)) {
                 // (item, type, fn, scope, options)
-                fn = selector;
-                scope = fn;
                 options = scope;
+                scope = fn;
+                fn = selector;
                 selector = undefined;
-                scope = undefined;
             }
             
             if (!item.$isInstance) {
@@ -230,14 +377,15 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
         },
          
         /**
-         * 为指定元素取消一个已绑定的处理事件
-         * @param {String/Element} el 指定元素
-         * @param {String/Object} eventType 事件类型，当为Object时，表示取消一组处理事件
-         * @param {Function} handler (optional) 事件处理函数
-         * @param {Object} scope (optional) 处理函数作用域
+         * 销毁一个事件监听，与声明事件监听mon()的传参方式一致，item同样包括两类：Utility的子类实例对象、jquery element对象
+         * @param {Element/Object} item 指定对象，Utility子类实例对象或一个jquery element对象
+         * @param {String/Object} types 事件类型，当为Object类型时，表示监听一组事件
+         * @param {String} selector (options) 一个选择器字符串，仅对jquery element对象有效
+         * @param {Function} fn (optional) 事件监听回调函数
+         * @param {Object} scope (optional) 回调函数作用域
          */
         mun: function(item, types, selector, fn, scope) {
-            var isClass = item.$isInstance,
+            var isClass = !!item.$isInstance,
                 event,
                 type,
                 i, len;
@@ -263,7 +411,7 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
                     }
                     event = types[type];
                     if (X.isFunction(event)) {
-                        this.mun(item, type, undefined, event, scope);
+                        this.mun(item, type, event.data, event, scope);
                     } else {
                         this.mun(item, type, event.selector, event.fn, event.scope || scope);
                     }
@@ -273,10 +421,9 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
             
             if (X.isFunction(selector)) {
                 // (item, type, fn, scope)
-                fn = selector;
                 scope = fn;
+                fn = selector;
                 selector = undefined;
-                scope = undefined;
             }
             
             scope = scope || this;
@@ -301,13 +448,15 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
         onDestroy: X.emptyFn,
         
         /**
-         * 调用destroy()方法，进入销毁生命周期，如下：
-         *  1、fire事件'beforedestroy'
+         * 销毁当前实例对象
+         *
+         * 销毁生命周期如下：
+         *  1、fire事件'beforedestroy'，返回false时中断销毁动作
          *  2、调用beforeDestroy()方法
-         *  3、移除dom对象绑定的事件
+         *  3、移除所有jquery element事件监听
          *  4、调用onDestroy()方法
          *  5、fire事件'destroy'
-         *  6、清空ob绑定的事件
+         *  6、清空this.ob事件监听
          */
         destroy: function() {
             if (!this.isDestroyed) {

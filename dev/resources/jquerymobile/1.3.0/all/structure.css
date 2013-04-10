@@ -63,8 +63,8 @@ div.ui-btn-text { width: auto; }
 /* Corner styling inheritance */
 .ui-btn-inner,
 .ui-btn-text {
-	-webkit-border-radius: inherit;	
-	border-radius: inherit;
+    -webkit-border-radius: inherit;    
+    border-radius: inherit;
 }
 
 /*btn icon positioning*/
@@ -102,9 +102,9 @@ div.ui-btn-text { width: auto; }
 .ui-field-contain .ui-btn.ui-submit { margin: 0; }
 label.ui-submit { font-size: 16px; line-height: 1.4; font-weight: normal; margin: 0 0 .3em; display: block; }
 @media all and (min-width: 28em){
-	.ui-field-contain label.ui-submit { vertical-align: top; display: inline-block; width: 20%; margin: 0 2% 0 0; }
-	.ui-field-contain .ui-btn.ui-submit { width: 78%; display: inline-block; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; }
-	.ui-hide-label .ui-btn.ui-submit { width: auto; display: block; }
+    .ui-field-contain label.ui-submit { vertical-align: top; display: inline-block; width: 20%; margin: 0 2% 0 0; }
+    .ui-field-contain .ui-btn.ui-submit { width: 78%; display: inline-block; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; }
+    .ui-hide-label .ui-btn.ui-submit { width: auto; display: block; }
 }
 
 
@@ -182,18 +182,18 @@ div.ui-mobile-viewport { overflow-x: hidden; }
 .ui-corner-all > .ui-header:first-child,
 .ui-corner-all > .ui-content:first-child,
 .ui-corner-all > .ui-footer:first-child {
-	-webkit-border-top-left-radius: inherit;
-	border-top-left-radius: inherit;
-	-webkit-border-top-right-radius: inherit;
-	border-top-right-radius: inherit;
+    -webkit-border-top-left-radius: inherit;
+    border-top-left-radius: inherit;
+    -webkit-border-top-right-radius: inherit;
+    border-top-right-radius: inherit;
 }
 .ui-corner-all > .ui-header:last-child,
 .ui-corner-all > .ui-content:last-child,
 .ui-corner-all > .ui-footer:last-child {
-	-webkit-border-bottom-left-radius: inherit;
-	border-bottom-left-radius: inherit;
-	-webkit-border-bottom-right-radius: inherit;
-	border-bottom-right-radius: inherit;
+    -webkit-border-bottom-left-radius: inherit;
+    border-bottom-left-radius: inherit;
+    -webkit-border-bottom-right-radius: inherit;
+    border-bottom-right-radius: inherit;
 }
 
 /* icons sizing */
@@ -211,7 +211,7 @@ div.ui-mobile-viewport { overflow-x: hidden; }
 .ui-field-contain:last-child { border-bottom-width: 0; }
 .ui-field-contain { max-width: 100%; } /* This prevents horizontal scrollbar in IE7 */
 @media all and (min-width: 28em){
-	.ui-field-contain, .ui-mobile fieldset.ui-field-contain { border-width: 0; padding: 0; margin: 1em 0; }
+    .ui-field-contain, .ui-mobile fieldset.ui-field-contain { border-width: 0; padding: 0; margin: 1em 0; }
 }
 
 
@@ -241,52 +241,52 @@ div.ui-mobile-viewport { overflow-x: hidden; }
 
 /* preset breakpoint to switch to stacked grid styles below 35em (560px) */
 @media all and (max-width: 35em) {
-	.ui-responsive .ui-block-a, 
-	.ui-responsive .ui-block-b, 
-	.ui-responsive .ui-block-c,
-	.ui-responsive .ui-block-d,
-	.ui-responsive .ui-block-e { 
-		width: 100%; 
-		float:none; 
-	}
+    .ui-responsive .ui-block-a, 
+    .ui-responsive .ui-block-b, 
+    .ui-responsive .ui-block-c,
+    .ui-responsive .ui-block-d,
+    .ui-responsive .ui-block-e { 
+        width: 100%; 
+        float:none; 
+    }
 }
 
 
 /* Transitions originally inspired by those from jQtouch, nice work, folks */
 .ui-mobile-viewport-transitioning,
 .ui-mobile-viewport-transitioning .ui-page {
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .ui-page-pre-in {
-	opacity: 0;
+    opacity: 0;
 }
 .in {
-	-webkit-animation-fill-mode: both;
-	-webkit-animation-timing-function: ease-out;
-	-webkit-animation-duration: 350ms;
-	-moz-animation-fill-mode: both;
-	-moz-animation-timing-function: ease-out;
-	-moz-animation-duration: 350ms;
-	animation-fill-mode: both;
-	animation-timing-function: ease-out;
-	animation-duration: 350ms;
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-timing-function: ease-out;
+    -webkit-animation-duration: 350ms;
+    -moz-animation-fill-mode: both;
+    -moz-animation-timing-function: ease-out;
+    -moz-animation-duration: 350ms;
+    animation-fill-mode: both;
+    animation-timing-function: ease-out;
+    animation-duration: 350ms;
 }
 .out {
-	-webkit-animation-fill-mode: both;
-	-webkit-animation-timing-function: ease-in;
-	-webkit-animation-duration: 225ms;
-	-moz-animation-fill-mode: both;
-	-moz-animation-timing-function: ease-in;
-	-moz-animation-duration: 225ms;
-	animation-fill-mode: both;
-	animation-timing-function: ease-in;
-	animation-duration: 225ms;
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-timing-function: ease-in;
+    -webkit-animation-duration: 225ms;
+    -moz-animation-fill-mode: both;
+    -moz-animation-timing-function: ease-in;
+    -moz-animation-duration: 225ms;
+    animation-fill-mode: both;
+    animation-timing-function: ease-in;
+    animation-duration: 225ms;
 }
 
 
@@ -298,54 +298,54 @@ div.ui-mobile-viewport { overflow-x: hidden; }
  */
 
 .viewport-flip {
-	-webkit-perspective: 1000;
-	-moz-perspective: 1000;
-	perspective: 1000;
-	position: absolute;
+    -webkit-perspective: 1000;
+    -moz-perspective: 1000;
+    perspective: 1000;
+    position: absolute;
 }
 .flip {
-	-webkit-backface-visibility: hidden;
-	-webkit-transform: translateX(0); /* Needed to work around an iOS 3.1 bug that causes listview thumbs to disappear when -webkit-visibility:hidden is used. */
-	-moz-backface-visibility: hidden;
-	-moz-transform: translateX(0);
-	backface-visibility: hidden;
-	transform: translateX(0);
+    -webkit-backface-visibility: hidden;
+    -webkit-transform: translateX(0); /* Needed to work around an iOS 3.1 bug that causes listview thumbs to disappear when -webkit-visibility:hidden is used. */
+    -moz-backface-visibility: hidden;
+    -moz-transform: translateX(0);
+    backface-visibility: hidden;
+    transform: translateX(0);
 }
 
 .flip.out {
-	-webkit-transform: rotateY(-90deg) scale(.9);
-	-webkit-animation-name: flipouttoleft;
-	-webkit-animation-duration: 175ms;
-	-moz-transform: rotateY(-90deg) scale(.9);
-	-moz-animation-name: flipouttoleft;
-	-moz-animation-duration: 175ms;
-	transform: rotateY(-90deg) scale(.9);
-	animation-name: flipouttoleft;
-	animation-duration: 175ms;
+    -webkit-transform: rotateY(-90deg) scale(.9);
+    -webkit-animation-name: flipouttoleft;
+    -webkit-animation-duration: 175ms;
+    -moz-transform: rotateY(-90deg) scale(.9);
+    -moz-animation-name: flipouttoleft;
+    -moz-animation-duration: 175ms;
+    transform: rotateY(-90deg) scale(.9);
+    animation-name: flipouttoleft;
+    animation-duration: 175ms;
 }
 
 .flip.in {
-	-webkit-animation-name: flipintoright;
-	-webkit-animation-duration: 225ms;
-	-moz-animation-name: flipintoright;
-	-moz-animation-duration: 225ms;
-	animation-name: flipintoright;
-	animation-duration: 225ms;
+    -webkit-animation-name: flipintoright;
+    -webkit-animation-duration: 225ms;
+    -moz-animation-name: flipintoright;
+    -moz-animation-duration: 225ms;
+    animation-name: flipintoright;
+    animation-duration: 225ms;
 }
 
 .flip.out.reverse {
-	-webkit-transform: rotateY(90deg) scale(.9);
-	-webkit-animation-name: flipouttoright;
-	-moz-transform: rotateY(90deg) scale(.9);
-	-moz-animation-name: flipouttoright;
-	transform: rotateY(90deg) scale(.9);
-	animation-name: flipouttoright;
+    -webkit-transform: rotateY(90deg) scale(.9);
+    -webkit-animation-name: flipouttoright;
+    -moz-transform: rotateY(90deg) scale(.9);
+    -moz-animation-name: flipouttoright;
+    transform: rotateY(90deg) scale(.9);
+    animation-name: flipouttoright;
 }
 
 .flip.in.reverse {
-	-webkit-animation-name: flipintoleft;
-	-moz-animation-name: flipintoleft;
-	animation-name: flipintoleft;
+    -webkit-animation-name: flipintoleft;
+    -moz-animation-name: flipintoleft;
+    animation-name: flipintoleft;
 }
 
 @-webkit-keyframes flipouttoleft {
@@ -400,173 +400,173 @@ div.ui-mobile-viewport { overflow-x: hidden; }
 
 /* flow transition */
 .flow {
-	-webkit-transform-origin: 50% 30%;
-	-webkit-box-shadow: 0 0 20px rgba(0,0,0,.4);
-	-moz-transform-origin: 50% 30%;	
-	-moz-box-shadow: 0 0 20px rgba(0,0,0,.4);
-	transform-origin: 50% 30%;	
-	box-shadow: 0 0 20px rgba(0,0,0,.4);
+    -webkit-transform-origin: 50% 30%;
+    -webkit-box-shadow: 0 0 20px rgba(0,0,0,.4);
+    -moz-transform-origin: 50% 30%;    
+    -moz-box-shadow: 0 0 20px rgba(0,0,0,.4);
+    transform-origin: 50% 30%;    
+    box-shadow: 0 0 20px rgba(0,0,0,.4);
 }
 .ui-dialog.flow {
-	-webkit-transform-origin: none;
-	-webkit-box-shadow: none;
-	-moz-transform-origin: none;	
-	-moz-box-shadow: none;
-	transform-origin: none;	
-	box-shadow: none;
+    -webkit-transform-origin: none;
+    -webkit-box-shadow: none;
+    -moz-transform-origin: none;    
+    -moz-box-shadow: none;
+    transform-origin: none;    
+    box-shadow: none;
 }
 .flow.out {
-	-webkit-transform: translateX(-100%) scale(.7);
-	-webkit-animation-name: flowouttoleft;
-	-webkit-animation-timing-function: ease;
-	-webkit-animation-duration: 350ms;
-	-moz-transform: translateX(-100%) scale(.7);
-	-moz-animation-name: flowouttoleft;
-	-moz-animation-timing-function: ease;
-	-moz-animation-duration: 350ms;
-	transform: translateX(-100%) scale(.7);
-	animation-name: flowouttoleft;
-	animation-timing-function: ease;
-	animation-duration: 350ms;
+    -webkit-transform: translateX(-100%) scale(.7);
+    -webkit-animation-name: flowouttoleft;
+    -webkit-animation-timing-function: ease;
+    -webkit-animation-duration: 350ms;
+    -moz-transform: translateX(-100%) scale(.7);
+    -moz-animation-name: flowouttoleft;
+    -moz-animation-timing-function: ease;
+    -moz-animation-duration: 350ms;
+    transform: translateX(-100%) scale(.7);
+    animation-name: flowouttoleft;
+    animation-timing-function: ease;
+    animation-duration: 350ms;
 }
 
 .flow.in {
-	-webkit-transform: translateX(0) scale(1);
-	-webkit-animation-name: flowinfromright;
-	-webkit-animation-timing-function: ease;
-	-webkit-animation-duration: 350ms;
-	-moz-transform: translateX(0) scale(1);
-	-moz-animation-name: flowinfromright;
-	-moz-animation-timing-function: ease;
-	-moz-animation-duration: 350ms;
-	transform: translateX(0) scale(1);
-	animation-name: flowinfromright;
-	animation-timing-function: ease;
-	animation-duration: 350ms;
+    -webkit-transform: translateX(0) scale(1);
+    -webkit-animation-name: flowinfromright;
+    -webkit-animation-timing-function: ease;
+    -webkit-animation-duration: 350ms;
+    -moz-transform: translateX(0) scale(1);
+    -moz-animation-name: flowinfromright;
+    -moz-animation-timing-function: ease;
+    -moz-animation-duration: 350ms;
+    transform: translateX(0) scale(1);
+    animation-name: flowinfromright;
+    animation-timing-function: ease;
+    animation-duration: 350ms;
 }
 
 .flow.out.reverse {
-	-webkit-transform: translateX(100%);
-	-webkit-animation-name: flowouttoright;
-	-moz-transform: translateX(100%);
-	-moz-animation-name: flowouttoright;
-	transform: translateX(100%);
-	animation-name: flowouttoright;
+    -webkit-transform: translateX(100%);
+    -webkit-animation-name: flowouttoright;
+    -moz-transform: translateX(100%);
+    -moz-animation-name: flowouttoright;
+    transform: translateX(100%);
+    animation-name: flowouttoright;
 }
 
 .flow.in.reverse {
-	-webkit-animation-name: flowinfromleft;
-	-moz-animation-name: flowinfromleft;
-	animation-name: flowinfromleft;
+    -webkit-animation-name: flowinfromleft;
+    -moz-animation-name: flowinfromleft;
+    animation-name: flowinfromleft;
 }
 
 @-webkit-keyframes flowouttoleft {
     0% { -webkit-transform: translateX(0) scale(1); }
-	60%, 70% { -webkit-transform: translateX(0) scale(.7); }
+    60%, 70% { -webkit-transform: translateX(0) scale(.7); }
     100% { -webkit-transform: translateX(-100%) scale(.7); }
 }
 @-moz-keyframes flowouttoleft {
     0% { -moz-transform: translateX(0) scale(1); }
-	60%, 70% { -moz-transform: translateX(0) scale(.7); }
+    60%, 70% { -moz-transform: translateX(0) scale(.7); }
     100% { -moz-transform:  translateX(-100%) scale(.7); }
 }
 @keyframes flowouttoleft {
     0% { transform: translateX(0) scale(1); }
-	60%, 70% { transform: translateX(0) scale(.7); }
+    60%, 70% { transform: translateX(0) scale(.7); }
     100% { transform:  translateX(-100%) scale(.7); }
 }
 
 @-webkit-keyframes flowouttoright {
     0% { -webkit-transform: translateX(0) scale(1); }
-	60%, 70% { -webkit-transform: translateX(0) scale(.7); }
+    60%, 70% { -webkit-transform: translateX(0) scale(.7); }
     100% { -webkit-transform:  translateX(100%) scale(.7); }
 }
 @-moz-keyframes flowouttoright {
     0% { -moz-transform: translateX(0) scale(1); }
-	60%, 70% { -moz-transform: translateX(0) scale(.7); }
+    60%, 70% { -moz-transform: translateX(0) scale(.7); }
     100% { -moz-transform:  translateX(100%) scale(.7); }
 }
 @keyframes flowouttoright {
     0% { transform: translateX(0) scale(1); }
-	60%, 70% { transform: translateX(0) scale(.7); }
+    60%, 70% { transform: translateX(0) scale(.7); }
     100% { transform:  translateX(100%) scale(.7); }
 }
 
 @-webkit-keyframes flowinfromleft {
     0% { -webkit-transform: translateX(-100%) scale(.7); }
-	30%, 40% { -webkit-transform: translateX(0) scale(.7); }
+    30%, 40% { -webkit-transform: translateX(0) scale(.7); }
     100% { -webkit-transform: translateX(0) scale(1); }
 }
 @-moz-keyframes flowinfromleft {
     0% { -moz-transform: translateX(-100%) scale(.7); }
-	30%, 40% { -moz-transform: translateX(0) scale(.7); }
+    30%, 40% { -moz-transform: translateX(0) scale(.7); }
     100% { -moz-transform: translateX(0) scale(1); }
 }
 @keyframes flowinfromleft {
     0% { transform: translateX(-100%) scale(.7); }
-	30%, 40% { transform: translateX(0) scale(.7); }
+    30%, 40% { transform: translateX(0) scale(.7); }
     100% { transform: translateX(0) scale(1); }
 }
 
 @-webkit-keyframes flowinfromright {
     0% { -webkit-transform: translateX(100%) scale(.7); }
-	30%, 40% { -webkit-transform: translateX(0) scale(.7); }
+    30%, 40% { -webkit-transform: translateX(0) scale(.7); }
     100% { -webkit-transform: translateX(0) scale(1); }
 }
 @-moz-keyframes flowinfromright {
     0% { -moz-transform: translateX(100%) scale(.7); }
-	30%, 40% { -moz-transform: translateX(0) scale(.7); }
+    30%, 40% { -moz-transform: translateX(0) scale(.7); }
     100% { -moz-transform: translateX(0) scale(1); }
 }
 @keyframes flowinfromright {
     0% { transform: translateX(100%) scale(.7); }
-	30%, 40% { transform: translateX(0) scale(.7); }
+    30%, 40% { transform: translateX(0) scale(.7); }
     100% { transform: translateX(0) scale(1); }
 }
 
 
 .pop {
-	-webkit-transform-origin: 50% 50%;
-	-moz-transform-origin: 50% 50%;
-	transform-origin: 50% 50%;
+    -webkit-transform-origin: 50% 50%;
+    -moz-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
 }
 
 .pop.in {
-	-webkit-transform: scale(1);
-	-webkit-animation-name: popin;
-	-webkit-animation-duration: 350ms;
-	-moz-transform: scale(1);
-	-moz-animation-name: popin;
-	-moz-animation-duration: 350ms;
-	transform: scale(1);
-	animation-name: popin;
-	animation-duration: 350ms;
+    -webkit-transform: scale(1);
+    -webkit-animation-name: popin;
+    -webkit-animation-duration: 350ms;
+    -moz-transform: scale(1);
+    -moz-animation-name: popin;
+    -moz-animation-duration: 350ms;
+    transform: scale(1);
+    animation-name: popin;
+    animation-duration: 350ms;
     opacity: 1;
 }
 
 .pop.out {
-	-webkit-animation-name: fadeout;
-	-webkit-animation-duration: 100ms;
-	-moz-animation-name: fadeout;
-	-moz-animation-duration: 100ms;
-	animation-name: fadeout;
-	animation-duration: 100ms;
-	opacity: 0;
+    -webkit-animation-name: fadeout;
+    -webkit-animation-duration: 100ms;
+    -moz-animation-name: fadeout;
+    -moz-animation-duration: 100ms;
+    animation-name: fadeout;
+    animation-duration: 100ms;
+    opacity: 0;
 }
 
 .pop.in.reverse {
-	-webkit-animation-name: fadein;
-	-moz-animation-name: fadein;
-	animation-name: fadein;
+    -webkit-animation-name: fadein;
+    -moz-animation-name: fadein;
+    animation-name: fadein;
 }
 
 .pop.out.reverse {
-	-webkit-transform: scale(.8);
-	-webkit-animation-name: popout;
-	-moz-transform: scale(.8);
-	-moz-animation-name: popout;
-	transform: scale(.8);
-	animation-name: popout;
+    -webkit-transform: scale(.8);
+    -webkit-animation-name: popout;
+    -moz-transform: scale(.8);
+    -moz-animation-name: popout;
+    transform: scale(.8);
+    animation-name: popout;
 }
 
 @-webkit-keyframes popin {
@@ -687,90 +687,90 @@ div.ui-mobile-viewport { overflow-x: hidden; }
 
 
 .slide.out, .slide.in {
-	-webkit-animation-timing-function: ease-out;
-	-webkit-animation-duration: 350ms;
-	-moz-animation-timing-function: ease-out;
-	-moz-animation-duration: 350ms;
-	animation-timing-function: ease-out;
-	animation-duration: 350ms;
+    -webkit-animation-timing-function: ease-out;
+    -webkit-animation-duration: 350ms;
+    -moz-animation-timing-function: ease-out;
+    -moz-animation-duration: 350ms;
+    animation-timing-function: ease-out;
+    animation-duration: 350ms;
 }
 .slide.out {
-	-webkit-transform: translateX(-100%);
-	-webkit-animation-name: slideouttoleft;
-	-moz-transform: translateX(-100%);
-	-moz-animation-name: slideouttoleft;
-	transform: translateX(-100%);
-	animation-name: slideouttoleft;
+    -webkit-transform: translateX(-100%);
+    -webkit-animation-name: slideouttoleft;
+    -moz-transform: translateX(-100%);
+    -moz-animation-name: slideouttoleft;
+    transform: translateX(-100%);
+    animation-name: slideouttoleft;
 }
 
 .slide.in {
-	-webkit-transform: translateX(0);
-	-webkit-animation-name: slideinfromright;
-	-moz-transform: translateX(0);
-	-moz-animation-name: slideinfromright;
-	transform: translateX(0);
-	animation-name: slideinfromright;
+    -webkit-transform: translateX(0);
+    -webkit-animation-name: slideinfromright;
+    -moz-transform: translateX(0);
+    -moz-animation-name: slideinfromright;
+    transform: translateX(0);
+    animation-name: slideinfromright;
 }
 
 .slide.out.reverse {
-	-webkit-transform: translateX(100%);
-	-webkit-animation-name: slideouttoright;
-	-moz-transform: translateX(100%);
-	-moz-animation-name: slideouttoright;
-	transform: translateX(100%);
-	animation-name: slideouttoright;
+    -webkit-transform: translateX(100%);
+    -webkit-animation-name: slideouttoright;
+    -moz-transform: translateX(100%);
+    -moz-animation-name: slideouttoright;
+    transform: translateX(100%);
+    animation-name: slideouttoright;
 }
 
 .slide.in.reverse {
-	-webkit-transform: translateX(0);
-	-webkit-animation-name: slideinfromleft;
-	-moz-transform: translateX(0);
-	-moz-animation-name: slideinfromleft;
-	transform: translateX(0);
-	animation-name: slideinfromleft;
+    -webkit-transform: translateX(0);
+    -webkit-animation-name: slideinfromleft;
+    -moz-transform: translateX(0);
+    -moz-animation-name: slideinfromleft;
+    transform: translateX(0);
+    animation-name: slideinfromleft;
 }
 
 /* slide down */
 .slidedown.out {
-	-webkit-animation-name: fadeout;
-	-webkit-animation-duration: 100ms;
-	-moz-animation-name: fadeout;
-	-moz-animation-duration: 100ms;
-	animation-name: fadeout;
-	animation-duration: 100ms;
+    -webkit-animation-name: fadeout;
+    -webkit-animation-duration: 100ms;
+    -moz-animation-name: fadeout;
+    -moz-animation-duration: 100ms;
+    animation-name: fadeout;
+    animation-duration: 100ms;
 }
 
 .slidedown.in {
-	-webkit-transform: translateY(0);
-	-webkit-animation-name: slideinfromtop;
-	-webkit-animation-duration: 250ms;
-	-moz-transform: translateY(0);
-	-moz-animation-name: slideinfromtop;
-	-moz-animation-duration: 250ms;
-	transform: translateY(0);
-	animation-name: slideinfromtop;
-	animation-duration: 250ms;
+    -webkit-transform: translateY(0);
+    -webkit-animation-name: slideinfromtop;
+    -webkit-animation-duration: 250ms;
+    -moz-transform: translateY(0);
+    -moz-animation-name: slideinfromtop;
+    -moz-animation-duration: 250ms;
+    transform: translateY(0);
+    animation-name: slideinfromtop;
+    animation-duration: 250ms;
 }
 
 .slidedown.in.reverse {
-	-webkit-animation-name: fadein;
-	-webkit-animation-duration: 150ms;
-	-moz-animation-name: fadein;
-	-moz-animation-duration: 150ms;
-	animation-name: fadein;
-	animation-duration: 150ms;
+    -webkit-animation-name: fadein;
+    -webkit-animation-duration: 150ms;
+    -moz-animation-name: fadein;
+    -moz-animation-duration: 150ms;
+    animation-name: fadein;
+    animation-duration: 150ms;
 }
 
 .slidedown.out.reverse {
-	-webkit-transform: translateY(-100%);
-	-webkit-animation-name: slideouttotop;
-	-webkit-animation-duration: 200ms;
-	-moz-transform: translateY(-100%);
-	-moz-animation-name: slideouttotop;
-	-moz-animation-duration: 200ms;
-	transform: translateY(-100%);
-	animation-name: slideouttotop;
-	animation-duration: 200ms;
+    -webkit-transform: translateY(-100%);
+    -webkit-animation-name: slideouttotop;
+    -webkit-animation-duration: 200ms;
+    -moz-transform: translateY(-100%);
+    -moz-animation-name: slideouttotop;
+    -moz-animation-duration: 200ms;
+    transform: translateY(-100%);
+    animation-name: slideouttotop;
+    animation-duration: 200ms;
 }
 
 @-webkit-keyframes slideinfromtop {
@@ -827,23 +827,23 @@ div.ui-mobile-viewport { overflow-x: hidden; }
 }
 
 .fade.out {
-	opacity: 0;
-	-webkit-animation-duration: 125ms;
-	-webkit-animation-name: fadeout;
-	-moz-animation-duration: 125ms;
-	-moz-animation-name: fadeout;
-	animation-duration: 125ms;
-	animation-name: fadeout;
+    opacity: 0;
+    -webkit-animation-duration: 125ms;
+    -webkit-animation-name: fadeout;
+    -moz-animation-duration: 125ms;
+    -moz-animation-name: fadeout;
+    animation-duration: 125ms;
+    animation-name: fadeout;
 }
 
 .fade.in {
-	opacity: 1;
-	-webkit-animation-duration: 225ms;
-	-webkit-animation-name: fadein;
-	-moz-animation-duration: 225ms;
-	-moz-animation-name: fadein;
-	animation-duration: 225ms;
-	animation-name: fadein;
+    opacity: 1;
+    -webkit-animation-duration: 225ms;
+    -webkit-animation-name: fadein;
+    -moz-animation-duration: 225ms;
+    -moz-animation-name: fadein;
+    animation-duration: 225ms;
+    animation-name: fadein;
 }
 
 /* keyframes for slideout to sides */
@@ -875,94 +875,94 @@ div.ui-mobile-viewport { overflow-x: hidden; }
 
 
 .slidefade.out {
-	-webkit-transform: translateX(-100%);
-	-webkit-animation-name: slideouttoleft;
-	-webkit-animation-duration: 225ms;
-	-moz-transform: translateX(-100%);
-	-moz-animation-name: slideouttoleft;
-	-moz-animation-duration: 225ms;
-	transform: translateX(-100%);
-	animation-name: slideouttoleft;
-	animation-duration: 225ms;
+    -webkit-transform: translateX(-100%);
+    -webkit-animation-name: slideouttoleft;
+    -webkit-animation-duration: 225ms;
+    -moz-transform: translateX(-100%);
+    -moz-animation-name: slideouttoleft;
+    -moz-animation-duration: 225ms;
+    transform: translateX(-100%);
+    animation-name: slideouttoleft;
+    animation-duration: 225ms;
 }
 
 .slidefade.in {
-	-webkit-transform: translateX(0);
-	-webkit-animation-name: fadein;
-	-webkit-animation-duration: 200ms;
-	-moz-transform: translateX(0);
-	-moz-animation-name: fadein;
-	-moz-animation-duration: 200ms;
-	transform: translateX(0);
-	animation-name: fadein;
-	animation-duration: 200ms;
+    -webkit-transform: translateX(0);
+    -webkit-animation-name: fadein;
+    -webkit-animation-duration: 200ms;
+    -moz-transform: translateX(0);
+    -moz-animation-name: fadein;
+    -moz-animation-duration: 200ms;
+    transform: translateX(0);
+    animation-name: fadein;
+    animation-duration: 200ms;
 }
 
 .slidefade.out.reverse {
-	-webkit-transform: translateX(100%);
-	-webkit-animation-name: slideouttoright;
-	-webkit-animation-duration: 200ms;
-	-moz-transform: translateX(100%);
-	-moz-animation-name: slideouttoright;
-	-moz-animation-duration: 200ms;
-	transform: translateX(100%);
-	animation-name: slideouttoright;
-	animation-duration: 200ms;
+    -webkit-transform: translateX(100%);
+    -webkit-animation-name: slideouttoright;
+    -webkit-animation-duration: 200ms;
+    -moz-transform: translateX(100%);
+    -moz-animation-name: slideouttoright;
+    -moz-animation-duration: 200ms;
+    transform: translateX(100%);
+    animation-name: slideouttoright;
+    animation-duration: 200ms;
 }
 
 .slidefade.in.reverse {
-	-webkit-transform: translateX(0);
-	-webkit-animation-name: fadein;
-	-webkit-animation-duration: 200ms;
-	-moz-transform: translateX(0);
-	-moz-animation-name: fadein;
-	-moz-animation-duration: 200ms;
-	transform: translateX(0);
-	animation-name: fadein;
-	animation-duration: 200ms;
+    -webkit-transform: translateX(0);
+    -webkit-animation-name: fadein;
+    -webkit-animation-duration: 200ms;
+    -moz-transform: translateX(0);
+    -moz-animation-name: fadein;
+    -moz-animation-duration: 200ms;
+    transform: translateX(0);
+    animation-name: fadein;
+    animation-duration: 200ms;
 }
 
 /* slide up */
 .slideup.out {
-	-webkit-animation-name: fadeout;
-	-webkit-animation-duration: 100ms;
-	-moz-animation-name: fadeout;
-	-moz-animation-duration: 100ms;
-	animation-name: fadeout;
-	animation-duration: 100ms;
+    -webkit-animation-name: fadeout;
+    -webkit-animation-duration: 100ms;
+    -moz-animation-name: fadeout;
+    -moz-animation-duration: 100ms;
+    animation-name: fadeout;
+    animation-duration: 100ms;
 }
 
 .slideup.in {
-	-webkit-transform: translateY(0);
-	-webkit-animation-name: slideinfrombottom;
-	-webkit-animation-duration: 250ms;
-	-moz-transform: translateY(0);
-	-moz-animation-name: slideinfrombottom;
-	-moz-animation-duration: 250ms;
-	transform: translateY(0);
-	animation-name: slideinfrombottom;
-	animation-duration: 250ms;
+    -webkit-transform: translateY(0);
+    -webkit-animation-name: slideinfrombottom;
+    -webkit-animation-duration: 250ms;
+    -moz-transform: translateY(0);
+    -moz-animation-name: slideinfrombottom;
+    -moz-animation-duration: 250ms;
+    transform: translateY(0);
+    animation-name: slideinfrombottom;
+    animation-duration: 250ms;
 }
 
 .slideup.in.reverse {
-	-webkit-animation-name: fadein;
-	-webkit-animation-duration: 150ms;
-	-moz-animation-name: fadein;
-	-moz-animation-duration: 150ms;
-	animation-name: fadein;
-	animation-duration: 150ms;
+    -webkit-animation-name: fadein;
+    -webkit-animation-duration: 150ms;
+    -moz-animation-name: fadein;
+    -moz-animation-duration: 150ms;
+    animation-name: fadein;
+    animation-duration: 150ms;
 }
 
 .slideup.out.reverse {
-	-webkit-transform: translateY(100%);
-	-webkit-animation-name: slideouttobottom;
-	-webkit-animation-duration: 200ms;
-	-moz-transform: translateY(100%);
-	-moz-animation-name: slideouttobottom;
-	-moz-animation-duration: 200ms;
-	transform: translateY(100%);
-	animation-name: slideouttobottom;
-	animation-duration: 200ms;
+    -webkit-transform: translateY(100%);
+    -webkit-animation-name: slideouttobottom;
+    -webkit-animation-duration: 200ms;
+    -moz-transform: translateY(100%);
+    -moz-animation-name: slideouttobottom;
+    -moz-animation-duration: 200ms;
+    transform: translateY(100%);
+    animation-name: slideouttobottom;
+    animation-duration: 200ms;
 }
 
 @-webkit-keyframes slideinfrombottom {
@@ -999,61 +999,61 @@ div.ui-mobile-viewport { overflow-x: hidden; }
  */
 
 .viewport-turn {
-	-webkit-perspective: 200px;
-	-moz-perspective: 200px;
-	-ms-perspective: 200px;
-	perspective: 200px;
-	position: absolute;
+    -webkit-perspective: 200px;
+    -moz-perspective: 200px;
+    -ms-perspective: 200px;
+    perspective: 200px;
+    position: absolute;
 }
 .turn {
-	-webkit-backface-visibility: hidden;
-	-webkit-transform: translateX(0); /* Needed to work around an iOS 3.1 bug that causes listview thumbs to disappear when -webkit-visibility:hidden is used. */
-	-webkit-transform-origin: 0;
-	
-	-moz-backface-visibility: hidden;
-	-moz-transform: translateX(0);
-	-moz-transform-origin: 0;
-	
-	backface-visibility :hidden;
-	transform: translateX(0);
-	transform-origin: 0;
+    -webkit-backface-visibility: hidden;
+    -webkit-transform: translateX(0); /* Needed to work around an iOS 3.1 bug that causes listview thumbs to disappear when -webkit-visibility:hidden is used. */
+    -webkit-transform-origin: 0;
+    
+    -moz-backface-visibility: hidden;
+    -moz-transform: translateX(0);
+    -moz-transform-origin: 0;
+    
+    backface-visibility :hidden;
+    transform: translateX(0);
+    transform-origin: 0;
 }
 
 .turn.out {
-	-webkit-transform: rotateY(-90deg) scale(.9);
-	-webkit-animation-name: flipouttoleft;
-	-webkit-animation-duration: 125ms;
-	-moz-transform: rotateY(-90deg) scale(.9);
-	-moz-animation-name: flipouttoleft;
-	-moz-animation-duration: 125ms;
-	transform: rotateY(-90deg) scale(.9);
-	animation-name: flipouttoleft;
-	animation-duration: 125ms;
+    -webkit-transform: rotateY(-90deg) scale(.9);
+    -webkit-animation-name: flipouttoleft;
+    -webkit-animation-duration: 125ms;
+    -moz-transform: rotateY(-90deg) scale(.9);
+    -moz-animation-name: flipouttoleft;
+    -moz-animation-duration: 125ms;
+    transform: rotateY(-90deg) scale(.9);
+    animation-name: flipouttoleft;
+    animation-duration: 125ms;
 }
 
 .turn.in {
-	-webkit-animation-name: flipintoright;
-	-webkit-animation-duration: 250ms;
-	-moz-animation-name: flipintoright;
-	-moz-animation-duration: 250ms;
-	animation-name: flipintoright;
-	animation-duration: 250ms;
-	
+    -webkit-animation-name: flipintoright;
+    -webkit-animation-duration: 250ms;
+    -moz-animation-name: flipintoright;
+    -moz-animation-duration: 250ms;
+    animation-name: flipintoright;
+    animation-duration: 250ms;
+    
 }
 
 .turn.out.reverse {
-	-webkit-transform: rotateY(90deg) scale(.9);
-	-webkit-animation-name: flipouttoright;
-	-moz-transform: rotateY(90deg) scale(.9);
-	-moz-animation-name: flipouttoright;
-	transform: rotateY(90deg) scale(.9);
-	animation-name: flipouttoright;
+    -webkit-transform: rotateY(90deg) scale(.9);
+    -webkit-animation-name: flipouttoright;
+    -moz-transform: rotateY(90deg) scale(.9);
+    -moz-animation-name: flipouttoright;
+    transform: rotateY(90deg) scale(.9);
+    animation-name: flipouttoright;
 }
 
 .turn.in.reverse {
-	-webkit-animation-name: flipintoleft;
-	-moz-animation-name: flipintoleft;
-	animation-name: flipintoleft;
+    -webkit-animation-name: flipintoleft;
+    -moz-animation-name: flipintoleft;
+    animation-name: flipintoleft;
 }
 
 @-webkit-keyframes flipouttoleft {
@@ -1126,45 +1126,45 @@ div.ui-mobile-viewport { overflow-x: hidden; }
 .ui-collapsible-heading .ui-btn span.ui-btn .ui-icon { left: 0; margin-top: -10px; }
 .ui-collapsible-heading-status { position: absolute; top: -9999px; left:0px; }
 .ui-collapsible-content {
-	display: block;
-	margin: 0 -15px;	
-	padding: 10px 15px;
-	border-left-width: 0;
-	border-right-width: 0;
-	border-top: none;      /* Overrides ui-body-* */
-	background-image: none; /* Overrides ui-body-* */
+    display: block;
+    margin: 0 -15px;    
+    padding: 10px 15px;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top: none;      /* Overrides ui-body-* */
+    background-image: none; /* Overrides ui-body-* */
 }
 .ui-collapsible-inset .ui-collapsible-content { margin: 0; border-right-width: 1px; border-left-width: 1px; }
 .ui-collapsible-content-collapsed { display: none; }
 
 .ui-collapsible-set > .ui-collapsible.ui-corner-all {
-	-webkit-border-radius: 0;
-	border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
 }
 .ui-collapsible-heading,
 .ui-collapsible-heading > .ui-btn {
-	-webkit-border-radius: inherit;	
-	border-radius: inherit;	
+    -webkit-border-radius: inherit;    
+    border-radius: inherit;    
 }
 .ui-collapsible-set .ui-collapsible.ui-first-child {
-	-webkit-border-top-right-radius: inherit;	
-	border-top-right-radius: inherit;
-	-webkit-border-top-left-radius: inherit;	
-	border-top-left-radius: inherit;		
+    -webkit-border-top-right-radius: inherit;    
+    border-top-right-radius: inherit;
+    -webkit-border-top-left-radius: inherit;    
+    border-top-left-radius: inherit;        
 }
 .ui-collapsible-content,
 .ui-collapsible-set .ui-collapsible.ui-last-child {
-	-webkit-border-bottom-right-radius: inherit;	
-	border-bottom-right-radius: inherit;
-	-webkit-border-bottom-left-radius: inherit;	
-	border-bottom-left-radius: inherit;		
+    -webkit-border-bottom-right-radius: inherit;    
+    border-bottom-right-radius: inherit;
+    -webkit-border-bottom-left-radius: inherit;    
+    border-bottom-left-radius: inherit;        
 }
 
 .ui-collapsible-themed-content:not(.ui-collapsible-collapsed) > .ui-collapsible-heading {
-	-webkit-border-bottom-right-radius: 0;	
-	border-bottom-right-radius: 0;
-	-webkit-border-bottom-left-radius: 0;	
-	border-bottom-left-radius: 0;		
+    -webkit-border-bottom-right-radius: 0;    
+    border-bottom-right-radius: 0;
+    -webkit-border-bottom-left-radius: 0;    
+    border-bottom-left-radius: 0;        
 }
 
 .ui-collapsible-set { margin: .5em 0; }
@@ -1204,151 +1204,151 @@ div.ui-mobile-viewport { overflow-x: hidden; }
 /* On IE7 the floating selects will be displayed as block if .ui-btn-text has width 100% */
 .ui-controlgroup-horizontal .ui-select .ui-btn-text { width: auto; }
 
-.ui-controlgroup-vertical .ui-btn {	border-bottom-width: 0; }
+.ui-controlgroup-vertical .ui-btn {    border-bottom-width: 0; }
 .ui-controlgroup-vertical .ui-btn.ui-last-child { border-bottom-width: 1px; }
 .ui-controlgroup-horizontal .ui-btn { border-right-width: 0; }
-.ui-controlgroup-horizontal .ui-btn.ui-last-child {	border-right-width: 1px; }
+.ui-controlgroup-horizontal .ui-btn.ui-last-child {    border-right-width: 1px; }
 
 .ui-controlgroup .ui-btn-corner-all {
-	-webkit-border-radius: 0;
-	border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
 }
 .ui-controlgroup .ui-controlgroup-controls,
 .ui-controlgroup .ui-radio,
 .ui-controlgroup .ui-checkbox,
 .ui-controlgroup .ui-select,
 .ui-controlgroup li {
-	-webkit-border-radius: inherit;
-	border-radius: inherit;
+    -webkit-border-radius: inherit;
+    border-radius: inherit;
 }
 .ui-controlgroup-vertical .ui-btn.ui-first-child {
-	-webkit-border-top-left-radius: inherit;
-	border-top-left-radius: inherit;
-	-webkit-border-top-right-radius: inherit;
-	border-top-right-radius: inherit;
+    -webkit-border-top-left-radius: inherit;
+    border-top-left-radius: inherit;
+    -webkit-border-top-right-radius: inherit;
+    border-top-right-radius: inherit;
 }
 .ui-controlgroup-vertical .ui-btn.ui-last-child {
-	-webkit-border-bottom-left-radius: inherit;
-	border-bottom-left-radius: inherit;
-	-webkit-border-bottom-right-radius: inherit;
-	border-bottom-right-radius: inherit;
+    -webkit-border-bottom-left-radius: inherit;
+    border-bottom-left-radius: inherit;
+    -webkit-border-bottom-right-radius: inherit;
+    border-bottom-right-radius: inherit;
 }
 .ui-controlgroup-horizontal .ui-btn.ui-first-child {
-	-webkit-border-top-left-radius: inherit;
-	border-top-left-radius: inherit;
-	-webkit-border-bottom-left-radius: inherit;
-	border-bottom-left-radius: inherit;
+    -webkit-border-top-left-radius: inherit;
+    border-top-left-radius: inherit;
+    -webkit-border-bottom-left-radius: inherit;
+    border-bottom-left-radius: inherit;
 }
 .ui-controlgroup-horizontal .ui-btn.ui-last-child {
-	-webkit-border-top-right-radius: inherit;
-	border-top-right-radius: inherit;
-	-webkit-border-bottom-right-radius: inherit;
-	border-bottom-right-radius: inherit;
+    -webkit-border-top-right-radius: inherit;
+    border-top-right-radius: inherit;
+    -webkit-border-bottom-right-radius: inherit;
+    border-bottom-right-radius: inherit;
 }
 
 .ui-controlgroup .ui-shadow:not(.ui-focus) {
-	-moz-box-shadow: none;
-	-webkit-box-shadow: none;
-	box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 
 @media all and (min-width: 28em){
-	.ui-field-contain .ui-controlgroup-label { vertical-align: top; display: inline-block; width: 20%; margin: 0 2% 0 0; }
-	.ui-field-contain .ui-controlgroup-controls { width: 78%; display: inline-block; }
-	.ui-field-contain .ui-controlgroup .ui-select { width: 100%; display: block; } 
-	.ui-field-contain .ui-controlgroup-horizontal .ui-select { width: auto; }
-	.ui-hide-label .ui-controlgroup-controls { width: 100%; }
-}	
+    .ui-field-contain .ui-controlgroup-label { vertical-align: top; display: inline-block; width: 20%; margin: 0 2% 0 0; }
+    .ui-field-contain .ui-controlgroup-controls { width: 78%; display: inline-block; }
+    .ui-field-contain .ui-controlgroup .ui-select { width: 100%; display: block; } 
+    .ui-field-contain .ui-controlgroup-horizontal .ui-select { width: auto; }
+    .ui-hide-label .ui-controlgroup-controls { width: 100%; }
+}    
 
 
 .ui-dialog {
-	 background: none !important; /* this is to ensure that dialog theming does not apply (by default at least) on the page div */
+     background: none !important; /* this is to ensure that dialog theming does not apply (by default at least) on the page div */
 }
 .ui-dialog-contain {
-	width: 92.5%;
-	max-width: 500px;
-	margin: 10% auto 15px auto;
-	padding: 0;
-	position: relative;
-	top: -15px;
+    width: 92.5%;
+    max-width: 500px;
+    margin: 10% auto 15px auto;
+    padding: 0;
+    position: relative;
+    top: -15px;
 }
 .ui-dialog-contain > .ui-header, 
 .ui-dialog-contain > .ui-content, 
 .ui-dialog-contain > .ui-footer { 
-	display: block;
-	position: relative; 
-	width: auto;
-	margin: 0;
+    display: block;
+    position: relative; 
+    width: auto;
+    margin: 0;
 }
 .ui-dialog-contain > .ui-header {
-	border: none;
-	overflow: hidden;
-	z-index: 10; 
-	padding: 0;
+    border: none;
+    overflow: hidden;
+    z-index: 10; 
+    padding: 0;
 }
 .ui-dialog-contain > .ui-content { 
-	padding: 15px; 
+    padding: 15px; 
 }
 .ui-dialog-contain > .ui-footer {
-	z-index: 10; 
-	padding: 0 15px; 
+    z-index: 10; 
+    padding: 0 15px; 
 }
 
 
 /* fixed page header & footer configuration */
 .ui-header-fixed,
 .ui-footer-fixed {
-	left: 0;
-	right: 0;
-	width: 100%;
-	position: fixed;
-	z-index: 1000;
+    left: 0;
+    right: 0;
+    width: 100%;
+    position: fixed;
+    z-index: 1000;
 }
 .ui-header-fixed {
-	top: -1px;
-	padding-top: 1px;
+    top: -1px;
+    padding-top: 1px;
 }
 .ui-header-fixed.ui-fixed-hidden {
-	top: 0;
-	padding-top: 0;
+    top: 0;
+    padding-top: 0;
 }
 .ui-footer-fixed {
-	bottom: -1px;
-	padding-bottom: 1px;
+    bottom: -1px;
+    padding-bottom: 1px;
 }
 .ui-footer-fixed.ui-fixed-hidden {
-	bottom: 0;
-	padding-bottom: 0;
+    bottom: 0;
+    padding-bottom: 0;
 }
 .ui-header-fullscreen,
 .ui-footer-fullscreen {
-	filter: Alpha(Opacity=90);
-	opacity: .9;
+    filter: Alpha(Opacity=90);
+    opacity: .9;
 }
 .ui-page-header-fixed {
-	padding-top: 2.6875em;
+    padding-top: 2.6875em;
 }
 .ui-page-footer-fixed {
-	padding-bottom: 2.6875em;
+    padding-bottom: 2.6875em;
 }
 .ui-page-header-fullscreen > .ui-content,
 .ui-page-footer-fullscreen > .ui-content {
-	padding: 0;
+    padding: 0;
 }
 .ui-fixed-hidden {
-	position: absolute;
+    position: absolute;
 }
 .ui-page-header-fullscreen .ui-fixed-hidden,
 .ui-page-footer-fullscreen .ui-fixed-hidden {
-	left: -9999px;
+    left: -9999px;
 }
 .ui-header-fixed .ui-btn,
 .ui-footer-fixed .ui-btn { 
-	z-index: 10;
+    z-index: 10;
 }
 /* workarounds for other widgets */
 .ui-android-2x-fixed .ui-li-has-thumb {
-	-webkit-transform: translate3d(0,0,0);
+    -webkit-transform: translate3d(0,0,0);
 }
 
 
@@ -1385,109 +1385,109 @@ div.ui-mobile-viewport { overflow-x: hidden; }
 
 
 .ui-rangeslider {
-	zoom: 1;
-	margin: 0;
+    zoom: 1;
+    margin: 0;
 }
 .ui-rangeslider:before,
 .ui-rangeslider:after {
-	content: "";
-	display: table;
+    content: "";
+    display: table;
 }
 .ui-rangeslider:after {
-	clear: both;
+    clear: both;
 }
 /* Margin-top/bottom: .5em * 16px/14px to make it equal to ui-rangeslider-sliders margin (input font-size is 14px) */
 .ui-rangeslider input.ui-input-text.ui-slider-input {
-	margin: .57143em 0;
+    margin: .57143em 0;
 }
 .ui-rangeslider.ui-mini input.ui-slider-input {
-	margin: .28571em 0;
+    margin: .28571em 0;
 }
 .ui-rangeslider input.ui-slider-input.ui-rangeslider-last {
-	float: right;
+    float: right;
 }
 .ui-rangeslider .ui-rangeslider-sliders {
-	position: relative;
-	overflow: visible;
-	height: 30px;
-	margin: .5em 68px;
+    position: relative;
+    overflow: visible;
+    height: 30px;
+    margin: .5em 68px;
 }
 .ui-rangeslider.ui-mini .ui-rangeslider-sliders {
-	margin: .25em 68px;
+    margin: .25em 68px;
 }
 .ui-field-contain .ui-rangeslider input.ui-slider-input,
 .ui-field-contain .ui-rangeslider.ui-mini input.ui-slider-input,
 .ui-field-contain .ui-rangeslider .ui-rangeslider-sliders,
 .ui-field-contain .ui-rangeslider.ui-mini .ui-rangeslider-sliders {
-	margin-top: 0;
-	margin-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 .ui-rangeslider .ui-rangeslider-sliders .ui-slider-track {
-	position: absolute;
-	top: 6px;
-	right: 0;
-	left: 0;
-	margin: 0;
+    position: absolute;
+    top: 6px;
+    right: 0;
+    left: 0;
+    margin: 0;
 }
 .ui-rangeslider.ui-mini .ui-rangeslider-sliders .ui-slider-track {
-	top: 8px;
+    top: 8px;
 }
 .ui-rangeslider .ui-slider-track:first-child .ui-slider-bg {
-	display: none;
+    display: none;
 }
 .ui-rangeslider .ui-rangeslider-sliders .ui-slider-track:first-child {
-	background-color: transparent;
-	background: none;
-	border-width: 0;
-	height: 0;
+    background-color: transparent;
+    background: none;
+    border-width: 0;
+    height: 0;
 }
 
 /* this makes ie6 and ie7 set height to 0 to fix z-index problem */
 html >/**/body .ui-rangeslider .ui-rangeslider-sliders .ui-slider-track:first-child {
-	height: 15px;
-	border-width: 1px;
+    height: 15px;
+    border-width: 1px;
 }
 html >/**/body .ui-rangeslider.ui-mini .ui-rangeslider-sliders .ui-slider-track:first-child {
-	height: 12px;
+    height: 12px;
 }
 
 @media all and (min-width: 28em){
-	.ui-field-contain .ui-rangeslider label.ui-slider {
-		float: left;
-	}
-	.ui-field-contain .ui-rangeslider input.ui-slider-input {
-		position: relative;
-		z-index: 1;
-	}
-	.ui-field-contain .ui-rangeslider input.ui-slider-input.ui-rangeslider-first,
-	.ui-field-contain .ui-rangeslider.ui-mini input.ui-slider-input.ui-rangeslider-first {
-		margin-right: 17px;
-	}
-	.ui-field-contain .ui-rangeslider .ui-rangeslider-sliders,
-	.ui-field-contain .ui-rangeslider.ui-mini .ui-rangeslider-sliders {
-		float: left;
-		width: 78%;
-		margin: 0 -68px;
-	}
-	.ui-field-contain .ui-rangeslider .ui-slider-track,
-	.ui-field-contain .ui-rangeslider.ui-mini .ui-slider-track {
-		right: 68px;
-		left: 68px;
-	}
-	.ui-field-contain.ui-hide-label .ui-rangeslider input.ui-slider-input.ui-rangeslider-first {
-		margin: 0;
-	}
-	.ui-field-contain.ui-hide-label .ui-rangeslider .ui-rangeslider-sliders,
-	.ui-field-contain.ui-hide-label .ui-rangeslider.ui-mini .ui-rangeslider-sliders {
-		width: auto;
-		float: none;
-		margin: 0 68px;
-	}
-	.ui-field-contain.ui-hide-label .ui-rangeslider .ui-slider-track,
-	.ui-field-contain.ui-hide-label .ui-rangeslider.ui-mini .ui-slider-track {
-		right: 0;
-		left: 0;
-	}
+    .ui-field-contain .ui-rangeslider label.ui-slider {
+        float: left;
+    }
+    .ui-field-contain .ui-rangeslider input.ui-slider-input {
+        position: relative;
+        z-index: 1;
+    }
+    .ui-field-contain .ui-rangeslider input.ui-slider-input.ui-rangeslider-first,
+    .ui-field-contain .ui-rangeslider.ui-mini input.ui-slider-input.ui-rangeslider-first {
+        margin-right: 17px;
+    }
+    .ui-field-contain .ui-rangeslider .ui-rangeslider-sliders,
+    .ui-field-contain .ui-rangeslider.ui-mini .ui-rangeslider-sliders {
+        float: left;
+        width: 78%;
+        margin: 0 -68px;
+    }
+    .ui-field-contain .ui-rangeslider .ui-slider-track,
+    .ui-field-contain .ui-rangeslider.ui-mini .ui-slider-track {
+        right: 68px;
+        left: 68px;
+    }
+    .ui-field-contain.ui-hide-label .ui-rangeslider input.ui-slider-input.ui-rangeslider-first {
+        margin: 0;
+    }
+    .ui-field-contain.ui-hide-label .ui-rangeslider .ui-rangeslider-sliders,
+    .ui-field-contain.ui-hide-label .ui-rangeslider.ui-mini .ui-rangeslider-sliders {
+        width: auto;
+        float: none;
+        margin: 0 68px;
+    }
+    .ui-field-contain.ui-hide-label .ui-rangeslider .ui-slider-track,
+    .ui-field-contain.ui-hide-label .ui-rangeslider.ui-mini .ui-slider-track {
+        right: 0;
+        left: 0;
+    }
 }
 
 
@@ -1535,9 +1535,9 @@ label.ui-select { font-size: 16px; line-height: 1.4; font-weight: normal; margin
 .ui-selectmenu .ui-header .ui-title { margin: 0.6em 46px 0.8em; }
 
 @media all and (min-width: 28em){
-	.ui-field-contain label.ui-select { vertical-align: top; display: inline-block; width: 20%; margin: 0 2% 0 0; }
-	.ui-field-contain .ui-select { width: 78%; display: inline-block; }
-	.ui-hide-label .ui-select { width: 100%; } 
+    .ui-field-contain label.ui-select { vertical-align: top; display: inline-block; width: 20%; margin: 0 2% 0 0; }
+    .ui-field-contain .ui-select { width: 78%; display: inline-block; }
+    .ui-hide-label .ui-select { width: 100%; } 
 }
 
 /* when no placeholder is defined in a multiple select, the header height doesn't even extend past the close button.  this shim's content in there */
@@ -1545,202 +1545,202 @@ label.ui-select { font-size: 16px; line-height: 1.4; font-weight: normal; margin
 
 
 label.ui-slider {
-	font-size: 16px;
-	line-height: 1.4;
-	font-weight: normal;
-	margin: 0;
-	display: block;
+    font-size: 16px;
+    line-height: 1.4;
+    font-weight: normal;
+    margin: 0;
+    display: block;
 }
 .ui-field-contain label.ui-slider {
-	margin-bottom: .4em;
+    margin-bottom: .4em;
 }
 div.ui-slider {
-	height: 30px;
-	margin: .5em 0;
-	zoom: 1;
+    height: 30px;
+    margin: .5em 0;
+    zoom: 1;
 }
 div.ui-slider.ui-mini {
-	margin: .25em 0;
+    margin: .25em 0;
 }
 .ui-field-contain div.ui-slider,
 .ui-field-contain div.ui-slider.ui-mini {
-	margin: 0;
+    margin: 0;
 }
 div.ui-slider:before, div.ui-slider:after {
-	content: "";
-	display: table;
+    content: "";
+    display: table;
 }
 div.ui-slider:after {
-	clear: both;
+    clear: both;
 }
 /* High level of specificity to override Textinput CSS. */
 input.ui-input-text.ui-slider-input {
-	display: block;
-	float: left;
-	margin: 0;
-	padding: 4px;
-	width: 40px;
-	height: 22px;
-	line-height: 22px;
-	font-size: 14px;
-	border: none;
-	background-image: none;
-	font-weight: bold;
-	text-align: center;
-	vertical-align: text-bottom;
-	outline: 0;
-	-webkit-box-sizing: content-box;
-	-moz-box-sizing: content-box;
-	-ms-box-sizing: content-box;
-	box-sizing: content-box;
+    display: block;
+    float: left;
+    margin: 0;
+    padding: 4px;
+    width: 40px;
+    height: 22px;
+    line-height: 22px;
+    font-size: 14px;
+    border: none;
+    background-image: none;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: text-bottom;
+    outline: 0;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    -ms-box-sizing: content-box;
+    box-sizing: content-box;
 }
 .ui-slider-input::-webkit-outer-spin-button,
 .ui-slider-input::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-	margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 .ui-slider-track,
 .ui-slider-switch {
-	position: relative;
-	overflow: visible;
-	height: 15px;
-	margin: 0 15px 0 68px;
-	top: 6px;
+    position: relative;
+    overflow: visible;
+    height: 15px;
+    margin: 0 15px 0 68px;
+    top: 6px;
 }
 .ui-slider-track.ui-mini {
-	height: 12px;
-	top: 8px;
+    height: 12px;
+    top: 8px;
 }
 .ui-slider-bg {
-	border: none;
-	height: 100%;
+    border: none;
+    height: 100%;
 }
 /* High level of specificity to override button margins in grids */
 .ui-slider-track .ui-btn.ui-slider-handle,
 .ui-slider-switch .ui-btn.ui-slider-handle {
-	position: absolute;
-	z-index: 1;
-	top: 50%;
-	width: 28px;
-	height: 28px;
-	margin: -15px 0 0 -15px;
-	outline: 0;
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    width: 28px;
+    height: 28px;
+    margin: -15px 0 0 -15px;
+    outline: 0;
 }
 .ui-slider-track.ui-mini .ui-slider-handle {
-	height: 14px;
-	width: 14px;
-	margin: -8px 0 0 -7px;
+    height: 14px;
+    width: 14px;
+    margin: -8px 0 0 -7px;
 }
 .ui-slider-handle .ui-btn-inner {
-	padding: 0;
-	height: 100%;
+    padding: 0;
+    height: 100%;
 }
 .ui-slider-track.ui-mini .ui-slider-handle .ui-btn-inner {
-	height: 30px;
-	width: 30px;
-	padding: 0;
-	margin: -9px 0 0 -9px;
-	border-top: none;
+    height: 30px;
+    width: 30px;
+    padding: 0;
+    margin: -9px 0 0 -9px;
+    border-top: none;
 }
 select.ui-slider-switch {
-	display: none;
+    display: none;
 }
 div.ui-slider-switch {
-	display: inline-block;
-	height: 32px;
-	width: 5.8em;
-	margin: .5em 0;
-	top: 0;
+    display: inline-block;
+    height: 32px;
+    width: 5.8em;
+    margin: .5em 0;
+    top: 0;
 }
 div.ui-slider-switch.ui-mini {
-	width: 5em;
-	height: 29px;
-	margin: .25em 0;
-	top: 0;
+    width: 5em;
+    height: 29px;
+    margin: .25em 0;
+    top: 0;
 }
 .ui-field-contain .ui-slider-switch,
 .ui-field-contain .ui-slider-switch.ui-mini {
-	margin: 0;
+    margin: 0;
 }
 .ui-slider-inneroffset {
-	margin: 0 16px;
-	position: relative;
-	z-index: 1;
+    margin: 0 16px;
+    position: relative;
+    z-index: 1;
 }
 .ui-slider-switch.ui-mini .ui-slider-inneroffset {
-	margin: 0 15px 0 14px;
+    margin: 0 15px 0 14px;
 }
 .ui-slider-switch .ui-btn.ui-slider-handle {
-	margin: 1px 0 0 -15px;
+    margin: 1px 0 0 -15px;
 }
 .ui-slider-switch.ui-mini .ui-slider-handle {
-	width: 25px;
-	height: 25px;
-	margin: 1px 0 0 -13px;
-	padding: 0;
+    width: 25px;
+    height: 25px;
+    margin: 1px 0 0 -13px;
+    padding: 0;
 }
 .ui-slider-handle-snapping {
-	-webkit-transition: left 70ms linear;
-	-moz-transition: left 70ms linear;
+    -webkit-transition: left 70ms linear;
+    -moz-transition: left 70ms linear;
 }
 .ui-slider-switch.ui-mini .ui-slider-handle .ui-btn-inner {
-	height: 30px;
-	width: 30px;
-	padding: 0;
-	margin: 0;
-	border-top: none;
+    height: 30px;
+    width: 30px;
+    padding: 0;
+    margin: 0;
+    border-top: none;
 }
 .ui-slider-switch .ui-slider-label {
-	position: absolute;
-	text-align: center;
-	width: 100%;
-	overflow: hidden;
-	font-size: 16px;
-	top: 0;
-	line-height: 2;
-	min-height: 100%;
-	border-width: 0;
-	white-space: nowrap;
-	cursor: pointer;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    overflow: hidden;
+    font-size: 16px;
+    top: 0;
+    line-height: 2;
+    min-height: 100%;
+    border-width: 0;
+    white-space: nowrap;
+    cursor: pointer;
 }
 .ui-slider-switch.ui-mini .ui-slider-label {
-	font-size: 14px;
+    font-size: 14px;
 }
 .ui-slider-switch .ui-slider-label-a {
-	z-index: 1;
-	left: 0;
-	text-indent: -1.5em;
+    z-index: 1;
+    left: 0;
+    text-indent: -1.5em;
 }
 .ui-slider-switch .ui-slider-label-b {
-	z-index: 0;
-	right: 0;
-	text-indent: 1.5em;
+    z-index: 0;
+    right: 0;
+    text-indent: 1.5em;
 }
 
 @media all and (min-width: 28em){
-	.ui-field-contain label.ui-slider {
-		vertical-align: top;
-		display: inline-block;
-		width: 20%;
-		margin: 0 2% 0 0;
-	}
-	.ui-field-contain div.ui-slider {
-		display: inline-block;
-		width: 78%;
-	}
-	.ui-field-contain.ui-hide-label div.ui-slider {
-		display: block;
-		width: auto;
-	}
-	.ui-field-contain div.ui-slider-switch,
-	.ui-field-contain.ui-hide-label div.ui-slider-switch {
-		display: inline-block;
-		width: 5.8em;
-	}
-	.ui-field-contain div.ui-slider-switch.ui-mini {
-		width: 5em;
-	}
-}	
+    .ui-field-contain label.ui-slider {
+        vertical-align: top;
+        display: inline-block;
+        width: 20%;
+        margin: 0 2% 0 0;
+    }
+    .ui-field-contain div.ui-slider {
+        display: inline-block;
+        width: 78%;
+    }
+    .ui-field-contain.ui-hide-label div.ui-slider {
+        display: block;
+        width: auto;
+    }
+    .ui-field-contain div.ui-slider-switch,
+    .ui-field-contain.ui-hide-label div.ui-slider-switch {
+        display: inline-block;
+        width: 5.8em;
+    }
+    .ui-field-contain div.ui-slider-switch.ui-mini {
+        width: 5em;
+    }
+}    
 
 
 label.ui-input-text { font-size: 16px; line-height: 1.4; display: block; font-weight: normal; margin: 0 0 .3em; }
@@ -1772,19 +1772,19 @@ input::-moz-placeholder, textarea::-moz-placeholder { color: #aaa; }
 input[type=number]::-webkit-outer-spin-button { margin: 0; }
 
 @media all and (min-width: 28em){
-	.ui-field-contain label.ui-input-text { vertical-align: top; display: inline-block; width: 20%; margin: 0 2% 0 0 }
-	.ui-field-contain input.ui-input-text,
-	.ui-field-contain textarea.ui-input-text,
-	.ui-field-contain .ui-input-search,
-	.ui-field-contain div.ui-input-text { width: 78%; display: inline-block; }
-	.ui-field-contain .ui-input-search,
-	.ui-field-contain div.ui-input-text { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; }
-	.ui-hide-label input.ui-input-text,
-	.ui-hide-label textarea.ui-input-text,
-	.ui-hide-label .ui-input-search,
-	.ui-hide-label div.ui-input-text,
-	.ui-input-search input.ui-input-text,
-	div.ui-input-text input.ui-input-text { width: 100%; }
+    .ui-field-contain label.ui-input-text { vertical-align: top; display: inline-block; width: 20%; margin: 0 2% 0 0 }
+    .ui-field-contain input.ui-input-text,
+    .ui-field-contain textarea.ui-input-text,
+    .ui-field-contain .ui-input-search,
+    .ui-field-contain div.ui-input-text { width: 78%; display: inline-block; }
+    .ui-field-contain .ui-input-search,
+    .ui-field-contain div.ui-input-text { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; }
+    .ui-hide-label input.ui-input-text,
+    .ui-hide-label textarea.ui-input-text,
+    .ui-hide-label .ui-input-search,
+    .ui-hide-label div.ui-input-text,
+    .ui-input-search input.ui-input-text,
+    div.ui-input-text input.ui-input-text { width: 100%; }
 }
 
 .ui-listview { margin: 0; }
@@ -1808,35 +1808,35 @@ ol.ui-listview .ui-li-jsnumbering:before { content: "" !important; } /* to avoid
 
 .ui-listview > .ui-li.ui-first-child,
 .ui-listview .ui-btn.ui-first-child > .ui-li > .ui-btn-text > .ui-link-inherit {
-	-webkit-border-top-right-radius: inherit;	
-	border-top-right-radius: inherit;
-	-webkit-border-top-left-radius: inherit;
-	border-top-left-radius: inherit;
+    -webkit-border-top-right-radius: inherit;    
+    border-top-right-radius: inherit;
+    -webkit-border-top-left-radius: inherit;
+    border-top-left-radius: inherit;
 }
 .ui-listview > .ui-li.ui-last-child,
 .ui-listview .ui-btn.ui-last-child > .ui-li > .ui-btn-text > .ui-link-inherit,
 .ui-collapsible-content > .ui-listview:not(.ui-listview-inset),
 .ui-collapsible-content > .ui-listview:not(.ui-listview-inset) .ui-li.ui-last-child {
-	-webkit-border-bottom-right-radius: inherit;
-	border-bottom-right-radius: inherit;
-	-webkit-border-bottom-left-radius: inherit;
-	border-bottom-left-radius: inherit;
+    -webkit-border-bottom-right-radius: inherit;
+    border-bottom-right-radius: inherit;
+    -webkit-border-bottom-left-radius: inherit;
+    border-bottom-left-radius: inherit;
 }
 .ui-listview > .ui-li.ui-first-child .ui-li-link-alt {
-	-webkit-border-top-right-radius: inherit;	
-	border-top-right-radius: inherit;	
+    -webkit-border-top-right-radius: inherit;    
+    border-top-right-radius: inherit;    
 }
 .ui-listview > .ui-li.ui-last-child .ui-li-link-alt {
-	-webkit-border-bottom-right-radius: inherit;
-	border-bottom-right-radius: inherit;	
+    -webkit-border-bottom-right-radius: inherit;
+    border-bottom-right-radius: inherit;    
 }
 .ui-listview > .ui-li.ui-first-child .ui-li-thumb:not(.ui-li-icon) {
-	-webkit-border-top-left-radius: inherit;
-	border-top-left-radius: inherit;	
+    -webkit-border-top-left-radius: inherit;
+    border-top-left-radius: inherit;    
 }
 .ui-listview > .ui-li.ui-last-child .ui-li-thumb:not(.ui-li-icon) {
-	-webkit-border-bottom-left-radius: inherit;
-	border-bottom-left-radius: inherit;	
+    -webkit-border-bottom-left-radius: inherit;
+    border-bottom-left-radius: inherit;    
 }
 .ui-li>.ui-btn-inner { display: block; position: relative; padding: 0; }
 .ui-li .ui-btn-inner a.ui-link-inherit, .ui-li-static.ui-li { padding: .7em 15px; display: block; }
@@ -1852,8 +1852,8 @@ ol.ui-listview .ui-li-jsnumbering:before { content: "" !important; } /* to avoid
 .ui-li-thumb, .ui-listview .ui-li-icon, .ui-li-content { float: left; margin-right: 10px; }
 .ui-li-aside { float: right; width: 50%; text-align: right; margin: .3em 0; }
 @media all and (min-width: 480px){
-	 .ui-li-aside { width: 45%; }
-}	 
+     .ui-li-aside { width: 45%; }
+}     
 .ui-li-divider { cursor: default; }
 .ui-li-has-alt .ui-btn-inner a.ui-link-inherit, .ui-li-static.ui-li-has-alt { padding-right: 53px; }
 .ui-li-has-alt.ui-li-has-count .ui-btn-inner a.ui-link-inherit, .ui-li-static.ui-li-has-alt.ui-li-has-count { padding-right: 88px; }
@@ -1922,68 +1922,68 @@ ol.ui-listview .ui-li-jsnumbering:before { content: "" !important; } /* to avoid
 
 /* panel */
 .ui-panel {
-	width: 17em;
-	min-height: 100%;
-	border-width: 0;
-	position: absolute;
-	top: 0;
-	display: block;
+    width: 17em;
+    min-height: 100%;
+    border-width: 0;
+    position: absolute;
+    top: 0;
+    display: block;
 }
 .ui-panel-closed {
-	width: 0;
-	overflow: hidden;
+    width: 0;
+    overflow: hidden;
 }
 .ui-panel-fixed {
-	position: fixed;
-	bottom: -1px; /* fixes gap on Chrome for Android */
-	padding-bottom: 1px;
+    position: fixed;
+    bottom: -1px; /* fixes gap on Chrome for Android */
+    padding-bottom: 1px;
 }
 .ui-panel-display-overlay {
-	z-index: 1001; /* fixed toolbars have z-index 1000 */
+    z-index: 1001; /* fixed toolbars have z-index 1000 */
 }
 .ui-panel-display-reveal {
-	z-index: 0;
+    z-index: 0;
 }
 .ui-panel-display-push {
-	z-index: 999;
+    z-index: 999;
 }
 .ui-panel-inner {
-	padding: 15px;
+    padding: 15px;
 }
 
 /* content-wrap */
 .ui-panel-content-wrap {
-	position: relative;
-	left: 0;
-	min-height: inherit;
-	border: none;
-	z-index: 999;
+    position: relative;
+    left: 0;
+    min-height: inherit;
+    border: none;
+    z-index: 999;
 }
 .ui-panel-content-wrap-display-overlay,
 .ui-panel-animate.ui-panel-content-wrap > .ui-header, /* ios4 fix */
 .ui-panel-content-wrap-closed {
-	position: static;
+    position: static;
 }
 
 /* dismiss */
 .ui-panel-dismiss {
-	position: absolute;
-	top: 0;
-	left:0;
-	height: 100%;
-	width: 100%;
-	z-index: 1002;
-	display: none;
+    position: absolute;
+    top: 0;
+    left:0;
+    height: 100%;
+    width: 100%;
+    z-index: 1002;
+    display: none;
 }
 .ui-panel-dismiss-open {
-	display: block;
+    display: block;
 }
 
 /* animate class is added to panel, wrapper and fixed toolbars */
 .ui-panel-animate {
-	-webkit-transition: -webkit-transform 350ms ease;
-	-moz-transition: -moz-transform 350ms ease;
-	transition: transform 350ms ease;
+    -webkit-transition: -webkit-transform 350ms ease;
+    -moz-transition: -moz-transform 350ms ease;
+    transition: transform 350ms ease;
 }
 
 /* hardware acceleration for smoother transitions */
@@ -1991,58 +1991,58 @@ ol.ui-listview .ui-li-jsnumbering:before { content: "" !important; } /* to avoid
 .ui-panel-animate.ui-panel:not(.ui-panel-display-reveal) > div,
 .ui-panel-animate.ui-panel-content-wrap,
 .ui-panel-animate.ui-panel-content-fixed-toolbar {
-	-webkit-backface-visibility: hidden;
-	-webkit-transform: translate3d(0,0,0);
+    -webkit-backface-visibility: hidden;
+    -webkit-transform: translate3d(0,0,0);
 }
 
 /* positioning: panel */
 /* panel left  */
 .ui-panel-position-left {
-	left: -17em;
+    left: -17em;
 }
 /* animated: panel left (for overlay and push) */
 .ui-panel-animate.ui-panel-position-left.ui-panel-display-overlay,
 .ui-panel-animate.ui-panel-position-left.ui-panel-display-push {
-	left: 0;
-	-webkit-transform: translate3d(-17em,0,0);
-	-moz-transform: translate3d(-17em,0,0);
-	transform: translate3d(-17em,0,0);
+    left: 0;
+    -webkit-transform: translate3d(-17em,0,0);
+    -moz-transform: translate3d(-17em,0,0);
+    transform: translate3d(-17em,0,0);
 }
 /* panel left open */
 .ui-panel-position-left.ui-panel-display-reveal, /* negate "panel left" for reveal */
 .ui-panel-position-left.ui-panel-open {
-	left: 0;
+    left: 0;
 }
 /* animated: panel left open (for overlay and push) */
 .ui-panel-animate.ui-panel-position-left.ui-panel-open.ui-panel-display-overlay,
 .ui-panel-animate.ui-panel-position-left.ui-panel-open.ui-panel-display-push {
-	-webkit-transform: translate3d(0,0,0);
-	-moz-transform: translate3d(0,0,0);
-	transform: translate3d(0,0,0);
+    -webkit-transform: translate3d(0,0,0);
+    -moz-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
 }
 /* panel right */
 .ui-panel-position-right {
-	right: -17em;
+    right: -17em;
 }
 /* animated: panel right (for overlay and push) */
 .ui-panel-animate.ui-panel-position-right.ui-panel-display-overlay,
 .ui-panel-animate.ui-panel-position-right.ui-panel-display-push {
-	right: 0;
-	-webkit-transform: translate3d(17em,0,0);
-	-moz-transform: translate3d(17em,0,0);
-	transform: translate3d(17em,0,0);
+    right: 0;
+    -webkit-transform: translate3d(17em,0,0);
+    -moz-transform: translate3d(17em,0,0);
+    transform: translate3d(17em,0,0);
 }
 /* panel right open */
 .ui-panel-position-right.ui-panel-display-reveal,  /* negate "panel right" for reveal */
 .ui-panel-position-right.ui-panel-open {
-	right: 0;
+    right: 0;
 }
 /* animated: panel right open (for overlay and push) */
 .ui-panel-animate.ui-panel-position-right.ui-panel-open.ui-panel-display-overlay,
 .ui-panel-animate.ui-panel-position-right.ui-panel-open.ui-panel-display-push {
-	-webkit-transform: translate3d(0,0,0);
-	-moz-transform: translate3d(0,0,0);
-	transform: translate3d(0,0,0);
+    -webkit-transform: translate3d(0,0,0);
+    -moz-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
 }
 
 /* positioning: content wrap, fixed toolbars and dismiss */
@@ -2050,145 +2050,145 @@ ol.ui-listview .ui-li-jsnumbering:before { content: "" !important; } /* to avoid
 .ui-panel-content-fixed-toolbar-position-left.ui-panel-content-fixed-toolbar-open,
 .ui-panel-content-wrap-position-left.ui-panel-content-wrap-open,
 .ui-panel-dismiss-position-left.ui-panel-dismiss-open {
-	left: 17em;
-	right: -17em;
+    left: 17em;
+    right: -17em;
 }
 /* animated: panel left open (for reveal and push) */
 .ui-panel-animate.ui-panel-content-fixed-toolbar-position-left.ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-reveal,
 .ui-panel-animate.ui-panel-content-fixed-toolbar-position-left.ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-push,
 .ui-panel-animate.ui-panel-content-wrap-position-left.ui-panel-content-wrap-open.ui-panel-content-wrap-display-reveal,
 .ui-panel-animate.ui-panel-content-wrap-position-left.ui-panel-content-wrap-open.ui-panel-content-wrap-display-push {
-	left: 0;
-	right: 0;
-	-webkit-transform: translate3d(17em,0,0);
-	-moz-transform: translate3d(17em,0,0);
-	transform: translate3d(17em,0,0);
+    left: 0;
+    right: 0;
+    -webkit-transform: translate3d(17em,0,0);
+    -moz-transform: translate3d(17em,0,0);
+    transform: translate3d(17em,0,0);
 }
 /* panel right open */
 .ui-panel-content-fixed-toolbar-position-right.ui-panel-content-fixed-toolbar-open,
 .ui-panel-content-wrap-position-right.ui-panel-content-wrap-open,
 .ui-panel-dismiss-position-right.ui-panel-dismiss-open {
-	left: -17em;
-	right: 17em;
+    left: -17em;
+    right: 17em;
 }
 /* animated: panel right open (for reveal and push) */
 .ui-panel-animate.ui-panel-content-fixed-toolbar-position-right.ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-reveal, 
 .ui-panel-animate.ui-panel-content-fixed-toolbar-position-right.ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-push,
 .ui-panel-animate.ui-panel-content-wrap-position-right.ui-panel-content-wrap-open.ui-panel-content-wrap-display-reveal, 
 .ui-panel-animate.ui-panel-content-wrap-position-right.ui-panel-content-wrap-open.ui-panel-content-wrap-display-push {
-	left: 0;
-	right: 0;
-	-webkit-transform: translate3d(-17em,0,0);
-	-moz-transform: translate3d(-17em,0,0);
-	transform: translate3d(-17em,0,0);
+    left: 0;
+    right: 0;
+    -webkit-transform: translate3d(-17em,0,0);
+    -moz-transform: translate3d(-17em,0,0);
+    transform: translate3d(-17em,0,0);
 }
 /* negate "panel left/right open" for overlay */
 .ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-overlay,
 .ui-panel-content-wrap-open.ui-panel-content-wrap-display-overlay {
-	left: 0;
+    left: 0;
 }
 
 /* always disable overflow-x to prevent zoom issue on Android */
 .ui-page-active.ui-page-panel {
-	overflow-x: hidden;
+    overflow-x: hidden;
 }
 
 /* shadows and borders */
 .ui-panel-display-reveal {
-	-webkit-box-shadow: inset -5px 0 5px rgba(0,0,0,.15);
-	-moz-box-shadow: inset -5px 0 5px rgba(0,0,0,.15);
-	box-shadow: inset -5px 0 5px rgba(0,0,0,.15);
+    -webkit-box-shadow: inset -5px 0 5px rgba(0,0,0,.15);
+    -moz-box-shadow: inset -5px 0 5px rgba(0,0,0,.15);
+    box-shadow: inset -5px 0 5px rgba(0,0,0,.15);
 }
 .ui-panel-position-right.ui-panel-display-reveal {
-	-webkit-box-shadow: inset 5px 0 5px rgba(0,0,0,.15);
-	-moz-box-shadow: inset 5px 0 5px rgba(0,0,0,.15);
-	box-shadow: inset 5px 0 5px rgba(0,0,0,.15);
+    -webkit-box-shadow: inset 5px 0 5px rgba(0,0,0,.15);
+    -moz-box-shadow: inset 5px 0 5px rgba(0,0,0,.15);
+    box-shadow: inset 5px 0 5px rgba(0,0,0,.15);
 }
 .ui-panel-position-right.ui-panel-display-overlay {
-	-webkit-box-shadow: -5px 0px 5px rgba(0,0,0,.15);
-	-moz-box-shadow: -5px 0px 5px rgba(0,0,0,.15);
-	box-shadow: -5px 0px 5px rgba(0,0,0,.15);
+    -webkit-box-shadow: -5px 0px 5px rgba(0,0,0,.15);
+    -moz-box-shadow: -5px 0px 5px rgba(0,0,0,.15);
+    box-shadow: -5px 0px 5px rgba(0,0,0,.15);
 }
 .ui-panel-position-left.ui-panel-display-overlay {
-	-webkit-box-shadow: 5px 0px 5px rgba(0,0,0,.15);
-	-moz-box-shadow: 5px 0px 5px rgba(0,0,0,.15);
-	box-shadow: 5px 0px 5px rgba(0,0,0,.15);
+    -webkit-box-shadow: 5px 0px 5px rgba(0,0,0,.15);
+    -moz-box-shadow: 5px 0px 5px rgba(0,0,0,.15);
+    box-shadow: 5px 0px 5px rgba(0,0,0,.15);
 }
 .ui-panel-display-push.ui-panel-open.ui-panel-position-left {
-	border-right-width: 1px;
-	margin-right: -1px;
+    border-right-width: 1px;
+    margin-right: -1px;
 }
 .ui-panel-animate.ui-panel-content-fixed-toolbar-position-left.ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-push {
-	margin-left: 1px;
+    margin-left: 1px;
 }
 .ui-panel-display-push.ui-panel-open.ui-panel-position-right {
-	border-left-width: 1px;
-	margin-left: -1px;
+    border-left-width: 1px;
+    margin-left: -1px;
 }
 .ui-panel-animate.ui-panel-content-fixed-toolbar-position-right.ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-push {
-	margin-right: 1px;
+    margin-right: 1px;
 }
 
 /* wrap on wide viewports once open */
 @media (min-width:55em){
-	.ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-push.ui-panel-content-fixed-toolbar-position-left,
-	.ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-reveal.ui-panel-content-fixed-toolbar-position-left,
-	.ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-push.ui-panel-content-wrap-position-left,
-	.ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-reveal.ui-panel-content-wrap-position-left {
-		margin-right: 17em;
-	}
-	.ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-push.ui-panel-content-fixed-toolbar-position-right,
-	.ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-reveal.ui-panel-content-fixed-toolbar-position-right,
-	.ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-push.ui-panel-content-wrap-position-right,
-	.ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-reveal.ui-panel-content-wrap-position-right {
-		margin-left: 17em;
-	}
-	.ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-push,
-	.ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-reveal {
-		width: auto;	
-	}
-	.ui-responsive-panel .ui-panel-dismiss-display-push {
-		display: none;
-	}	
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-push.ui-panel-content-fixed-toolbar-position-left,
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-reveal.ui-panel-content-fixed-toolbar-position-left,
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-push.ui-panel-content-wrap-position-left,
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-reveal.ui-panel-content-wrap-position-left {
+        margin-right: 17em;
+    }
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-push.ui-panel-content-fixed-toolbar-position-right,
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-reveal.ui-panel-content-fixed-toolbar-position-right,
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-push.ui-panel-content-wrap-position-right,
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-reveal.ui-panel-content-wrap-position-right {
+        margin-left: 17em;
+    }
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-push,
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-reveal {
+        width: auto;    
+    }
+    .ui-responsive-panel .ui-panel-dismiss-display-push {
+        display: none;
+    }    
 }
 
 
 .ui-popup-open .ui-header-fixed,
 .ui-popup-open .ui-footer-fixed {
-	position: absolute !important; 	/* See line #553 of popup.js */
+    position: absolute !important;     /* See line #553 of popup.js */
 }
 .ui-popup-screen {
-	background-image: url(data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==); /* Necessary to set some form of background to ensure element is clickable in IE6/7. While legacy IE won't understand the data-URI'd image, it ensures no additional requests occur in all other browsers with little overhead. */
-	top: 0px;
-	left: 0px;
-	right: 0px;
-	bottom: 1px;
-	position: absolute;
-	filter: Alpha(Opacity=0);
-	opacity: 0;
-	z-index: 1099;
+    background-image: url(data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==); /* Necessary to set some form of background to ensure element is clickable in IE6/7. While legacy IE won't understand the data-URI'd image, it ensures no additional requests occur in all other browsers with little overhead. */
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 1px;
+    position: absolute;
+    filter: Alpha(Opacity=0);
+    opacity: 0;
+    z-index: 1099;
 }
 .ui-popup-screen.in {
-	opacity: 0.5;
-	filter: Alpha(Opacity=50);
+    opacity: 0.5;
+    filter: Alpha(Opacity=50);
 }
 .ui-popup-screen.out {
-	opacity: 0;
-	filter: Alpha(Opacity=0);
+    opacity: 0;
+    filter: Alpha(Opacity=0);
 }
 .ui-popup-container {
-	z-index: 1100;
-	display: inline-block;
-	position: absolute;
-	padding: 0;
-	outline: 0;
+    z-index: 1100;
+    display: inline-block;
+    position: absolute;
+    padding: 0;
+    outline: 0;
 }
 .ui-popup {
-	position: relative;
+    position: relative;
 }
 .ui-popup.ui-content,
 .ui-popup .ui-content {
-	overflow: visible;
+    overflow: visible;
 }
 .ui-popup > p,
 .ui-popup > h1,
@@ -2197,17 +2197,17 @@ ol.ui-listview .ui-li-jsnumbering:before { content: "" !important; } /* to avoid
 .ui-popup > h4,
 .ui-popup > h5,
 .ui-popup > h6 {
-	margin: .5em 7px;
+    margin: .5em 7px;
 }
 .ui-popup > span {
-	display: block;
-	margin: .5em 7px;
+    display: block;
+    margin: .5em 7px;
 }
 .ui-popup .ui-title {
-	font-size: 16px;
-	font-weight: bold;
-	margin-top: .5em;
-	margin-bottom: .5em;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: .5em;
+    margin-bottom: .5em;
 }
 .ui-popup-container .ui-content > p,
 .ui-popup-container .ui-content > h1,
@@ -2216,10 +2216,10 @@ ol.ui-listview .ui-li-jsnumbering:before { content: "" !important; } /* to avoid
 .ui-popup-container .ui-content > h4,
 .ui-popup-container .ui-content > h5,
 .ui-popup-container .ui-content > h6 {
-	margin: .5em 0;
+    margin: .5em 0;
 }
 .ui-popup-container .ui-content > span {
-	margin: 0;
+    margin: 0;
 }
 .ui-popup-container .ui-content > p:first-child,
 .ui-popup-container .ui-content > h1:first-child,
@@ -2228,7 +2228,7 @@ ol.ui-listview .ui-li-jsnumbering:before { content: "" !important; } /* to avoid
 .ui-popup-container .ui-content > h4:first-child,
 .ui-popup-container .ui-content > h5:first-child,
 .ui-popup-container .ui-content > h6:first-child {
-	margin-top: 0;
+    margin-top: 0;
 }
 .ui-popup-container .ui-content > p:last-child,
 .ui-popup-container .ui-content > h1:last-child,
@@ -2237,47 +2237,47 @@ ol.ui-listview .ui-li-jsnumbering:before { content: "" !important; } /* to avoid
 .ui-popup-container .ui-content > h4:last-child,
 .ui-popup-container .ui-content > h5:last-child,
 .ui-popup-container .ui-content > h6:last-child {
-	margin-bottom: 0;
+    margin-bottom: 0;
 }
 .ui-popup > img {
-	width: auto;
-	height: auto;
-	max-width: 100%;
-	max-height: 100%;
-	vertical-align: middle;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    vertical-align: middle;
 }
 .ui-popup:not(.ui-content) > img:only-child,
 .ui-popup:not(.ui-content) > .ui-btn-left:first-child + img:last-child,
 .ui-popup:not(.ui-content) > .ui-btn-right:first-child + img:last-child {
-	-webkit-border-radius: inherit;
-	border-radius: inherit;
+    -webkit-border-radius: inherit;
+    border-radius: inherit;
 }
 .ui-popup iframe {
-	vertical-align: middle;
+    vertical-align: middle;
 }
 
 @media all and (min-width: 28em){
-	.ui-popup .ui-field-contain label.ui-submit,
-	.ui-popup .ui-field-contain .ui-controlgroup-label,
-	.ui-popup .ui-field-contain label.ui-select,
-	.ui-popup .ui-field-contain label.ui-input-text {
-		font-size: 16px; line-height: 1.4; display: block; font-weight: normal; margin: 0 0 .3em;
-	}
-	.ui-popup .ui-field-contain .ui-btn.ui-submit,
-	.ui-popup .ui-field-contain .ui-controlgroup-controls,
-	.ui-popup .ui-field-contain .ui-select,
-	.ui-popup .ui-field-contain input.ui-input-text,
-	.ui-popup .ui-field-contain textarea.ui-input-text,
-	.ui-popup .ui-field-contain .ui-input-search {
-		width: 100%; display: block;
-	}
+    .ui-popup .ui-field-contain label.ui-submit,
+    .ui-popup .ui-field-contain .ui-controlgroup-label,
+    .ui-popup .ui-field-contain label.ui-select,
+    .ui-popup .ui-field-contain label.ui-input-text {
+        font-size: 16px; line-height: 1.4; display: block; font-weight: normal; margin: 0 0 .3em;
+    }
+    .ui-popup .ui-field-contain .ui-btn.ui-submit,
+    .ui-popup .ui-field-contain .ui-controlgroup-controls,
+    .ui-popup .ui-field-contain .ui-select,
+    .ui-popup .ui-field-contain input.ui-input-text,
+    .ui-popup .ui-field-contain textarea.ui-input-text,
+    .ui-popup .ui-field-contain .ui-input-search {
+        width: 100%; display: block;
+    }
 }
 .ui-popup > .ui-btn-left,
 .ui-popup > .ui-btn-right {
-	position: absolute; 
-	top: -9px;
-	margin: 0;
-	z-index: 1101;
+    position: absolute; 
+    top: -9px;
+    margin: 0;
+    z-index: 1101;
 }
 .ui-popup > .ui-btn-left { left: -9px; }
 .ui-popup > .ui-btn-right { right: -9px; }
@@ -2311,23 +2311,23 @@ ol.ui-listview .ui-li-jsnumbering:before { content: "" !important; } /* to avoid
 }
 
 .fade.out {
-	opacity: 0;
-	-webkit-animation-duration: 125ms;
-	-webkit-animation-name: fadeout;
-	-moz-animation-duration: 125ms;
-	-moz-animation-name: fadeout;
-	animation-duration: 125ms;
-	animation-name: fadeout;
+    opacity: 0;
+    -webkit-animation-duration: 125ms;
+    -webkit-animation-name: fadeout;
+    -moz-animation-duration: 125ms;
+    -moz-animation-name: fadeout;
+    animation-duration: 125ms;
+    animation-name: fadeout;
 }
 
 .fade.in {
-	opacity: 1;
-	-webkit-animation-duration: 225ms;
-	-webkit-animation-name: fadein;
-	-moz-animation-duration: 225ms;
-	-moz-animation-name: fadein;
-	animation-duration: 225ms;
-	animation-name: fadein;
+    opacity: 1;
+    -webkit-animation-duration: 225ms;
+    -webkit-animation-name: fadein;
+    -moz-animation-duration: 225ms;
+    -moz-animation-name: fadein;
+    animation-duration: 225ms;
+    animation-name: fadein;
 }
 
 
@@ -2346,7 +2346,7 @@ ol.ui-listview .ui-li-jsnumbering:before { content: "" !important; } /* to avoid
 }
 .ui-table th .ui-btn,
 .ui-table td .ui-btn {
-	line-height: normal;
+    line-height: normal;
 }
 .ui-table th {
   font-weight: bold;
@@ -2389,30 +2389,30 @@ ol.ui-listview .ui-li-jsnumbering:before { content: "" !important; } /* to avoid
 */
 
 .ui-table-columntoggle-btn {
-	float: right;
-	margin-bottom:.8em;
+    float: right;
+    margin-bottom:.8em;
 }
 /* Remove top/bottom margins around the fieldcontain on check list */
 .ui-table-columntoggle-popup fieldset {
-	margin:0;
+    margin:0;
 }
 
 /* Hide all prioritized columns by default */
 @media only all {
-	th.ui-table-priority-6,
-	td.ui-table-priority-6,
-	th.ui-table-priority-5,
-	td.ui-table-priority-5,
-	th.ui-table-priority-4,
-	td.ui-table-priority-4,
-	th.ui-table-priority-3,
-	td.ui-table-priority-3,
-	th.ui-table-priority-2,
-	td.ui-table-priority-2,
-	th.ui-table-priority-1,
-	td.ui-table-priority-1 {
-		display: none;
-	}
+    th.ui-table-priority-6,
+    td.ui-table-priority-6,
+    th.ui-table-priority-5,
+    td.ui-table-priority-5,
+    th.ui-table-priority-4,
+    td.ui-table-priority-4,
+    th.ui-table-priority-3,
+    td.ui-table-priority-3,
+    th.ui-table-priority-2,
+    td.ui-table-priority-2,
+    th.ui-table-priority-1,
+    td.ui-table-priority-1 {
+        display: none;
+    }
 }
 
 
@@ -2420,45 +2420,45 @@ ol.ui-listview .ui-li-jsnumbering:before { content: "" !important; } /* to avoid
 
 /* Show priority 1 at 320px (20em x 16px) */
 @media screen and (min-width: 20em) {
-	.ui-table-columntoggle.ui-responsive th.ui-table-priority-1,
-	.ui-table-columntoggle.ui-responsive td.ui-table-priority-1 {
-		display: table-cell;
-	}
+    .ui-table-columntoggle.ui-responsive th.ui-table-priority-1,
+    .ui-table-columntoggle.ui-responsive td.ui-table-priority-1 {
+        display: table-cell;
+    }
 }
 /* Show priority 2 at 480px (30em x 16px) */
 @media screen and (min-width: 30em) {
-	.ui-table-columntoggle.ui-responsive th.ui-table-priority-2,
-	.ui-table-columntoggle.ui-responsive td.ui-table-priority-2 {
-		display: table-cell;
-	}
+    .ui-table-columntoggle.ui-responsive th.ui-table-priority-2,
+    .ui-table-columntoggle.ui-responsive td.ui-table-priority-2 {
+        display: table-cell;
+    }
 }
 /* Show priority 3 at 640px (40em x 16px) */
 @media screen and (min-width: 40em) {
-	.ui-table-columntoggle.ui-responsive th.ui-table-priority-3,
-	.ui-table-columntoggle.ui-responsive td.ui-table-priority-3 {
-		display: table-cell;
-	}
+    .ui-table-columntoggle.ui-responsive th.ui-table-priority-3,
+    .ui-table-columntoggle.ui-responsive td.ui-table-priority-3 {
+        display: table-cell;
+    }
 }
 /* Show priority 4 at 800px (50em x 16px) */
 @media screen and (min-width: 50em) {
-	.ui-table-columntoggle.ui-responsive th.ui-table-priority-4,
-	.ui-table-columntoggle.ui-responsive td.ui-table-priority-4 {
-		display: table-cell;
-	}
+    .ui-table-columntoggle.ui-responsive th.ui-table-priority-4,
+    .ui-table-columntoggle.ui-responsive td.ui-table-priority-4 {
+        display: table-cell;
+    }
 }
 /* Show priority 5 at 960px (60em x 16px) */
 @media screen and (min-width: 60em) {
-	.ui-table-columntoggle.ui-responsive th.ui-table-priority-5,
-	.ui-table-columntoggle.ui-responsive td.ui-table-priority-5 {
-		display: table-cell;
-	}
+    .ui-table-columntoggle.ui-responsive th.ui-table-priority-5,
+    .ui-table-columntoggle.ui-responsive td.ui-table-priority-5 {
+        display: table-cell;
+    }
 }
 /* Show priority 6 at 1,120px (70em x 16px) */
 @media screen and (min-width: 70em) {
-	.ui-table-columntoggle.ui-responsive th.ui-table-priority-6,
-	.ui-table-columntoggle.ui-responsive td.ui-table-priority-6 {
-		display: table-cell;
-	}
+    .ui-table-columntoggle.ui-responsive th.ui-table-priority-6,
+    .ui-table-columntoggle.ui-responsive td.ui-table-priority-6 {
+        display: table-cell;
+    }
 }
 
 
@@ -2467,7 +2467,7 @@ ol.ui-listview .ui-li-jsnumbering:before { content: "" !important; } /* to avoid
 .ui-table-columntoggle td.ui-table-cell-hidden,
 .ui-table-columntoggle.ui-responsive th.ui-table-cell-hidden,
 .ui-table-columntoggle.ui-responsive td.ui-table-cell-hidden {
-	display: none;
+    display: none;
 }
 
 /* Checked manually: Always show */
@@ -2475,7 +2475,7 @@ ol.ui-listview .ui-li-jsnumbering:before { content: "" !important; } /* to avoid
 .ui-table-columntoggle td.ui-table-cell-visible,
 .ui-table-columntoggle.ui-responsive th.ui-table-cell-visible,
 .ui-table-columntoggle.ui-responsive td.ui-table-cell-visible {
-	display: table-cell;
+    display: table-cell;
 }
 
 
@@ -2484,85 +2484,85 @@ ol.ui-listview .ui-li-jsnumbering:before { content: "" !important; } /* to avoid
 */
 .ui-table-reflow td .ui-table-cell-label,
 .ui-table-reflow th .ui-table-cell-label { 
-	display: none;
+    display: none;
 }
 
 /* Mobile first styles: Begin with the stacked presentation at narrow widths */ 
 @media only all {
-	/* Hide the table headers */ 
-	.ui-table-reflow thead td, 
-	.ui-table-reflow thead th {
-		display: none;
-	}
-	/* Show the table cells as a block level element */ 
-	.ui-table-reflow td,
-	.ui-table-reflow th { 
-		text-align: left;
-		display: block;
-	}
-	/* Add a fair amount of top margin to visually separate each row when stacked */  
-	.ui-table-reflow tbody th {
-		margin-top: 3em;
-	}
-	/* Make the label elements a percentage width */ 
-	.ui-table-reflow td .ui-table-cell-label,
-	.ui-table-reflow th .ui-table-cell-label { 
-		display: block;
-		padding: .4em; 
-		min-width: 30%; 
-		display: inline-block;
-		margin: -.4em 1em -.4em -.4em;
-	}
-	/* For grouped headers, have a different style to visually separate the levels by classing the first label in each col group */ 
-	.ui-table-reflow th .ui-table-cell-label-top,
-	.ui-table-reflow td .ui-table-cell-label-top {
-		display: block;
-		padding: .4em 0;
-		margin: .4em 0;
-		text-transform: uppercase;
-		font-size: .9em;
-		font-weight: normal;
-	}
+    /* Hide the table headers */ 
+    .ui-table-reflow thead td, 
+    .ui-table-reflow thead th {
+        display: none;
+    }
+    /* Show the table cells as a block level element */ 
+    .ui-table-reflow td,
+    .ui-table-reflow th { 
+        text-align: left;
+        display: block;
+    }
+    /* Add a fair amount of top margin to visually separate each row when stacked */  
+    .ui-table-reflow tbody th {
+        margin-top: 3em;
+    }
+    /* Make the label elements a percentage width */ 
+    .ui-table-reflow td .ui-table-cell-label,
+    .ui-table-reflow th .ui-table-cell-label { 
+        display: block;
+        padding: .4em; 
+        min-width: 30%; 
+        display: inline-block;
+        margin: -.4em 1em -.4em -.4em;
+    }
+    /* For grouped headers, have a different style to visually separate the levels by classing the first label in each col group */ 
+    .ui-table-reflow th .ui-table-cell-label-top,
+    .ui-table-reflow td .ui-table-cell-label-top {
+        display: block;
+        padding: .4em 0;
+        margin: .4em 0;
+        text-transform: uppercase;
+        font-size: .9em;
+        font-weight: normal;
+    }
 }
 
 
 /* Breakpoint to show as a standard table at 560px (35em x 16px) or wider */ 
 @media ( min-width: 35em ) {
 
-	/* Fixes table rendering when switching between breakpoints in Safari <= 5. See https://github.com/jquery/jquery-mobile/issues/5380 */
-	.ui-table-reflow.ui-responsive {
-		display: table-row-group;
-	}
+    /* Fixes table rendering when switching between breakpoints in Safari <= 5. See https://github.com/jquery/jquery-mobile/issues/5380 */
+    .ui-table-reflow.ui-responsive {
+        display: table-row-group;
+    }
 
-	/* Show the table header rows */ 
-	.ui-table-reflow.ui-responsive td,
-	.ui-table-reflow.ui-responsive th,
-	.ui-table-reflow.ui-responsive tbody th,
-	.ui-table-reflow.ui-responsive tbody td,
-	.ui-table-reflow.ui-responsive thead td,
-	.ui-table-reflow.ui-responsive thead th {
-		display: table-cell;
-		margin: 0;
-	}
+    /* Show the table header rows */ 
+    .ui-table-reflow.ui-responsive td,
+    .ui-table-reflow.ui-responsive th,
+    .ui-table-reflow.ui-responsive tbody th,
+    .ui-table-reflow.ui-responsive tbody td,
+    .ui-table-reflow.ui-responsive thead td,
+    .ui-table-reflow.ui-responsive thead th {
+        display: table-cell;
+        margin: 0;
+    }
 
-	/* Hide the labels in each cell */ 
-	.ui-table-reflow.ui-responsive td .ui-table-cell-label,
-	.ui-table-reflow.ui-responsive th .ui-table-cell-label { 
-		display: none;
-	}
+    /* Hide the labels in each cell */ 
+    .ui-table-reflow.ui-responsive td .ui-table-cell-label,
+    .ui-table-reflow.ui-responsive th .ui-table-cell-label { 
+        display: none;
+    }
 }
 
 
 /* Hack to make IE9 and WP7.5 treat cells like block level elements, scoped to ui-responsive class */ 
 /* Applied in a max-width media query up to the table layout breakpoint so we don't need to negate this*/ 
 @media ( max-width: 35em ) {
-	.ui-table-reflow.ui-responsive td,
-	.ui-table-reflow.ui-responsive th {
-		width: 100%;
-		-webkit-box-sizing: border-box;
-		-moz-box-sizing: border-box;
-		box-sizing: border-box;
-		float: left;
-		clear: left;
-	}
+    .ui-table-reflow.ui-responsive td,
+    .ui-table-reflow.ui-responsive th {
+        width: 100%;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        float: left;
+        clear: left;
+    }
 }

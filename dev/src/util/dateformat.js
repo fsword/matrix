@@ -1,7 +1,8 @@
 /**
  * @class MX.util.DateFormatFormat
+ * @alias dateformat
  * 
- * DateFormat来自Ext3.4.0的源码
+ * DateFormat类来自Ext3.4.0的源码
  * 
  * A set of useful static methods to deal with date
  * Note that if MX.util.DateFormat is required and loaded, it will copy all methods / properties to

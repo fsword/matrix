@@ -13,9 +13,7 @@ window.MX = {
         toString = Object.prototype.toString,
         $ = window.jQuery,
         artTemplate = window.template,
-        iScroll = window.iScroll,
         ua = window.navigator.userAgent,
-        webkit = ua.match(/WebKit\/([\d.]+)/),
         android = ua.match(/(Android)[\/\s+]([\d.]+)/),
         ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
         iphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
@@ -26,7 +24,25 @@ window.MX = {
         os;
     
     /**
-     * 声明命名空间
+     * 声明命名空间，用法如下：
+     *
+     * <code>
+     *  MX.namespace('NS.core', 'NS.util');
+     *
+     *  alert(typeof NS.core); // alert 'object'
+     *
+     *  alert(typeof NS.util); // alert 'object'
+     *
+     *  //有了命名空间之后，就可以直接在命名空间下声明类
+     *  NS.util.Format = {
+     *
+     *      // ...
+     *
+     *  };
+     * </code>
+     *
+     * @param {String} namespace1
+     * @param {String...} namespace2...n
      */
     X.namespace = function() {
         var len1 = arguments.length,
@@ -53,15 +69,18 @@ window.MX = {
         }
         return current;
     };
-    
-    // 命名空间函数的简写
+
+    /**
+     * 命名空间函数的缩写方法名
+     * @param {String} namespace1
+     * @param {String...} namespace2...n
+     */
     X.ns = X.namespace;
-    X.ns('MX.lib', 'MX.klass', 'MX.app', 'MX.lib', 'MX.util');
+    X.ns('MX.lib', 'MX.klass', 'MX.lib', 'MX.util', 'MX.app');
     
     $.extend(X.lib, {
         jQuery: $,
-        artTemplate: artTemplate,
-        iScroll: iScroll
+        artTemplate: artTemplate
     });
     if (artTemplate) {
         artTemplate.openTag = '<#';
@@ -222,13 +241,24 @@ window.MX = {
         os.kindle = true;
         os.version = kindle[1];
     }
-    
+
     $.extend(X, {
         /**
-         * 操作系统信息
+         * 移动设备操作系统信息，可能会包含一下属性:
+         *
+         * true表示为当前操作系统
+         *  Boolean : ios
+         *  Boolean : android
+         *  Boolean : webos
+         *  Boolean : touchpad
+         *  Boolean : blackberry
+         *  Boolean : kindle
+         *
+         *  String : version 系统版本号
+         *
          */
         os: os,
-        
+
         /**
          * 将config包含的属性，合并到object对象，如果object已存在相同的属性名，则忽略合并
          * @param {Object} object
@@ -249,10 +279,35 @@ window.MX = {
         },
         
         /**
-         * 将对象转换成数组
+         * 将对象转换成数组，包含以下几种参数传递方式：
+         *
+         * <code>
+         *  var arr = MX.toArray('a', 'b', 'c');
+         *
+         *  // 输出 ['a', 'b', 'c']
+         *  alert(arr);
+         *
+         *
+         *  arr = MX.toArray();
+         *
+         *  // 输出 []
+         *  alert(arr);
+         *
+         *
+         *  function fn() {
+         *      return MX.toArray(arguments);
+         *  }
+         *
+         *  arr = fn('a', 'b', 'c');
+         *
+         *  // 输出 ['a', 'b', 'c']
+         *  alert(arr);
+         *
+         * </code>
+         *
          */
         toArray: function(obj) {
-            if (!obj) {
+            if (!X.isDefined(obj)) {
                 return [];
             } else if (X.isArray(obj)) {
                 return slice.call(obj);
@@ -264,8 +319,7 @@ window.MX = {
         },
         
         /**
-         * 遍历一个$.each的封装类，允许指定回调函数的作用域
-         * 
+         * 遍历一个对象或数组，$.each的封装类，允许指定回调函数的作用域
          * @param {Element/Array} obj 遍历的对象或数组
          * @param {Function} fn 遍历对象的回调函数
          * @param {Object} scope 回调函数作用域
@@ -298,6 +352,7 @@ window.MX = {
          * @param {Number} millis The number of milliseconds for the setTimeout call (if less than or equal to 0 the function is executed immediately)
          * @param {Object} scope (optional) The scope (<code><b>this</b></code> reference) in which the function is executed.
          * <b>If omitted, defaults to the browser window.</b>
+         * @param {Array} args (optionls) 回调函数的形参
          * @return {Number} The timeout id that can be used with clearTimeout
          */
         defer: function(fn, millis, scope, args) {
@@ -314,7 +369,55 @@ window.MX = {
     
     $.extend(X, {
         /**
-         * Specify a function to execute
+         * 声明一个匿名函数工作空间，并执行。同时进行类依赖管理，将依赖类对象作为参数传给回调函数
+         *
+         * 回调函数形参的第一个参数默认为MX，例如：
+         * <code>
+         *  // 不依赖任何类，直接执行回调，第一个参数为MX对象
+         *  MX.kindle(function(X) {
+         *      // 输出true
+         *      alert(X.isBoolean(true));
+         *  });
+         * </code>
+         *
+         * 处理类的依赖关系，类依赖使用alias属性，也可以直接是一个对象：
+         * <code>
+         *  MX.kindle('jquery', function(X, $) {
+         *      // 输出true
+         *      alert(window.jQuery == $;
+         *  });
+         *
+         *  // 又或者是
+         *
+         *  MX.kindle('jquery', 'klass', function(X, $, Klass) {
+         *
+         *      var Cls1 = Klass.define({
+         *          say: function() {
+         *              alert('hello');
+         *          }
+         *      });
+         *
+         *      // 输出'hello'
+         *      new Cls1().say();
+         *  });
+         *
+         *  // 直接依赖对象
+         *  MX.kindle('jquery', MX.klass.Klass, function(X, $, Klass) {
+         *
+         *      var Cls1 = Klass.define({
+         *          say: function() {
+         *              alert('hello');
+         *          }
+         *      });
+         *
+         *      // 输出'hello'
+         *      new Cls1().say();
+         *  });
+         * </code>
+         *
+         * @param {String} alias 类对象的别名
+         * @param {String} alias1...n {optional}
+         * @param {Function} callback 回调函数
          */
         kindle: function() {
             var args = X.toArray(arguments),
@@ -329,7 +432,23 @@ window.MX = {
         },
         
         /**
-         * 代理$.ready()函数，并引入MX.kindle类依赖机制
+         * 代理$.ready()函数，并具备MX.kindle()的特性
+         *
+         * MX.kindle()是立即执行回调函数
+         *
+         * MX.ready()是当DOM准备就绪时，才执行回调函数
+         *
+         * 基本用法：
+         * <code>
+         *  MX.ready('jquery', function(X, $) {
+         *      // 输出true
+         *      alert(window.jQuery == $;
+         *  });
+         * </code>
+         *
+         * @param {String} alias 类对象的别名
+         * @param {String} alias1...n {optional}
+         * @param {Function} callback 回调函数
          */
         ready: function() {
             var args = X.toArray(arguments);
@@ -341,20 +460,44 @@ window.MX = {
 })(MX);
 /**
  * @class MX.klass.KlassManager
+ * @alias klassmanager
+ *
+ * 类管理器，管理类对象与alias的映射关系
+ *
+ * Matrix框架的几个依赖库的alias分别是：
+ *      jQuery对应'$'或'jquery'
+ *      artTemplate对应'arttemplate'
+ *
  */
 (function(X) {
     X.klass.KlassManager = function() {
         var classes = {};
         
         var pub = {
+            /**
+             * 为一个类对象注册一个alias
+             * @param {String} alias 别名
+             * @param {Class} klass 类对象
+             */
             register: function(alias, klass) {
                 classes[alias] = klass;
             },
-            
+
+            /**
+             * 通过alias获取类对象
+             * @param {String} alias 别名
+             * @return {Class} 类对象
+             */
             get: function(alias) {
                 return X.isString(alias) ? classes[alias] : alias;
             },
-            
+
+            /**
+             * 实例化一个类对象
+             * @param {String} alias 别名
+             * @param {Object} config 配置参数
+             * @returns {Object} 实例对象
+             */
             create: function(alias, config) {
                 var cls = pub.get(alias);
                 return new cls(config);
@@ -366,25 +509,41 @@ window.MX = {
     
     /**
      * @memberOf MX
+     * 为MX对象增加KlassManager.register()映射函数，使用MX.reg快速访问register函数
+     * @param {String} alias 别名
+     * @param {Class} klass 类对象
      */
     X.reg = X.klass.KlassManager.register;
+
+    /**
+     * @memberOf MX
+     * 为MX对象增加KlassManager.get()映射函数，使用MX.getClass快速访问get函数
+     * @param {String} alias 别名
+     * @return {Class} 类对象
+     */
+    X.getClass = X.klass.KlassManager.get;
     
     /**
      * @memberOf MX
+     * 为MX对象增加KlassManager.create()映射函数，使用MX.create快速访问create函数
+     * @param {String} alias 别名
+     * @param {Object} config 配置参数
+     * @returns {Object} 实例对象
      */
     X.create = X.klass.KlassManager.create;
-    
+
+    // 注册几个MX框架依赖库的alias
     X.reg('$', X.lib.jQuery);
     X.reg('jquery', X.lib.jQuery);
     X.lib.artTemplate && X.reg('arttemplate', X.lib.artTemplate);
-    X.lib.iScroll && X.reg('iscroll', X.lib.iScroll);
-    
+
     X.reg('klassmanager', X.klass.KlassManager);
 })(MX);
 /**
  * @class MX.klass.Base
- * 
- * 所有使用Class.define()方法声明类的基类
+ * @alias base
+ *
+ * Class基类，使用Klass.define()方法声明类继承的顶级父类
  */
 MX.kindle('jquery', function(X, $) {
     var enumerables = ['hasOwnProperty', 'valueOf', 'isPrototypeOf', 'propertyIsEnumerable', 'toLocaleString', 'toString', 'constructor'],
@@ -502,7 +661,8 @@ MX.kindle('jquery', function(X, $) {
 });
 /**
  * @class MX.klass.Klass
- * 
+ * @alias klass
+ *
  * 声明类，类的继承，重写类方法
  */
 MX.kindle('base', 'klassmanager', function(X, Base, KlassManager) {
@@ -544,7 +704,7 @@ MX.kindle('base', 'klassmanager', function(X, Base, KlassManager) {
     X.klass.Klass = {
         /**
          * 声明一个类，或继承自一个父类，子类拥有父类的所有prototype定义的特性，
-         * 如未定义extend属性，默认继承class.Base类，例子：
+         * 如未定义extend属性，默认继承MX.klass.Base类，例子：
          * <code>
          *  var Cls1 = Klass.define({
          *      constructor: function(name) {
@@ -621,12 +781,10 @@ MX.kindle('base', 'klassmanager', function(X, Base, KlassManager) {
          *  cls1.sayHello(); // 输出 'hello world!'
          * </code>
          * 
-         * 如果要为函数的某个方法定义别名，切忌使用override，应该像下面这样处理：
+         * 如果想为类的方法定义一个新的别名，应该使用下面的方式，不能使用override函数：
          * <code>
-         *  $.extend(Cls1.prototype, {
-         *      speak: Cls1.prototype.say
-         *  });
-         *  
+         *  Cls1.prototype.speak = Cls1.prototype.say;
+         *
          *  var cls1 = new Cls1();
          *  cls1.speak(); // 输出 'Max  say: hello, I'm Max, nice to meet you!'
          * </code>
