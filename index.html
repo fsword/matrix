@@ -44,7 +44,7 @@
 
 <h2>功能特性</h2>
 
-<h3>MVC</h3>
+<h3>MVC框架</h3>
 
 <p>Matrix是一个高度集成jQuery Mobile的MVC框架，它将jQuery Mobile的UI、事件控制等功能结构化，让开发者更少的纠结在jQuery Mobile以及如何构建页面本身，更多的专注在业务开发上。</p>
 
@@ -56,24 +56,43 @@
 
 <p>Model/Store数据更改之后，模版会自动更新绑定的页面视图区域，无需更多的额外编码。</p>
 
-<h2>Hello World!</h2>
+<h2>支持平台</h2>
+
+<ul>
+<li>iOS 5+</li>
+<li>Android 4+</li>
+<li>Windows Phone 8+ (建设中)</li>
+</ul><h2>Hello World!</h2>
 
 <p>使用Matrix非常简单，从第一个例子<a href="https://github.com/mxjs/matrix/tree/master/examples/helloworld/" title="Example">Hello World</a>开始吧</p>
 
 <pre><code>MX.ready('klass', function(X, Klass) {
+    // 声明一个View类
     Klass.define({
+        // 为DemoView类定义别名
         alias: 'demo.view',
+
+        // 继承MX.app.View类
         extend: 'view',
+
         onRender: function() {
+            // 更新body对象的HTML，body是一个jquery element对象
             this.body.html('Hello World!');
         }
     });
+
+    // 启动App
     X.App.launch({
-        pagelets: [{
-            id: 'demo-pagelet',
-            url: 'h',
-            view: 'demo.view'
-        }],
+        // 定义pagelet
+        pagelets: [
+            {
+                id: 'demo-pagelet', // pagelet唯一标识
+                url: 'h', // pagelet访问路径
+                view: 'demo.view' // 为pagelet设置一个View
+            }
+        ],
+
+        // App的默认欢迎页
         welcome: 'h'
     });
 });
@@ -81,11 +100,37 @@
 
 <h2>一个比较完整的例子：手机搜狐</h2>
 
-<p>你可以直接从手机浏览器打开<a href="http://mxjs.github.com/matrix/dev/examples/msohu/index.html" title="手机搜狐（向Zaker致敬）">手机搜狐WebApp</a>，为了达到最佳展示效果，请使用iphone safari打开，并将页面添加到你的桌面。</p>
+<p><a href="http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html" title="手机搜狐（向Zaker致敬）">手机搜狐WebApp</a>的功能完全仿照ZAKER for iPhone开发。</p>
 
-<p>直接用手机扫描下面的二维码，就可以访问<a href="http://mxjs.github.com/matrix/dev/examples/msohu/index.html" title="手机搜狐（向Zaker致敬）">手机搜狐WebApp</a></p>
+<p>你可以直接从手机浏览器打开<a href="http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html" title="手机搜狐（向Zaker致敬）">手机搜狐WebApp</a>，为了达到最佳展示效果，请使用iOS Safari，并将页面添加到你的桌面，然后从桌面打开进入。</p>
 
-<p><img src="http://mxjs.github.com/matrix/dev/examples/msohu/qrcode.png" alt="QR Code"></p>
+<p>直接用手机扫描下面的二维码，就可以访问<a href="http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html" title="手机搜狐（向Zaker致敬）">手机搜狐WebApp</a></p>
+
+<p><img src="http://mxjs.github.io/matrix/dev/examples/msohu/qrcode.png" alt="QR Code"></p>
+
+<h2>Examples</h2>
+
+<ul>
+<li><a href="http://mxjs.github.io/matrix/dev/examples/helloworld/index.html" title="Hello World">Hello World</a></li>
+<li>Use Template (建设中)</li>
+<li>Use Model (建设中)</li>
+<li>Use Store (建设中)</li>
+<li>Use jQuery Mobile Widget (建设中)</li>
+<li>Use RequireJS (建设中)</li>
+<li>Use SeaJS (建设中)</li>
+<li><a href="http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html" title="手机搜狐（向Zaker致敬）">手机搜狐WebApp</a></li>
+</ul><h2>Downloads</h2>
+
+<ul>
+<li>
+<a href="http://mxjs.github.io/matrix/tags/matrix-0.1.1.zip" title="matrix-0.1.1.zip">v0.1.1</a>(latest version)</li>
+</ul><h2>Change Log</h2>
+
+<h3>v0.1.1 (2013/4/19)</h3>
+
+<ul>
+<li>第一个版本发布</li>
+</ul>
       </section>
 
     </div>
