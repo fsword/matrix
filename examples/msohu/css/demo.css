@@ -856,7 +856,8 @@ ul {
 .footer .btn_ft {
     width: 24px;
     height: 24px;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
+    margin-top: -3px;
     display: block;
     padding:0 10px;
     text-indent: -999em;
