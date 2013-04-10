@@ -3,6 +3,11 @@
  * @alias application
  *
  * Appliaction主程序类，整合WebApp中使用的资源，管理页面视图
+ *
+ * Matrix框架的Appliaction是一个Single Page Web Application，
+ * App的Pagelet视图是基于模版渲染，还不支持由外部加载页面内容作为页面视图的功能，类似jQuery mobile Navigation
+ *
+ * 当hash发生改变时，App加载hash对应的pagelet，然后，pagelet使用view绑定的template渲染试图
  */
 MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, LocalStorage, Pagelet) {
     var $window = $(window),
@@ -22,14 +27,19 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 
         /**
          * @cfg {String} templateVersion 模版库版本号
+         * 当App初始化时，如果本地版本号与服务端版本号不同，则会自动更新模版文件
+         * 并将最新的版本号存储在localStorage中，等待下一次启动App时调用
+         */
+        templateVersion: '1.0',
+
+        /**
+         * @cfg {String} templateUrl 更新模版请求的URL
+         * 模版文件以String类型存储的localStorage中
          */
 
         /**
-         * @cfg {String} templateUrl 模版更新URL
-         */
-
-        /**
-         * @cfg {Boolean} useWebDatabase true启动Web SQL Database缓存，全局配置参数，影响model、store调用db接口
+         * @cfg {Boolean} useWebDatabase true启动Web SQL Database缓存
+         * 全局配置参数，当useWebDatabase设置为false时，会那么App中所有使用Cache的model、store都会被影响
          */
         useWebDatabase: true,
 
@@ -40,6 +50,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 
         /**
          * @cfg {String} databaseName 数据库名称，默认undefined
+         * 如果数据库名称未设置，则useWebDatabase会被设置为false
          */
 
         /**
@@ -58,11 +69,13 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 
         /**
          * @cfg {Number} pageletCacheSize pagelet缓存大小，默认为30
+         * 最小不能小于3，如果设置一个小于3的值，会被重置为3
          */
         pageletCacheSize: 30,
 
         /**
          * @cfg {String} startUpSelector 启动画面selector
+         * 在App初次加载页面时，画面由启动页过渡到第一个页面
          */
         startUpSelector: 'div#startUpView',
 
@@ -79,6 +92,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
             // pagelet缓存池
             this.pageletCaches = this.pageletCaches || [];
 
+            // 页面访问历史管理器，记录页面访问路径，X.App.back()方法使用history找回访问路径的上一个页面的hash
             this.history = new $.mobile.History();
         },
 
@@ -87,42 +101,68 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
             this.addEvents(
                 /**
                  * @event beforelaunch
+                 * 当App启动之前调用，返回false则终止App启动
+                 * @param {App} app 当前App实例对象
                  */
                 'beforelaunch',
                 /**
                  * @event launch
+                 * 当App启动完成时调用
+                 * @param {App} app 当前App实例对象
                  */
                 'launch',
                 /**
                  * @event pagebeforechange
+                 * 当页面切换之前调用，返回false则终止页面切换
+                 * @param {Pagelet} nextPagelet 进入的pagelet
+                 * @param {Pagelet} prevPagelet 离开的pagelet
                  */
                 'pagebeforechange',
                 /**
                  * @event pagechange
+                 * 当页面切换时调用
+                 * @param {Pagelet} nextPagelet 进入的pagelet
+                 * @param {Pagelet} prevPagelet 离开的pagelet
                  */
                 'pagechange',
                 /**
                  * @event pageafterchange
+                 * 当页面切换之后调用
+                 * @param {Pagelet} nextPagelet 进入的pagelet
+                 * @param {Pagelet} prevPagelet 离开的pagelet
                  */
                 'pageafterchange',
                 /**
                  * @event pagechangefailed
+                 * 当页面切换失败调用
+                 * @param {Pagelet} nextPagelet 进入的pagelet
+                 * @param {Pagelet} prevPagelet 离开的pagelet
                  */
                 'pagechangefailed'
             );
 
-            // 监听hashchange，当hash发生改变时，切换Pagelet
+            /*
+             * 监听hashchange，当hash发生改变时，切换Pagelet
+             *
+             * Matrix框架的Appliaction页面导航策略，是通过监听hash变化，实现页面之间的切换，
+             *
+             * 如页面hash由'#/h'变为'#/c/0/1'时，
+             * hash ‘h’ 对应的pagelet，切换到hash 'c/0/1' 对应的Pagelet
+             */
             this.mon(window, 'hashchange', this.onHashChange);
+
+            this.mon(window, 'orientationchange', this.onOrientationChange);
         },
 
         /**
-         * 运行WebApp
-         * @param {Object} config
+         * 启动WebApp，App由此开始，只有在执行launch之后，App才能正常工作
+         * @param {Object} config 配置参数
          */
         launch: function(config) {
             config = config || {};
             this.setConfig(config);
 
+            // 加载模版文件
             var templates = LocalStorage.get('mx-app/templates'),
                 lastTemplateVersion = LocalStorage.get('mx-app/template-version'),
                 dt = $.now();
@@ -133,22 +173,22 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                     dataType: 'text',
                     context: this
                 }).done(function(response) {
-                        LocalStorage.set('mx-app/template-version', this.templateVersion);
-                        LocalStorage.set('mx-app/templates', response);
-                        this.createTemplateElement(response);
-
-                        if ($.now() - dt > 200) {
-                            this._launch(config);
-                        } else {
-                            X.defer(this._launch, 200, this, [config]);
-                        }
-                    }).fail(function() {
-                        // TODO 加载模版失败
-                    });
+                    LocalStorage.set('mx-app/template-version', this.templateVersion);
+                    LocalStorage.set('mx-app/templates', response);
+                    this.createTemplateElement(response);
+                    dt = $.now() - dt;
+                    if (dt > 200) {
+                        this._launch(config);
+                    } else {
+                        X.defer(this._launch, dt, this, [config]);
+                    }
+                }).fail(function() {
+                    // TODO 加载模版失败
+                });
             } else {
                 this.createTemplateElement(templates);
 
-                // iScroll加载需要延迟200毫秒，防止iScroll加载失败
+                // App延迟200毫秒启动，有一些第三方组件（如iScroll）初始化比较慢，防止这一类第三方组件加载失败
                 X.defer(this._launch, 200, this, [config]);
             }
         },
@@ -166,21 +206,28 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                 if (this.startUpView.length == 0) {
                     this.startUpView = null;
                 } else {
-                    /*
-                     * 初始化启动画面状态，jquery mobile changePage()会使用到
-                     */
+                    // 初始化启动画面的jquery mobile element的page扩展特性，在执行第一次由启动视图切换到首视图时会使用到
                     this.startUpView.page();
                     this.startUpView.css('min-height', window.innerHeight + 'px');
                 }
 
-                // 初始化jquery mobile配置
-                // start ---------------------------------------------------
+                // 初始化jquery mobile配置 start-----------------------------
                 $.extend($.mobile, {
+                    // 第一个视图
                     firstPage: this.startUpView || $(''),
+
+                    // 当前活动那个视图
                     activePage: this.startUpView,
+
+                    // 页面容器
                     pageContainer: this.pageContainer
                 });
+
+                // 触发页面容器创建事件
                 $window.trigger('pagecontainercreate');
+
+                // 监听页面切换事件，jquery mobile的changePage事件由App全权代理，
+                // 所有需要业务功能中需要监听的页面事件，都可以在pagelet controller中获得
                 this.mon(this.pageContainer, {
                     'pagechange': this.onPageChange,
                     'pagechangefailed': this.onPageChangeFailed
@@ -207,10 +254,10 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
             }
         },
 
-        // private
+        // private 子类扩展方法
         beforeLaunch: X.emptyFn,
 
-        // private
+        // private 子类扩展方法
         onLaunch: X.emptyFn,
 
         // private
@@ -229,7 +276,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
             delete config.pagelets;
             $.extend(this, config);
 
-            this.pageContainer = $('body');
+            this.pageContainer = $('body'); // pagelet容器
 
             if (this.useWebDatabase) {
                 // 没有设置数据库名称，则禁用web sql database
@@ -249,6 +296,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                         });
                     } catch (e) {
                         // 在iOS下提示增加数据库容量时，如果选择“取消”，那么会抛异常“无权限访问数据库”
+                        // 还有，在部分低版本（2.3及以下）Android系统下，也会出现无database权限的异常
                         isErr = true;
                     }
                 } else {
@@ -293,6 +341,8 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                         isErr = true;
                     });
                 }
+
+                // 不论任何原因，在初始化数据库时出现异常，则禁用web sql database
                 me.useWebDatabase = !isErr;
             }
         },
@@ -356,14 +406,19 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
             }
         },
 
-        // private
+        /*
+         * 获取当前URL种的hash值，例如：
+         *
+         * http://localhost/mx/examples/helloworld/index.html#/h
+         *
+         * 得到的值是 'h'
+         */
         getHash: function() {
             var match = location.href.match(matchHashRe);
             return match ? match[1].replace(hashStripperRe, '') : '';
         },
 
-        // private
-        // 使用hash匹配pagelet
+        // private 使用hash匹配pagelet配置参数
         matchPagelet: function(hash) {
             var pagelet;
             X.each(this.pagelets, function(i, p) {
@@ -377,8 +432,8 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 
         /*
          * @private
-         * 创建pagelet，系统维持一个pagelet缓冲池，缓冲池仅包含非单例的pagelet，
-         * 单例pagelet始终存在，不包括在缓冲池中
+         * 创建pagelet，系统维持一个pagelet缓冲池，缓冲池仅包含非单例的pagelet，单例pagelet始终存在，不包括在缓冲池中
+         * 缓存池的数量上限不超过pageletCacheSize，超出长度的最初创建的pagelet实例将被销毁
          */
         createPagelet: function(config, hash) {
             var pagelet, p, i, len;
@@ -411,9 +466,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                 this.pageletCaches.push(pagelet);
                 len = this.pageletCaches.length;
                 if (len > this.pageletCacheSize && len > 3) {
-                    /*
-                     * pagelet缓存池最大数量不超过pageletCacheSize，超出长度的pagelet进行销毁
-                     */
+                    // 销毁超出缓存池长度的pagelet实例
                     for (i = 0; i < len; i++) {
                         p = this.pageletCaches[i];
                         if (pagelet != p) {
@@ -428,7 +481,10 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
             return pagelet;
         },
 
-        // private
+        /*
+         * @private
+         * 为实例化pagelet时，准备config配置参数，将pagelet所关联的model、store实例化，并将实例对象设置到config中
+         */
         preparePageletConfig: function(config) {
             var models, model, stores, store, id;
             if (config.models) {
@@ -486,8 +542,14 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
         },
 
         /**
-         * 转向到hash
-         * @param {String} hash
+         * 指定一个hash，跳转到页面
+         * @param {String} hash 跳转页面的hash，不包含'#/'前缀
+         * 例如，要跳转到页面'http://localhost/mx/examples/helloworld/index.html#/h'
+         * <code>
+         *  X.App.go(‘h’); // 参数只需要输入'h'就可以了
+         * </code>
+         * @param {Object} options (optional) 页面跳转需要的参数
+         * 由于App的页面跳转内部实现使用的是$.mobile.changePage方法，所以，这个参数与changePage()函数中的options参数是一样配置
          */
         go: function(hash, options) {
             if (!this.isPageChanging) {
@@ -498,8 +560,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
         },
 
         /**
-         * 回退
-         * @param {String} (optional) defaultHash 当访问路径历史没有上一页时，默认跳转hash
+         * 回退到上一页面，当没有上一页的历史时，默认跳转到起始欢迎页
          */
         back: function() {
             var prev = this.history.getPrev(),
@@ -520,6 +581,17 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
             var hash = this.getHash(),
                 pagelet;
 
+            /*
+             * 为防止页面跳转参数pageChangeOptions被错误应用，如：
+             *
+             * 调用 X.App.go('h', { reverse: true }); 会设置pageChangeOptions
+             *
+             * 同时，App触发了另一次hash更改为 'w'
+             *
+             * 此时，hash 'w' 的hashchange事件回调被先触发，那么，取到pageChangeOptions其实是对应hash ‘h’的参数
+             *
+             * 所以，验证hash的有效性，防止pageChangeOptions被应用在异常的hash上
+             */
             if (this.lastHash && this.lastHash != hash) {
                 this.pageChangeOptions = null;
             }
@@ -534,7 +606,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 
         // private
         changePage: function(pagelet) {
-            var path = $.mobile.path, url, lp, np, transition, transtionOptions;
+            var path = $.mobile.path, url, lp = this.lastPagelet, np, transition, transtionOptions;
             window.scrollTo(0, 1);
             url = path.getLocation();
             this.history.add(url, {
@@ -542,11 +614,10 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                 hash: pagelet.hash
             });
 
-            if (!this.isPageChanging && this.fireEvent('beforepagechange', this, pagelet) !== false) {
+            if (!this.isPageChanging && this.fireEvent('beforepagechange', this, pagelet, lp) !== false) {
                 this.isPageChanging = true;
                 this.pageChangeOptions = this.pageChangeOptions || {};
 
-                lp = this.lastPagelet;
                 np = this.nextPagelet = pagelet;
 
                 np.render(this.pageContainer);
@@ -555,6 +626,14 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                 transtionOptions = $.extend({}, this.pageChangeOptions, {
                     fromHashChange: true
                 });
+
+                /*
+                 * 页面切换的过渡动画效果transition，基本规则如下：
+                 *  1、优先使用进入页面的getTransition()动态返回效果
+                 *  2、其次使用离开页面的transtion.out效果
+                 *  3、再次使用进入页面的transtion.in效果
+                 *  4、最末使用进入页面的transtion.out效果
+                 */
                 if (this.startUpView) {
                     transition = 'fade';
                 }
@@ -600,6 +679,15 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
             this.lastHash = null;
 
             this.fireEvent('pageafterchange', this, this.lastPagelet);
+        },
+
+        // private
+        onOrientationChange: function(e) {
+            var lp = this.lastPagelet;
+            if (lp) {
+                lp.el.css('min-height', window.innerHeight + 'px');
+                lp.onOrientationChange();
+            }
         },
 
         // private
