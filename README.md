@@ -66,21 +66,21 @@ MX.ready('klass', function(X, Klass) {
 ## Examples
 
 * [Hello World](http://mxjs.github.io/matrix/dev/examples/helloworld/index.html "Hello World")
-* Use Template (*建设中*)
-* Use Model (*建设中*)
-* Use Store (*建设中*)
-* Use jQuery Mobile Widget (*建设中*)
-* Use RequireJS (*建设中*)
-* Use SeaJS (*建设中*)
+* Use Template (建设中)
+* Use Model (建设中)
+* Use Store (建设中)
+* Use jQuery Mobile Widget (建设中)
+* Use RequireJS (建设中)
+* Use SeaJS (建设中)
 * [手机搜狐WebApp](http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html "手机搜狐（向Zaker致敬）")
 
 ## Downloads
 
-[v0.1.1](http://mxjs.github.io/matrix/tags/matrix-0.1.1.zip "matrix-0.1.1.zip")(*latest version*)
+[v0.1.1](http://mxjs.github.io/matrix/tags/matrix-0.1.1.zip "matrix-0.1.1.zip")(latest version)
 
 ## Change Log
 
-### v0.1.1 (*2013/4/19*)
+### v0.1.1 (2013/4/19)
 
 * 第一个版本发布
 
