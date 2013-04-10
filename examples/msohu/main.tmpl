@@ -96,7 +96,7 @@
                 <div class="banner">
                     <div class="b_info">
                         <a href="#n/<#= data[0]['id'] #>">
-                            <img src="http://s7.rr.itc.cn/g/<#= data[0]['cover_image_url'] #>" alt=""/>
+                            <img src="http://s7.rr.itc.cn/g<#= data[0]['cover_image_url'] #>" alt=""/>
                             <span class="i_title"><#= data[0]['title'] #></span>
                         </a>
                     </div>
@@ -139,7 +139,7 @@
                 <div class="banner">
                     <div class="b_info">
                         <a href="#n/<#= data[2]['id'] #>">
-                            <img src="http://s7.rr.itc.cn/g/<#= data[2]['cover_image_url'] #>" alt=""/>
+                            <img src="http://s7.rr.itc.cn/g<#= data[2]['cover_image_url'] #>" alt=""/>
                             <span class="i_title"><#= data[2]['title'] #></span>
                         </a>
                     </div>
@@ -234,51 +234,23 @@
 </script>
 
 <script id="article-header-template" type="text/tmpl">
-    <h1 class="i_title">苹果发信致歉中国:我们错了我们错了!!</h1>
-    <p>IT之家 1天前</p>
+    <h1 class="i_title"></h1>
+    <p></p>
 </script>
 
 <script id="article-footer-template" type="text/tmpl">
     <div class="detail_footer">
-        <span><a href="#0" class="btn_back btn_ft">返回</a></span>
-        <span><a href="#0" class="ico-approve" data-message="true"></a></span>
-        <span><a href="#0" class="ico-turn" data-message="true"></a></span>
-        <span><a href="#0" class="ico-comment" data-message="true"></a></span>
-        <span><a href="#0" class="btn_refresh btn_ft" data-message="true">刷新</a></span>
+        <a href="#0" class="btn_back btn_ft"><span>返回</span></a>
+        <a href="#0" class="ico-approve" data-message="true"><span></span></a>
+        <a href="#0" class="ico-turn" data-message="true"><span></span></a>
+        <a href="#0" class="ico-comment" data-message="true"><span></span></a>
+        <a href="#0" class="btn_refresh btn_ft"><span>刷新</span></a>
     </div>
 </script>
 
 <script id="article-body-template" type="text/tmpl">
     <div class="detail_cont">
-            <h4>面对媒体</h4>
-            <p>面对媒体对其保修政策的持续诟病<img src="images/banner.jpg" alt=""/>，前期态度强硬的苹果终于有所低头。4月1日，苹果在官网挂出CEO蒂姆·库克的署名道歉信，表示其iOS设备在更换全新整机之后，保修期将重新计算。受此消息影响，苹果股价当日走低，截至收盘跌3.11%，报428.91美元/股。而在此前一周，备受压力的苹果股价已经跌去5%。
-
-　　与此同时，4月2日沪深两市苹果概念股纷纷跳水，</p><p>苹果概念板块整体跌幅为5.41%，领跌两市。和苹果机壳业务密切相关的锦富新材股价跌停，环旭电子、歌尔声学、德赛电池等苹果供应链内企业股价跌幅也均超过5%。
-
-　　分析人士认为，虽然苹果的道歉有利于企业声誉的挽回，</p><p>但其调整后的售后政策仍未杜绝“霸王条款”，在竞争对手差距缩小、国产智能产品份额提升的大背景下，今年苹果在华市场份额或仍将受到一定冲击。
-
-　　担心失去中国市场</p><img src="images/banner.jpg" alt=""/><p>2013财年第一财季财报显示，苹果净利润为130.78亿美元，比2012年同期的130.64亿美元仅增长0.1%。自2003年以来，除了一个季度之外，苹果的季度利润增幅均超过10%，本次财报让苹果的利润神话走向终结。
-
-　　对苹果来说，相比已经增速放缓的欧美市场，中国市场是必争之地。目前，中国已是仅次于美国的苹果第二大市场。2013财年第一季度，苹果在中国的收入增长67%至68亿美元。2013年1月，库克访华期间曾表示，预期中国将在未来某个时候成为苹果的最大市场。
-
-　　银通智略分析师白兴芳指出，从最初的沉默、回避、强硬回应，再到后来的公开道歉，一系列态度上的转变，中国巨大的市场无疑是驱使苹果“低头”的最强“底气”，而消费者维权意识的增强也起到了重要的催化作用。
-
-　　与此同时，同行对手的“前车之鉴”或也是苹果做出道歉决定的一个重要因素。有分析师介绍，1999年东芝笔记本售后政策“中外有别”被曝光，直接导致其交出了市场占有率的头把交椅。
-
-　　面对大中华地区业绩的迅速提升，业内人士认为，目前苹果股价疲软，库克需要采取积极行动避免在中国这个成长亮点上出现麻烦。“霸王条款”仍存</p><p>苹果在道歉信中就其在中国市场的售后维修政策进行了三项调整：苹果设备整机更换后重新计算保修期、由保留iphone4和iphone4s后盖的做法改成完全整机更换、曾在维修中保留后盖的手机自维修之日重新计算保修期。
-
-　　知名IT法律专家、中国政法大学知识产权中心特约研究员赵占领向中国证券报记者表示，这三项调整涉及的恰恰是自央视3·15晚会之后，中国媒体最集中批评、呼吁苹果改进的地方，也是苹果的维修政策比较严重的违规之处，迫于压力，苹果在这些方面道歉并进行调整。尽管苹果积极回应外界质疑、向消费者道歉并改进维修政策的做法值得肯定，但是消费者也必须看到，这个改进是被动而非主动改进，是部分改进而非全面改进。
-
-　　赵占领指出，调整后的苹果售后政策，其“霸王条款”仍未杜绝。比如，对于不属于保修范围的维修，被更换的零件或者产品的所有权仍归苹果公司，消费者若要苹果返回，需要向苹果支付更换物品的全额费用。实际上，无论是否属于保修范围，被更换的零件或者产品的所有权都属于消费者。另外，苹果明确不保证在维修或者更换产品时不会导致程序或数据损失，也不保证对数据保密，且苹果的责任仅限于受损产品的维修或更换费用。这实际上是以格式条款的形式，减轻免除经营者的责任，逃避对消费者应尽的数据保密义务。
-
-　　市场份额或遭蚕食</p><p>分析人士认为，虽然苹果的道歉能缓解舆论对苹果的冲击，但从长期观察，由于产品的创新能力处于瓶颈和竞争对手的虎视眈眈，今年苹果在华的市场仍有被竞争对手进一步蚕食的可能。
-
-　　以苹果最大的竞争对手三星为例，经过一年的高速增长，三星和苹果之间的差距正在快速缩小，而三星的股价去年表现也优于苹果。国信证券预计，今年一季度三星在中国内地的智能手机月平均出货量达到2500万部，创历史新高。
-
-　　与此同时，国产智能手机与智能平板的崛起也不容忽视。统计数据显示，今年一季度国产智能手机出货量快速跳升至单月逾2500万部水平，同比提升25%。“五一”黄金销售周备货已经启动，业界估计3、4月国产智能手机单月需求量将突破3000万部。
-
-　　针对苹果产品未来在中国的经营风险，有分析师预测，倘若失去50%的中国市场份额，苹果年营收将缩水131亿美元，每股收益会降低3.62美元。（实习记者 傅嘉）
-    </p>
+        <#= content #>
     </div>
-    <a href="#0" class="look_original_btn"><span>查看原文</span></a>
+    <a href="http://m.sohu.com/n/<#= id #>" class="look_original_btn" target="_blank"><span>查看原文</span></a>
 </script>

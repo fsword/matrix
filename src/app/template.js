@@ -55,16 +55,17 @@ MX.kindle('jquery', 'arttemplate', 'klass', function(X, $, artTemplate, Klass) {
             }
             container = container || this.container;
 
-            if (this.getData) {
-                // getData()与this.params这两个接口是从View中调用
-                // 在View.render()中会设置
-                data = this.getData(this.params, data || {});
-            }
+            // getData()与this.params这两个接口是从View中调用
+            // 在View.render()中会设置
+            data = this.getData(this.params, data || {});
+
             container.html(this.applyTemplate(data));
         },
 
         // private
-        getData: X.emptyFn,
+        getData: function(params, data) {
+            return data;
+        },
 
         /**
          * 绑定store

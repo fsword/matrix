@@ -177,6 +177,7 @@ ul {
 
 .ui-mobile, .ui-mobile .ui-page {
     min-height: 460px;
+    overflow: hidden;
 }
 
 /* loading icon */
@@ -620,7 +621,6 @@ ul {
 }
 
 .container .banner {
-
     width: 100%;
     /*height: 160px;  高度不定  可能随机变化根据内容来定*/
     /* -webkit-box-flex:0;*/
@@ -628,7 +628,6 @@ ul {
 
 .container .banner img {
     width: 100%;
-    height: 160px;
     display: block;
 
 }
@@ -636,11 +635,20 @@ ul {
 .container .b_info {
     margin: auto;
     width: 320px;
+    height: 160px;
+    overflow: hidden;
     position: relative;
+    background-color: #8a8c8e;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #8a8c8e;
+    border-left-width: 0;
+    border-right-width: 0;
 }
 
 .container .b_info a {
     display: block;
+    text-decoration: none;
 }
 
 .container .b_info .i_title {
@@ -706,7 +714,6 @@ ul {
     line-height: 24px;
     font-weight: bold;
     margin:0;
-    text-overflow: none;
     text-align: left;
     white-space:pre-wrap;
 }
@@ -752,7 +759,7 @@ ul {
     display: block;;
     text-align: center;
     color: #737373;
-    margin: 10px 0 50px;
+    margin: 5px 0 10px;
 
 }
 
@@ -866,6 +873,7 @@ ul {
     background: #FFF;
     border-top: 1px solid #f2f2f2;
     padding-top: 5px;
+    overflow: hidden;
 }
 
 .detail_footer span a {
@@ -930,6 +938,7 @@ ul {
     position: absolute;
     top: 5px;
     left: 0;
+    text-decoration: none;
 }
 
 .footer .s_time:first-child {
@@ -985,6 +994,7 @@ ul {
     font-family: "Arial";
     -webkit-border-radius: 1px;
     border-radius: 1px;
+    line-height: 13px;
 }
 
 .active_rel .ico_line {

@@ -129,6 +129,9 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
             if (!isShowFavourite) {
                 isShowFavourite = true;
                 showFavourite();
+                initShowTimeout = setTimeout(function() {
+                    hideFavourite(true);
+                }, 2000);
             }
             if (!this.holder) {
                 this.holder = new TouchHolder({
@@ -201,13 +204,21 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
             template: {
                 id: 'channel-body-template',
                 getData: function(params, data) {
-                    var focusTop = true, showFocus = true;
-                    if (data.data[0] && data.data[0]['cover_image_url']) {
-                        focusTop = true;
-                    } else if (data.data[2] && data.data[2]['cover_image_url']) {
-                        focusTop = false;
-                    } else {
-                        showFocus = false;
+                    var focusTop = true, showFocus = true, arr = [];
+                    if (data.data) {
+                        if (data.data[0] && data.data[0]['cover_image_url']) {
+                            focusTop = true;
+                        } else if (data.data[2] && data.data[2]['cover_image_url']) {
+                            focusTop = false;
+                        } else {
+                            showFocus = false;
+                        }
+                        X.each(data.data, function(i, val) {
+                            if (val.id.length != 6) {
+                                arr.push(val);
+                            }
+                        });
+                        data.data = arr;
                     }
                     return $.extend({
                         bgColor: channels[params.id].bgColor,
@@ -343,7 +354,16 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
         alias: 'msohu.articlecontroller',
         extend: 'controller',
         delegates: {
-            'click .btn_back': 'back'
+            'click .btn_back': 'back',
+            'click .btn_refresh': 'refresh'
+        },
+        initEvents: function() {
+            this.mon(this.getModel('article-model'), 'load', this.onModelLoad);
+        },
+        onModelLoad: function(model) {
+            var rs = model.get();
+            this.getHeader().find('.i_title').html(rs['title']);
+            this.getHeader().find('p').html(rs['media'] + ' ' + rs['create_time']);
         },
         onPageCreate: function() {
             var colors = ['#2ca7ea', '#1d953f', '#c7a252', '#585eaa', '#853f04', '#dea32c', '#f05b72', '#5f5d46', '#c63c26', '#b4532a'];
@@ -353,13 +373,17 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
             e && e.preventDefault();
             X.App.back();
         },
+        refresh: function(e) {
+            e && e.preventDefault();
+            this.getModel('article-model').reload();
+        },
         getTransition: function(to, from) {
             return 'slideup';
         }
     });
 
     // 欢迎页 start *********************************************
-    var favEl, touchCoords, favCount = 0, resetFavCount;
+    var favEl, touchCoords, favCount = 0, resetFavCount, initShowTimeout;
     var idiotMsg = ['姐姐，别玩了，有意思么', '有时间干点正事吧', '你也太无聊了吧'];
 
     function showFavourite() {
@@ -382,9 +406,19 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
         }
     }
 
-    function hideFavourite() {
+    function hideFavourite(animated) {
+        if (initShowTimeout) {
+            clearTimeout(initShowTimeout);
+            initShowTimeout = null;
+        }
         if (favEl) {
             favEl.removeClass('animated bounceInDown');
+            if (animated) {
+                favEl.one('webkitTransitionEnd transitionend', function() {
+                    favEl.removeClass('favouriteOut');
+                });
+                favEl.addClass('favouriteOut');
+            }
             favEl.css('-webkit-transform', 'translateY(' + -favEl.height() + 'px)');
             $body.off('touchstart', bodyTouchStart);
             $body.off('touchmove', bodyTouchMove);
@@ -485,7 +519,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
     LocalStorage.globalPrefix = 'msohu/';
 
     var config = {
-        templateVersion: '1.4',
+        templateVersion: '1.6',
         templateUrl: 'main.tmpl',
         databaseName: 'msohu_db',
         databaseDescription: 'msohu offline database',
@@ -493,11 +527,15 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
             {
                 id: 'article-model',
                 tableName: 'articles',
-                fields: ['title', 'content', 'create_time', 'media', 'page_count'],
+                fields: ['id', 'title', 'content', 'media', {
+                    name: 'create_time',
+                    renderer: calcTime
+                }],
                 useCache: true,
                 getUrl: function(params) {
                     return '/wcms/news/' + params.id + '/';
-                }
+                },
+                showPageLoading: true
             }
         ],
         stores: [
@@ -505,10 +543,10 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
                 id: 'channel-store',
                 url: '/wcms/news/',
                 useCache: true,
-                fields: ['id', 'title', {
+                fields: ['id', 'title', 'cover_image_url', 'comment_count', {
                     name: 'create_time',
                     renderer: calcTime
-                }, 'cover_image_url','comment_count'],
+                }],
                 pageSize: 6,
                 meta: {
                     pageSizeProperty: 'page_size'
@@ -558,7 +596,20 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
                 url: 'n/:id',
                 view: 'msohu.articleview',
                 controller: 'msohu.articlecontroller',
-                model: 'article-model',
+                models: {
+                    id: 'article-model',
+                    autoLoad: true,
+                    bindTo: 'body',
+                    getOptions: function(params) {
+                        return {
+                            data: {
+                                'page': 1,
+                                'page_size': 1800,
+                                'rest': '0'
+                            }
+                        };
+                    }
+                },
                 cls: 'winContent',
                 transition: {
                     in: 'slideup',

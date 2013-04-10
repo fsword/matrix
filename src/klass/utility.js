@@ -296,7 +296,7 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
          * @param {String} selector (options) 一个选择器字符串，仅对jquery element对象有效
          * @param {Function} fn (optional) 事件监听回调函数
          * @param {Object} scope (optional) 回调函数作用域
-         * @param {Object} options (optional) 事件监听选项，当item为jquery element时，options可以在回调函数的第一个参数event.data获得
+         * @param {Object} options (optional) 事件监听选项
          *  可选的选项参数包括：
          *      Boolean : single true表示只执行一次
          */
@@ -304,8 +304,7 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
             var event,
                 type,
                 proxyFn,
-                isClass = true,
-                data;
+                isClass = true;
             
             this.createEventCache();
             
@@ -346,7 +345,6 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
             
             scope = scope || this;
             options = options || {};
-            data = [options];
             if (!isClass) {
                 proxyFn = this.createListener(item, types, selector, fn, scope, options);
             }
@@ -358,14 +356,13 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
                 fn: fn,
                 proxyFn: proxyFn,
                 scope: scope,
-                options: options,
-                data: data
+                options: options
             });
             
             if (isClass) {
                 item.on && item.on(types, fn, scope, options);
             } else {
-                item.on(types, selector, data, proxyFn);
+                item.on(types, selector, undefined, proxyFn);
             }
         },
         
@@ -388,7 +385,7 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
          * @param {Object} scope (optional) 回调函数作用域
          */
         mun: function(item, types, selector, fn, scope) {
-            var isClass = item.$isInstance,
+            var isClass = !!item.$isInstance,
                 event,
                 type,
                 i, len;
@@ -437,7 +434,7 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
                     if (isClass) {
                         item.un && item.un(types, fn, scope);
                     } else {
-                        item.off(types, selector, event.data, event.proxyFn);
+                        item.off(types, selector, undefined, event.proxyFn);
                     }
                     break;
                 }

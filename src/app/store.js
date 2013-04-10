@@ -105,7 +105,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         // private
         init: function() {
             this.baseParams = this.baseParams || {};
-            this.storageKey = this.storageKey || this.alias;
+            this.storageKey = this.storageKey || this.id;
             this.meta = this.meta || {};
             X.applyIf(this.meta, {
                 pageNumberProperty: 'page',
@@ -240,7 +240,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
             params.data[meta.pageStartProperty] = (pageNumber - 1) * this.pageSize;
             params.data['_dt'] = $.now(); // 时间戳，防止缓存
             params.data = $.extend({}, this.baseParams, params.data);
-            params = $.extend({
+            params = $.extend(this.getOptions ? this.getOptions(this.params) : {}, {
                 type: this.requestMethod,
                 url: this.getUrl ? this.getUrl(this.params) : this.url
             }, params, {

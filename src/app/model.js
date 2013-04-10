@@ -409,7 +409,7 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
         fetch: function(params) {
             params.data = params.data || {};
             params.data = $.extend({}, this.baseParams, this.getFetchParams() || {}, params.data, {'_dt': $.now()});
-            params = $.extend({
+            params = $.extend(this.getOptions ? this.getOptions(this.params) : {}, {
                 type: this.requestMethod,
                 url: this.getUrl ? this.getUrl(this.params) : this.restful.read
             }, params, {
@@ -582,6 +582,16 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
                     // database error
                 });
             }
+        },
+
+        // private
+        showPageLoadingMsg: function() {
+            $.mobile.showPageLoadingMsg();
+        },
+
+        // private
+        hidePageLoadingMsg: function() {
+            $.mobile.hidePageLoadingMsg();
         },
         
         // private

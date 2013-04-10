@@ -251,7 +251,7 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         loadModelOrStore: function(objects) {
             X.each(objects, function(i, obj) {
                 if (obj.autoLoad === true) {
-                    obj.load(obj.getOptions ? obj.getOptions(this.params) : null);
+                    obj.load();
                 }
             }, this);
         },
