@@ -4,7 +4,7 @@
  *
  * Appliaction主程序类，整合WebApp中使用的各种资源（model、store、view、controller），管理页面视图
  *
- * Matrix框架的Appliaction是一个Single Page Web Application
+ * Matrix框架适合于开发Single Page Web Application
  * Appliaction的Pagelet视图是基于模版渲染，不支持由外部加载页面内容作为页面视图的功能（类似jQuery mobile Navigation）
  * 仅支持基于hash pagelet页面切换
  *
