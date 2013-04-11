@@ -50,7 +50,20 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
          */
 
         /**
-         * @cfg {String} url AJAX请求API
+         * @cfg {String} url AJAX请求URL
+         */
+
+        /**
+         * @cfg {Function} getUrl 动态获取AJAX请求URL
+         * 包含参数：
+         *  - Object : params 页面hash中包含的参数
+         *  - String : type 请求类型，create、read、update、destroy
+         *
+         * <code>
+         *  getUrl: function(params, type) {
+         *      return '';
+         *  }
+         * </code>
          */
         
         /**
@@ -232,9 +245,9 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         /**
          * 加载数据
          */
-        load: function(params) {
+        load: function(params, /*private*/ force) {
             var maxPage = this.maxPage, pageNumber;
-            params = params || {};
+            params = $.extend({}, params, this.getData ? this.getData(this.params) : null);
             pageNumber = params.page || this.currentPage;
             pageNumber = pageNumber < 1 ? 1 : pageNumber;
             params.page = pageNumber;
@@ -244,7 +257,9 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
                 if (this.showPageLoading) {
                     this.showPageLoadingMsg();
                 }
-                if (this.useWebDatabase && this.useCache) {
+                if (force === true) {
+                    this.fetch(params);
+                } else if (this.useWebDatabase && this.useCache) {
                     this.loadStorage(params);
                 } else {
                     this.fetch(params);
@@ -256,21 +271,11 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
          * 重新加载数据
          */
         reload: function(params) {
-            var pageNumber;
             params = params || {};
-            pageNumber = params.page || this.currentPage;
-            pageNumber = pageNumber < 1 ? 1 : pageNumber;
-            params.page = pageNumber;
-            if (!this.removed && !this.loading && this.fireEvent('beforeload', this, pageNumber) !== false) {
-                this.loading = true;
-                this.toPage = pageNumber;
-                if (this.showPageLoading) {
-                    this.showPageLoadingMsg();
-                }
-                this.fetch(params);
-            }
+            params.page = this.currentPage;
+            this.load(params, true);
         },
-        
+
         // private 强制从服务端取得数据，并更新本地缓存
         fetch: function(params) {
             var meta = this.meta, pageNumber = params.page, options;
@@ -278,7 +283,6 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
             params[meta.pageSizeProperty] = this.pageSize;
             params[meta.pageStartProperty] = (pageNumber - 1) * this.pageSize;
             params['_dt'] = $.now(); // 时间戳，防止缓存
-            params = $.extend({}, params, this.getData ? this.getData(this.params) : null);
             options = $.extend({}, this.baseParams, {
                 type: this.requestMethod,
                 url: this.getUrl ? this.getUrl(this.params, 'read') : this.url,
@@ -509,10 +513,16 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         sync: function() {
             // TODO
         },
-        
-        // private
-        getStorageKey: function(pageNumber) {
-            return this.storageKey + '-' + pageNumber;
+
+        /**
+         * 返回数据存储的主键值
+         * @param {String} storageKey 主键前缀
+         * @param {String} pageNumber 页码
+         * @param {Object} param 页面hash中包含的参数
+         * @returns {String} primary key
+         */
+        getStorageKey: function(storageKey, pageNumber, params) {
+            return storageKey + '-' + pageNumber;
         },
         
         // private
@@ -521,7 +531,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
                 pageNumber = params.page,
                 id;
             if (me.useWebDatabase) {
-                id = me.getStorageKey(pageNumber);
+                id = me.getStorageKey(me.storageKey, pageNumber, me.params);
                 me.db.transaction(function(t) {
                     t.executeSql('SELECT * FROM ' + me.tableName + ' WHERE id = ?', [id], function(t, result) {
                         if (result.rows.length > 0) {
@@ -555,7 +565,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
             var me = this, 
                 id;
             if (me.useWebDatabase) {
-                id = me.getStorageKey(me.currentPage);
+                id = me.getStorageKey(me.storageKey, me.currentPage, me.params);
                 me.db.transaction(function(t) {
                     t.executeSql('SELECT * FROM ' + me.tableName + ' WHERE id = ?', [id], function(t, result) {
                         try {

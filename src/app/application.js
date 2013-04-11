@@ -702,6 +702,8 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 
         // private
         onPageChange: function() {
+            // 在页面切换完成之后，将body滚动到顶部，防止页面滚动条错位
+            $body.scrollTop(0);
             this.fireEvent('pagechange', this, this.nextPagelet, this.lastPagelet);
             this.afterChangePage();
         },

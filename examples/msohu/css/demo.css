@@ -625,10 +625,10 @@ ul {
     height: 160px;
     overflow: hidden;
     position: relative;
-    background-color: #8a8c8e;
+    background-color: #d3d7d4;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    border: 1px solid #8a8c8e;
+    border: 1px solid #d3d7d4;
     border-left-width: 0;
     border-right-width: 0;
 }

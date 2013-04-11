@@ -557,7 +557,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
 
     var config = {
         /* 定义页面模版 */
-        templateVersion: '1.6',
+        templateVersion: '1.7',
         templateUrl: 'main.tmpl',
 
         /* 定义Web SQL Database，使用浏览器DB缓存新闻列表、正文数据 */
@@ -627,6 +627,9 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
                             'channel_id': channels[params.id].list,
                             'roll': 1
                         };
+                    },
+                    getStorageKey: function(storageKey, pageNumber, params) {
+                        return storageKey + '-' + params.id + '-' + pageNumber;
                     }
                 },
                 cls: 'winContent', // 为pagelet容器设置css

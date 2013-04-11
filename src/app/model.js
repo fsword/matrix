@@ -73,7 +73,20 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
          */
 
         /**
-         * @cfg {String} url AJAX请求API
+         * @cfg {String} url AJAX请求URL
+         */
+
+        /**
+         * @cfg {Function} getUrl 动态获取AJAX请求URL
+         * 包含参数：
+         *  - Object : params 页面hash中包含的参数
+         *  - String : type 请求类型，create、read、update、destroy
+         *
+         * <code>
+         *  getUrl: function(params, type) {
+         *      return '';
+         *  }
+         * </code>
          */
         
         /**
@@ -466,14 +479,17 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
         /**
          * 加载数据
          */
-        load: function(params) {
+        load: function(params, /*private*/ force) {
             if (!this.removed && !this.loading && this.fireEvent('beforeload', this) !== false) {
                 this.loading = true;
-                params = params || {};
+                params = $.extend({}, params, this.getFetchData(), this.getData ? this.getData(this.params) : null);
+
                 if (this.showPageLoading) {
                     this.showPageLoadingMsg();
                 }
-                if (this.useWebDatabase && this.useCache) {
+                if (force === true) {
+                    this.fetch(params);
+                } else if (this.useWebDatabase && this.useCache) {
                     this.loadStorage(params);
                 } else {
                     this.fetch(params);
@@ -485,13 +501,7 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
          * 重新加载数据
          */
         reload: function(params) {
-            if (!this.removed && !this.loading && this.fireEvent('beforeload', this) !== false) {
-                this.loading = true;
-                if (this.showPageLoading) {
-                    this.showPageLoadingMsg();
-                }
-                this.fetch(params);
-            }
+            this.load(params, true);
         },
         
         // private 强制从服务端取得数据，并更新本地缓存
@@ -499,7 +509,6 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
             var options;
             params = params || {};
             params['_dt'] = $.now(); // 时间戳，防止缓存
-            params = $.extend({}, params, this.getFetchData(), this.getData ? this.getData(this.params) : null);
             options = $.extend({}, this.baseParams, {
                 type: this.requestMethod,
                 url: this.getUrl ? this.getUrl(this.params, 'read') : this.restful.read,
