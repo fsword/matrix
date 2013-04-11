@@ -67,7 +67,7 @@ MX.ready('klass', function(X, Klass) {
 
 直接用手机扫描下面的二维码，就可以访问[手机搜狐WebApp](http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html "手机搜狐（向Zaker致敬）")
 
-![QR Code](http://mxjs.github.io/matrix/dev/examples/msohu/qrcode.png)
+![QR Code](https://raw.github.com/mxjs/matrix/master/examples/msohu/qrcode.png "二维码")
 
 ## Examples
 
