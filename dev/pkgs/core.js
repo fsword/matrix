@@ -82,6 +82,8 @@ window.MX = {
         jQuery: $,
         artTemplate: artTemplate
     });
+
+    // 重写artTemplate代码标签的（开口/闭合）标签符号，默认的标签为'<%'和'%>'，%太通用了，很容易与其他技术的页面标签冲突，如JSP等
     if (artTemplate) {
         artTemplate.openTag = '<#';
         artTemplate.closeTag = '#>';
