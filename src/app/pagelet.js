@@ -1,6 +1,9 @@
 /**
  * @class MX.app.Pagelet
  * @alias pagelet
+ *
+ * Pagelet是Appliaction的一个内部对象，一般情况下不会被外部调用，
+ * 在业务系统中只会使用View或Controller提供的接口
  */
 MX.kindle('jquery', 'klass', function(X, $, Klass) {
     var paramNameRe = /(:|\*)\w+/g; // 匹配URL中的参数名
@@ -23,7 +26,8 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         noCache: false,
         
         /**
-         * @cfg {String} hash pagelet绑定的hash
+         * @cfg {String} url pagelet绑定的url
+         * 当页面hash发生改变时，使用url匹配hash创建对应的pagelet，然后实现页面跳转
          */
         
         /**
@@ -45,6 +49,27 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         /**
          * @cfg {String} cls 添加到el元素上的扩展CSS样式
          */
+
+        /**
+         * @cfg {String/Object} transition 页面切换过渡动画效果
+         * 当值为string时，仅仅表示设置了“页面进入效果”
+         *  transition: 'fade'
+         *
+         * 如果要设置页面离开效果，使用下面这种方式:
+         *  transition: {
+         *      in: 'fade',
+         *      out: 'slideup'
+         *  }
+         *
+         * 还可以通过设置reverse属性，使动画反向
+         *  transition: {
+         *      in: 'fade',
+         *      out: {
+         *          effect: 'slideup',
+         *          reverse: true
+         *      }
+         *  }
+         */
         
         // private
         init: function() {
@@ -54,7 +79,7 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
             // 解析URL中包含的参数值
             this.parseParams();
 
-            // 这里必须严格按照这个初始化顺序
+            // 这里必须严格按照下面的顺序初始化
             this.initTransition();
             this.initView();
             this.initModels();
@@ -62,8 +87,20 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
             this.initController();
         },
 
-        // private
-        // 将hash中包含的参数解析出来
+        /*
+         * @private
+         * 将hash中包含的参数解析出来
+         *
+         * 比如：
+         *  pagelet配置参数设置的url为'c/:id/:page'
+         *
+         * 那么，当访问页面'http://localhost/mx/examples/msohu/index.html#/c/0/1'时，
+         * 解析的params为：
+         *  {
+         *      id: '0',
+         *      page: '1'
+         *  }
+         */
         parseParams: function() {
             var values = this.urlRe.exec(this.hash).slice(1),
                 params = {};
@@ -132,10 +169,14 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
             this.addEvents(
                 /**
                  * @event beforerender
+                 * 当pagelet渲染之前触发，返回false，终止pagelet渲染
+                 * @param {Pagelet} this
                  */
                 'beforerender',
                 /**
                  * @event render
+                 * 当pagelet渲染时触发
+                 * @param {Pagelet} this
                  */
                 'render'
             );
@@ -143,6 +184,10 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         
         // private
         initView: function() {
+            /**
+             * @property {Object} view
+             * 绑定的view实例对象
+             */
             this.view = X.create(this.view || 'view', {
                 params: this.params
             });
@@ -151,6 +196,10 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         
         // private
         initController: function() {
+            /**
+             * @property {Object} controller
+             * 绑定的controller实例对象
+             */
             this.controller = X.create(this.controller || 'controller', {
                 view: this.view,
                 models: this.models,
@@ -163,9 +212,17 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         render: function(container) {
             if (!this.rendered && this.fireEvent('beforerender', this) !== false) {
                 this.rendered = true;
-                
+
+                /**
+                 * @property {Element} container
+                 * pagelet container jquery element
+                 */
                 this.container = container = $(container);
-                
+
+                /**
+                 * @property {Element} el
+                 * pagelet el jquery element
+                 */
                 this.el = $(document.createElement('div'));
                 this.el.attr('id', 'mx-app-page-' + this.id)
                        .attr('data-' + $.mobile.ns + 'role', 'page')
@@ -178,7 +235,8 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                 if (this.view) {
                     this.view.render(this.el);
                 }
-                
+
+                // pagelet代理page事件
                 this.mon(this.el, {
                     'pagebeforeshow': this.beforePageShow,
                     'pageshow': this.onPageShow,
@@ -211,6 +269,9 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         
         // private
         onPageShow: function() {
+            /*
+             * 在页面进入时，自动加载配置了autoLoad属性的model、store
+             */
             this.loadModelOrStore(this.models);
             this.loadModelOrStore(this.stores);
             if (this.controller) {
@@ -218,16 +279,20 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                 this.controller.fireEvent('pageshow', this.controller);
             }
         },
-        
+
         // private
         beforePageHide: function() {
+            /*
+             * 当页面离开时，中断当前页面的所有model、store的AJAX请求操作
+             * 防止页面离开之后，Pagelet的DOM被刷新
+             */
             this.cancelFetch();
             if (this.controller) {
                 this.controller.beforePageHide();
                 this.controller.fireEvent('pagebeforehide', this.controller);
             }
         },
-        
+
         // private
         onPageHide: function() {
             if (this.controller) {
@@ -244,8 +309,7 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
             }
         },
         
-        // private
-        // 取消所有model、store的AJAX fetch动作
+        // private 取消所有model、store的AJAX请求操作
         cancelFetch: function() {
             X.each(this.models, function(id, model) {
                 model.cancelFetch();
@@ -266,6 +330,7 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         
         /**
          * 获得view对象
+         * @return {Object} view
          */
         getView: function() {
             return this.view;
@@ -273,6 +338,7 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         
         /**
          * 获得controller对象
+         * @return {Object} controller
          */
         getController: function() {
             return this.controller;

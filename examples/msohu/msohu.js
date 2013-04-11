@@ -622,7 +622,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
                     autoLoad: true, // 进入页面时，自动加载Store
                     bindTo: 'body', // 将Store绑定给View的body模版，数据加载完成，自动渲染body
                     getData: function(params) { // params参数为hash中包含的参数
-                        return { // 返回一组AJAX请求的data参数
+                        return { // 返回一组AJAX请求使用的data参数
                             'page': params.page,
                             'channel_id': channels[params.id].list,
                             'roll': 1

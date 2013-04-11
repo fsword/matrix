@@ -20,11 +20,12 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         
         /**
          * @cfg {String} tableName 数据表名，默认'storepaging'
+         * 如果未设置表名，则useWebDatabase会被设置为false
          */
         tableName: 'storepaging',
         
         /**
-         * @cfg {Boolean} useCache 当网络离线或本地数据库有数据时，优先使用本地数据
+         * @cfg {Boolean} useCache 当本地数据库有数据时，优先使用本地数据
          */
         useCache: false,
         
@@ -36,7 +37,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         /**
          * @cfg {String} storageKey 数据存储时，data record primary key
          * record的pk值一般有两部分，storageKey+pageNumber，例如：list-1
-         * 如果为设定storageKey，那么会默认设置为Store.alias值
+         * 如果为设定storageKey，那么会默认设置为store.id值
          */
         
         /**
@@ -45,7 +46,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         idProperty: 'id',
         
         /**
-         * @cfg {Array} fields 赋值给model
+         * @cfg {Array} fields 赋值给model，参见{Model#fields}的API
          */
 
         /**
@@ -58,12 +59,27 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         requestMethod: 'GET',
 
         /**
-         * @cfg {String} dataType 默认'json'
+         * @cfg {String} dataType 服务端响应数据类型，默认'json'
          */
         dataType: 'json',
         
         /**
-         * @cfg {Object} baseParams AJAX请求提交给服务端的默认参数
+         * @cfg {Object} baseParams AJAX请求的默认参数
+         * 允许设置jquery.ajax(settings)函数的参数settings包含的属性
+         */
+
+        /**
+         * @cfg {Object} getData 返回一组AJAX请求使用的data参数
+         * 包含一个参数：
+         *  - Object : params 页面hash中包含的参数
+         *
+         * <code>
+         *  getData: function(params) {
+         *      return {
+         *          // ...
+         *      };
+         *  }
+         * </code>
          */
         
         /**
@@ -73,18 +89,19 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
 
         /**
          * @cfg {Object} meta 服务端响应数据json属性名映射
-         * 
-         *      {String} pageNumberProperty 翻页请求，提交参数名，默认'pageNumber'
-         *      pageNumberProperty: 'pageNumber',
-         * 
-         *      {String} pageSizeProperty 翻页请求，提交参数名，默认'pageSize'
-         *      pageSizeProperty: 'pageSize',
-         * 
-         *      {String} pageStartProperty 翻页请求，提交参数名，默认'pageStart'
-         *      pageStartProperty: 'pageStart',
-         * 
-         *      {String} totalProperty 翻页请求，服务端响应数据，JSON参数名，默认'total'
-         *      totalProperty: 'total',
+         *  设置的数据项包括
+         *      String : pageNumberProperty 翻页请求，提交参数名，默认'pageNumber'
+         *      String : pageSizeProperty 翻页请求，提交参数名，默认'pageSize'
+         *      String : pageStartProperty 翻页请求，提交参数名，默认'pageStart'
+         *      String : totalProperty 翻页请求，服务端响应数据，JSON参数名，默认'total'
+         *
+         *  例如：
+         *      meta: {
+         *          pageNumberProperty: 'pageNumber',
+         *          pageSizeProperty: 'pageSize',
+         *          pageStartProperty: 'pageStart',
+         *          totalProperty: 'total'
+         *      }
          */
 
         /**
@@ -98,9 +115,21 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         maxPage: Number.MAX_VALUE,
 
         /**
-         * @cfg {Boolean} showPageLoading true显示$.mobile.showPageLoadingMsg，默认false
+         * @cfg {Boolean} showPageLoading true显示加载中DOM，默认false
+         * 调用$.mobile.showPageLoadingMsg()方法
          */
         showPageLoading: false,
+
+        /**
+         * @cfg {Boolean} autoLoad true自动加载model
+         * 这个属性提供给pagelet使用，当页面进入时，自动加载model数据
+         */
+
+        /**
+         * @cfg {String} bindTo 将model绑定到一个page区域
+         * 可选参数: 'header' 'footer' 'body'
+         * 将model绑定到一个page区域，当model加载数据时，自动渲染对应区域的模版
+         */
         
         // private
         init: function() {
@@ -117,17 +146,19 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
             this.initTable();
             
             /**
-             * @property {Number} currentPage 当前页
+             * @property {Number} currentPage
+             * 当前页
              */
             this.currentPage = 1;
             
             /**
-             * @property {Number} total 总记录数
+             * @property {Number} total
+             * 总记录数
              */
             this.total = undefined;
             
             /**
-             * @property fetched
+             * @property {Boolean} fetched
              * true表示已从服务器取值
              */
             this.fetched = false;
@@ -167,22 +198,32 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
             this.addEvents(
                 /**
                  * @event datachanged
+                 * 当store值改变时触发
+                 * @param {Store} this
                  */
                 'datachanged',
                 /**
                  * @event beforeload
+                 * 当store加载数据之前触发，返回false则中断操作
+                 * @param {Store} this
                  */
                 'beforeload',
                 /**
                  * @event load
+                 * 当store加载数据之后触发
+                 * @param {Store} this
                  */
                 'load',
                 /**
                  * @event loadfailed
+                 * 当store加载数据失败时触发
+                 * @param {Store} this
                  */
                 'loadfailed',
                 /**
                  * @event loadcomplete
+                 * 当store加载数据完成时触发
+                 * @param {Store} this
                  */
                 'loadcomplete'
             );
@@ -333,7 +374,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         },
         
         /**
-         * 获取第一页
+         * 加载第一页
          */
         first: function() {
             this.load({
@@ -342,7 +383,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         },
         
         /**
-         * 获取最后一页
+         * 加载最后一页
          */
         last: function() {
             if (X.isDefined(this.total)) {
@@ -354,7 +395,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         },
         
         /**
-         * 获取前一页
+         * 加载前一页
          */
         prev: function() {
             this.load({
@@ -363,7 +404,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         },
         
         /**
-         * 获取后一页
+         * 加载后一页
          */
         next: function() {
             if (this.currentPage == 1 && this.get().length == 0) {
@@ -378,6 +419,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         
         /**
          * 增加数据
+         * @param {Object} record
          */
         add: function(record) {
             this.appendData(X.toArray(record));
@@ -385,6 +427,8 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         
         /**
          * 插入一条数据
+         * @param {index} index 索引位置，插入在索引位置之后
+         * @param {Object} record
          */
         insert: function(index, record) {
             this.data.insert(index, this.createModel(record));
@@ -393,6 +437,7 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         
         /**
          * 移除数据
+         * @param {String} id
          */
         remove: function(id) {
             var r = this.data.item(id);
@@ -403,13 +448,18 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
         
         /**
          * 递归
+         * @param {Function} fn
+         * @param {Object} scope
          */
         each: function(fn, scope) {
             this.data.each(fn, scope || this);
         },
         
         /**
-         * 获取store数据
+         * 获取store的值
+         * @param {String/Boolean} id (optional) model的id
+         * @param {Boolean} raw (optional) ture表示获取未包装的原始值
+         * @return {String/Object} values
          */
         get: function(id, raw) {
             var rs, model;
@@ -431,7 +481,17 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
             return rs;
         },
 
-        // private
+        /**
+         * 获得页面分页信息
+         * @returns {Object}
+         *  包含：
+         *      Number : total
+         *      Number : maxPage
+         *      Number : currentPage
+         *      Number : pageCount
+         *      Number : fromRecord
+         *      Number : toRecord
+         */
         getPageData: function() {
             return {
                 total: this.total,

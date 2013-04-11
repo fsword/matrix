@@ -20,10 +20,11 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
         
         /**
          * @cfg {String} tableName 数据表名
+         * 如果未设置表名，则useWebDatabase会被设置为false
          */
         
         /**
-         * @cfg {Boolean} useCache 当网络离线或本地数据库有数据时，优先使用本地数据
+         * @cfg {Boolean} useCache 当本地数据库有数据时，优先使用本地数据
          */
         useCache: false,
         
@@ -33,7 +34,42 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
         cacheExpires: 10 * 60 * 1000,
         
         /**
-         * @cfg {Array} fields 开启useCache时，必须设置fields字段
+         * @cfg {Array} fields 定义数据表字段名，开启useWebDatabase时，必须设置fields字段
+         * 如果未设置fields字段，则useWebDatabase会被设置为false
+         *
+         * 使用以下几种方式设置：
+         *
+         *  第一种
+         *      fields: ['id', 'title', 'content', 'createTime']
+         *
+         *  第二种，设置字段类型
+         *      fields: ['id', 'title', 'content', {
+         *          name: 'createTime',
+         *          type: 'date',
+         *          format: 'Y-m-d' // 如果未设置format，默认为'Y-m-d H:i:s'
+         *      }]
+         *
+         *      字段类型转换包含以下几种类型
+         *      - number 将值转换成Number
+         *      - float 将值转换成浮点数
+         *      - date 将值转换成Date对象
+         *      - timestamp 将一个timestamp的值，转换成一个指定格式的日期字符串
+         *          例如：
+         *          fields: ['id', 'title', 'content', {
+         *              name: 'createTime',
+         *              type: 'timestamp',
+         *              format: 'Y-m-d'
+         *          }]
+         *          createTime的值为1365661794097
+         *          转换之后，获取到createTime的值为 2013-04-11
+         *
+         *  第三种，设置renderer函数，使用renderer函数包装数据
+         *      fields: ['id', 'title', {
+         *          name: 'content',
+         *          renderer: function(val) {
+         *              return 'Hello, ' + val;
+         *          }
+         *      }]
          */
 
         /**
@@ -42,6 +78,11 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
         
         /**
          * @cfg {String/Object} restful AJAX请求API
+         * 包含CRUD操作AJAX请求URL
+         *  - create
+         *  - read
+         *  - update
+         *  - destroy
          */
         
         /**
@@ -50,12 +91,27 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
         requestMethod: 'GET',
 
         /**
-         * @cfg {String} dataType 默认'json'
+         * @cfg {String} dataType 服务端响应数据类型，默认'json'
          */
         dataType: 'json',
         
         /**
-         * @cfg {Object} baseParams AJAX请求提交给服务端的默认参数
+         * @cfg {Object} baseParams AJAX请求的默认参数
+         * 允许设置jquery.ajax(settings)函数的参数settings包含的属性
+         */
+
+        /**
+         * @cfg {Object} getData 返回一组AJAX请求使用的data参数
+         * 包含一个参数：
+         *  - Object : params 页面hash中包含的参数
+         *
+         * <code>
+         *  getData: function(params) {
+         *      return {
+         *          // ...
+         *      };
+         *  }
+         * </code>
          */
         
         /**
@@ -73,10 +129,22 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
          */
 
         /**
-         * @cfg {Boolean} showPageLoading true显示$.mobile.showPageLoadingMsg，默认false
+         * @cfg {Boolean} showPageLoading true显示加载中DOM，默认false
+         * 调用$.mobile.showPageLoadingMsg()方法
          */
         showPageLoading: false,
-        
+
+        /**
+         * @cfg {Boolean} autoLoad true自动加载model
+         * 这个属性提供给pagelet使用，当页面进入时，自动加载model数据
+         */
+
+        /**
+         * @cfg {String} bindTo 将model绑定到一个page区域
+         * 可选参数: 'header' 'footer' 'body'
+         * 将model绑定到一个page区域，当model加载数据时，自动渲染对应区域的模版
+         */
+
         // private
         init: function() {
             this.baseParams = this.baseParams || {};
@@ -86,23 +154,23 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
             this.initTable();
             
             /**
-             * @property dirty
+             * @property {Boolean} dirty
              * true表示model的值被修改
              */
             this.dirty = false;
             
             /**
-             * @property fetched
+             * @property {Boolean} fetched
              * true表示已从服务器取值
              */
             this.fetched = false;
             
             /**
-             * @property removed
-             * true表示当前model数据已删除
+             * @property {Boolean} removed
+             * true表示当前model数据已被删除
              */
             this.removed = false;
-            
+
             this.modified = {}; // model被修改的值
             this.data = {};
             
@@ -230,33 +298,51 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
             this.addEvents(
                 /**
                  * @event datachanged
+                 * 当model值改变时触发
+                 * @param {Model} this
+                 * @param {Object} changed 修改之后的值
+                 * @param {Object} currValues 当前值
                  */
                 'datachanged',
                 /**
                  * @event idchanged
+                 * 当model的id改变时触发
+                 * @param {Model} this
+                 * @param {String} newId 新id
+                 * @param {String} oldId 旧id
                  */
                 'idchanged',
                 /**
                  * @event beforeload
+                 * 当model加载数据之前触发，返回false则中断操作
+                 * @param {Model} this
                  */
                 'beforeload',
                 /**
                  * @event load
+                 * 当model加载数据之后触发
+                 * @param {Model} this
                  */
                 'load',
                 /**
                  * @event loadfailed
+                 * 当model加载数据失败时触发
+                 * @param {Model} this
                  */
                 'loadfailed',
                 /**
                  * @event loadcomplete
+                 * 当model加载数据完成时触发
+                 * @param {Model} this
                  */
                 'loadcomplete'
             );
         },
         
         /**
-         * 给model赋值，触发datachanged事件
+         * 设置model的值
+         * @param {String/Object} name 名称或一组被设置值对象
+         * @param {String} value (optional)
          */
         set: function(name, value) {
             var data = this.data,
@@ -318,7 +404,10 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
         },
         
         /**
-         * 获取数据
+         * 获取model的值
+         * @param {String/Boolean} name (optional) 名称
+         * @param {Boolean} raw (optional) ture表示获取未包装的原始值
+         * @return {String/Object} values
          */
         get: function(name, raw) {
             var data = this.data,
@@ -360,7 +449,7 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
                             value = parseFloat(value);
                         } else if (type == 'date') {
                             value = DateFormat.parse(value, field.format || dateFormat);
-                        } else if (type == 'timestampToDateString') {
+                        } else if (type == 'timestamp') {
                             dt = new Date();
                             dt.setTime(value);
                             value = DateFormat.format(dt, field.format || dateFormat);

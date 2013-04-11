@@ -2,15 +2,56 @@
  * @class MX.app.Application
  * @alias application
  *
- * Appliaction主程序类，整合WebApp中使用的资源，管理页面视图
+ * Appliaction主程序类，整合WebApp中使用的各种资源（model、store、view、controller），管理页面视图
  *
- * Matrix框架的Appliaction是一个Single Page Web Application，
- * App的Pagelet视图是基于模版渲染，还不支持由外部加载页面内容作为页面视图的功能，类似jQuery mobile Navigation
+ * Matrix框架的Appliaction是一个Single Page Web Application
+ * Appliaction的Pagelet视图是基于模版渲染，不支持由外部加载页面内容作为页面视图的功能（类似jQuery mobile Navigation）
+ * 仅支持基于hash pagelet页面切换
  *
  * 当hash发生改变时，App加载hash对应的pagelet，然后，pagelet使用view绑定的template渲染试图
+ *
+ * 当App启动时，页面会自动跳转到welcome pagelet，例如：
+ *  welcome的hash为'h'，那么页面的url会被重置为'http://localhost/mx/examples/helloworld/index.html#/h'
+ *
+ * 此时，有三种方式可以实现页面跳转：
+ *  1、直接更改url中的hash值
+ *  2、将页面<a>标签的href定义为hash，如：<a href="#/h">首页</a>
+ *  3、使用X.App.go('h')函数实现页面跳转，不需要带前缀'#/'
+ *
+ * Matrix框架的Appliaction集成了jquery mobile的changePage功能，实现页面切换的过渡动画效果
+ *
+ * Appliaction代理了changePage过程中的页面事件，并由App和Controller对外提供接口支持
+ * Appliaction提供的页面事件：
+ *  - pagebeforechange
+ *  - pagechange
+ *  - pageafterchange
+ *  - pagechangefailed
+ * 可以使用如下方式监听：
+ * <code>
+ *  X.App.on('pagechange', function() {
+ *      // ...
+ *  })
+ * </code>
+ *
+ * Controller提供的页面事件：
+ *  - pagecreate
+ *  - pagebeforeshow
+ *  - pageshow
+ *  - pagebeforehide
+ *  - pagehide
+ *
+ * Controller除了提供事件之外，还提供由子类实现的抽象方法
+ *  - onPageCreate() 当页面创建DOM时触发
+ *  - beforePageShow() 当进入页面之前触发
+ *  - onPageShow() 当进入页面时触发
+ *  - beforePageHide() 当离开页面之前触发
+ *  - onPageHide() 当离开页面时触发
+ *
+ * 在编写业务代码时，可以充分利用Matrix框架Application、Controller提供的页面事件、方法的支持，实现业务逻辑
  */
 MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, LocalStorage, Pagelet) {
     var $window = $(window),
+        $body = $('body'),
         location = window.location,
         matchHashRe = /#(.*)$/, // 匹配url中的hash部分
         hashStripperRe = /^[#\/]/, // 移除hash碎片中的"#/"标识符
@@ -265,7 +306,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
             this.templateCt = $(document.createElement('div'));
             this.templateCt.attr('id', 'mx-app-templates').hide();
             this.templateCt.html(templates);
-            $('body').append(this.templateCt);
+            $body.append(this.templateCt);
         },
 
         // private
@@ -276,7 +317,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
             delete config.pagelets;
             $.extend(this, config);
 
-            this.pageContainer = $('body'); // pagelet容器
+            this.pageContainer = $body; // pagelet容器
 
             if (this.useWebDatabase) {
                 // 没有设置数据库名称，则禁用web sql database
@@ -357,11 +398,10 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                     return;
                 }
 
-                var props = $.extend({}, models, { id: null }),
-                    id = models.id;
+                var props = $.extend({}, models);
                 props.useWebDatabase = this.useWebDatabase ? props.useWebDatabase : false;
                 props.db = this.db;
-                this.models[id] = props;
+                this.models[models.id] = props;
             }
         },
 
@@ -375,11 +415,10 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                     return;
                 }
 
-                var props = $.extend({}, stores, { id: null }),
-                    id = stores.id;
+                var props = $.extend({}, stores);
                 props.useWebDatabase = this.useWebDatabase ? props.useWebDatabase : false;
                 props.db = this.db;
-                this.stores[id] = props;
+                this.stores[stores.id] = props;
             }
         },
 
@@ -543,6 +582,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 
         /**
          * 指定一个hash，跳转到页面
+         *
          * @param {String} hash 跳转页面的hash，不包含'#/'前缀
          * 例如，要跳转到页面'http://localhost/mx/examples/helloworld/index.html#/h'
          * <code>
@@ -649,6 +689,13 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                     transtionOptions.reverse = np.transition.in.reverse;
                 }
                 transtionOptions.transition = transition;
+
+                /*
+                 * 在页面切换之前，需要将页面的body的滚动条重置到顶部，否则，jquery mobile changePage函数在处理slideDown的动画效果时，
+                 * 如果页面body的scrollTop在底部，会导致动画过度效果异常，页面会弹跳卡顿，动画无法正常执行
+                 */
+                $body.scrollTop(0);
+
                 $.mobile.changePage(np.el, transtionOptions);
             }
         },
