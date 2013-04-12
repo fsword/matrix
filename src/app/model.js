@@ -487,9 +487,11 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
                 if (this.showPageLoading) {
                     this.showPageLoadingMsg();
                 }
-                if (force === true) {
-                    this.fetch(params);
-                } else if (this.useWebDatabase && this.useCache) {
+
+                /*
+                 * 在网络离线时，强制使用本地缓存，因为，网络离线再使用AJAX请求数据已经没有意义了
+                 */
+                if (!window.navigator.onLine || (!force && this.useWebDatabase && this.useCache)) {
                     this.loadStorage(params);
                 } else {
                     this.fetch(params);

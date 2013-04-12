@@ -5,7 +5,7 @@ window.MX = {
     /**
      * The version of the framework
      */
-    version: '@VERSION'
+    version: '{@VERSION}'
 };
 
 (function(X) {
