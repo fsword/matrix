@@ -396,10 +396,19 @@ ul {
     position: absolute;
     left: 30px;
     top: 30px;
-    font: normal 36px earth_normal, Helvetica, sans-serif;
+    font: normal 33px earth_normal, Helvetica, sans-serif;
     color: #fffef9;
     opacity: 0.3;
     text-shadow: 1px 1px 0 rgb(79, 85, 85);
+}
+
+.favourite .title span {
+    font: normal 14px Helvetica, sans-serif;
+    display: block;
+}
+
+.favourite .title span a {
+    color: #411445;
 }
 
 .favourite .download {

@@ -1,7 +1,7 @@
 /*
  * 手机搜狐WebApp是一个基于Matrix框架构建的Single Page Web Application，完整的展现了Matrix框架在WebApp领域的使用技巧。
  *
- * Example中的功能完全仿照ZAKER for iPhone开发，由于页面是按照iPhone4S全屏高度设计，为了达到最佳展示效果，请使用iOS Safari打开，
+ * DEMO中的功能完全模拟ZAKER for iPhone开发，由于页面是按照iPhone4S全屏高度设计，为了达到最佳展示效果，请使用iOS Safari打开，
  * 并将页面添加到你的桌面，然后从桌面打开进入。
  *
  * 由于例子中的数据访问存在跨域安全问题，所以本例托管在搜狐的服务器上，访问地址如下：
@@ -431,7 +431,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
     var idiotMsg = ['姐姐，别玩了，有意思么', '有时间干点正事吧', '你也太无聊了吧'];
     function showFavourite() {
         if (!favEl) {
-            favEl = $('<div class="favourite"><div class="title">MATRIX</div><a href="#0" class="download" data-message="true"></a></div>');
+            favEl = $('<div class="favourite"><div class="title">MATRIX<span>Based on the <a href="https://github.com/mxjs/matrix" target="_blank">Matrix</a> Framework</span></div><a href="#0" class="download" data-message="true"></a></div>');
             $body.append(favEl);
         }
         favEl.height(window.innerHeight);
