@@ -84,7 +84,7 @@ var copyFile = function(src, dest, file, filters, encode) {
         canCopy = (typeof filters === 'string' ? new RegExp(filters, 'i') : filters).test(file);
     }
     if (canCopy) {
-        if (!/\.(html|js|css)$/i.test(file)) {
+        if (!/\.(html|js|css|txt|manifest|tmpl|md)$/i.test(file)) {
             var rOption = {
                 flags: 'r',
                 encoding: null,
@@ -115,6 +115,7 @@ var copyFile = function(src, dest, file, filters, encode) {
                     code = code.replace(match[0], '<html manifest="appcache.manifest">');
                 }
             }
+            code = code.replace(/\{@VERSION\}/g, tag);
             fs.writeFileSync(dest, code, encode);
         }
     }
@@ -167,8 +168,8 @@ function processPackage(package) {
         filePath = SRC_DIR + file.path + file.name;
         log('    + ' + filePath);
         code = fs.readFileSync(filePath, ENCODING);
-        if (file.name === 'matrix.js') {
-            code = code.replace(/@VERSION/, tag);
+        if (/\.(html|js|css|txt|manifest|tmpl|md)$/i.test(file.name)) {
+            code = code.replace(/\{@VERSION\}/g, tag);
         }
         outputCode.push(code);
     });

@@ -659,9 +659,11 @@ MX.kindle('klass', 'dateformat', function(X, Klass, DateFormat) {
                 if (this.showPageLoading) {
                     this.showPageLoadingMsg();
                 }
-                if (force === true) {
-                    this.fetch(params);
-                } else if (this.useWebDatabase && this.useCache) {
+
+                /*
+                 * 在网络离线时，强制使用本地缓存，因为，网络离线再使用AJAX请求数据已经没有意义了
+                 */
+                if (!window.navigator.onLine || (!force && this.useWebDatabase && this.useCache)) {
                     this.loadStorage(params);
                 } else {
                     this.fetch(params);
@@ -1128,12 +1130,15 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
             if (!this.removed && !this.loading && pageNumber <= maxPage && this.fireEvent('beforeload', this, pageNumber) !== false) {
                 this.loading = true;
                 this.toPage = pageNumber;
+
                 if (this.showPageLoading) {
                     this.showPageLoadingMsg();
                 }
-                if (force === true) {
-                    this.fetch(params);
-                } else if (this.useWebDatabase && this.useCache) {
+
+                /*
+                 * 在网络离线时，强制使用本地缓存，因为，网络离线再使用AJAX请求数据已经没有意义了
+                 */
+                if (!window.navigator.onLine || (!force && this.useWebDatabase && this.useCache)) {
                     this.loadStorage(params);
                 } else {
                     this.fetch(params);
@@ -2462,7 +2467,7 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
  *
  * Appliaction主程序类，整合WebApp中使用的各种资源（model、store、view、controller），管理页面视图
  *
- * Matrix框架的Appliaction是一个Single Page Web Application
+ * Matrix框架适合于开发Single Page Web Application
  * Appliaction的Pagelet视图是基于模版渲染，不支持由外部加载页面内容作为页面视图的功能（类似jQuery mobile Navigation）
  * 仅支持基于hash pagelet页面切换
  *

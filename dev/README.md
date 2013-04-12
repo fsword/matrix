@@ -1,7 +1,7 @@
 # Matrix - A Mobile WebApp Framework
 ======
 
-Matrix是一个面向移动端WebApp开发的前端框架，当前还处于开发阶段，功能还不完善，初期的Matrix会更适用于阅读类产品开发，如新闻客户端等。
+Matrix是一个面向移动端WebApp开发的前端框架，适用于开发Single Page Web Application。当前还处于开发阶段，功能还不完善，初期的Matrix功能会更好的支持阅读类产品开发，如新闻客户端等。
 
 Matrix构建在 jQuery 1.9.1 以及 jQuery Mobile 1.3.0 之上，Matrix自身并不提供CSS、页面动画以及UI组件等功能，它只是将这些资源更有效的整合起来，并提供更多项目开发中所需要的工具、套件，辅助开发者更高效的构建移动WebApp项目。
 
@@ -63,7 +63,7 @@ MX.ready('klass', function(X, Klass) {
 
 [手机搜狐WebApp](http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html "手机搜狐（向Zaker致敬）")的功能完全仿照ZAKER for iPhone开发。
 
-你可以直接从手机浏览器打开[手机搜狐WebApp](http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html "手机搜狐（向Zaker致敬）")，为了达到最佳展示效果，请使用iOS Safari，并将页面添加到你的桌面，然后从桌面打开进入。
+你可以直接从手机浏览器打开[手机搜狐WebApp](http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html "手机搜狐（向Zaker致敬）")。由于页面是按照iPhone4S全屏高度设计，为了达到最佳展示效果，请使用iOS Safari打开，并将页面添加到你的桌面，然后从桌面打开进入。
 
 直接用手机扫描下面的二维码，就可以访问[手机搜狐WebApp](http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html "手机搜狐（向Zaker致敬）")
 
