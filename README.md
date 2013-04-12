@@ -61,7 +61,7 @@ MX.ready('klass', function(X, Klass) {
 
 ## 一个比较完整的例子：手机搜狐
 
-[手机搜狐WebApp](http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html "手机搜狐（向Zaker致敬）")的功能完全仿照ZAKER for iPhone开发。
+[手机搜狐WebApp](http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html "手机搜狐（向Zaker致敬）")的功能完全模拟ZAKER for iPhone开发。
 
 你可以直接从手机浏览器打开[手机搜狐WebApp](http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html "手机搜狐（向Zaker致敬）")。由于页面是按照iPhone4S全屏高度设计，为了达到最佳展示效果，请使用iOS Safari打开，并将页面添加到你的桌面，然后从桌面打开进入。
 
