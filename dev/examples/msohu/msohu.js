@@ -141,7 +141,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
                 showFavourite();
                 initShowTimeout = setTimeout(function() {
                     hideFavourite(true);
-                }, 2000);
+                }, 3000);
             }
 
             if (!this.holder) {

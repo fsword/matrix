@@ -15877,7 +15877,7 @@ window.MX = {
     /**
      * The version of the framework
      */
-    version: '0.0.3'
+    version: '0.0.4'
 };
 
 (function(X) {
