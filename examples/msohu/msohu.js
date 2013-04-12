@@ -431,7 +431,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
     var idiotMsg = ['姐姐，别玩了，有意思么', '有时间干点正事吧', '你也太无聊了吧'];
     function showFavourite() {
         if (!favEl) {
-            favEl = $('<div class="favourite"><div class="title">MATRIX</div><a href="#0" class="download" data-message="true"></a></div>');
+            favEl = $('<div class="favourite"><div class="title">MATRIX<span>Based on the <a href="https://github.com/mxjs/matrix" target="_blank">Matrix</a> Framework</span></div><a href="#0" class="download" data-message="true"></a></div>');
             $body.append(favEl);
         }
         favEl.height(window.innerHeight);
