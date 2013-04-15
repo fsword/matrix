@@ -41,7 +41,8 @@ require(['matrix'], function(X) {
                                '            Button',
                                '        </a>',
                                '    </li>',
-                               '</ul>'].join('')
+                               '</ul>',
+                               '<p>这个例子展示了如何使用RequireJS加载Matrix，参见<a href="main.js" target="_blank">main.js</a></p>'].join('')
                 }
             },
             footerCfg: {

@@ -21260,8 +21260,6 @@ MX.kindle('jquery', 'klass', 'collection', function(X, $, Klass, Collection) {
             this.db = null;
         }
     });
-
-    return X.app.Store;
 });
 /**
  * @class MX.app.View
