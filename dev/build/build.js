@@ -23,6 +23,7 @@ program
 var BASE_DIR = '../',
     SRC_DIR = BASE_DIR + 'src/',
     OUTPUT_DIR = BASE_DIR + 'tags/',
+    DIST_DIR = BASE_DIR + 'dist/',
     ENCODING = 'utf8';
 
 var projectName = program.project,
@@ -77,14 +78,14 @@ var rmdirSync = (function() {
     };
 })();
 
-var copyFile = function(src, dest, file, filters, encode) {
+var copyFile = function(src, dest, fileName, filters, encode) {
     var canCopy = true,
         code, match;
     if (filters) {
-        canCopy = (typeof filters === 'string' ? new RegExp(filters, 'i') : filters).test(file);
+        canCopy = (typeof filters === 'string' ? new RegExp(filters, 'i') : filters).test(fileName);
     }
     if (canCopy) {
-        if (!/\.(html|js|css|txt|manifest|tmpl|md)$/i.test(file)) {
+        if (!/\.(html|js|css|txt|manifest|tmpl|md)$/i.test(fileName)) {
             var rOption = {
                 flags: 'r',
                 encoding: null,
@@ -105,7 +106,7 @@ var copyFile = function(src, dest, file, filters, encode) {
             });
         } else {
             code = fs.readFileSync(src, encode);
-            if (/\.html$/i.test(file)) {
+            if (/\.html$/i.test(fileName)) {
                 match = code.match(/<script type="text\/javascript" id="bootstrap" src="(.*)"><\/script>/);
                 if (match && match[0]) {
                     code = code.replace(match[0], '<script type="text/javascript" src="../../matrix.min.js"></script>');
@@ -121,9 +122,9 @@ var copyFile = function(src, dest, file, filters, encode) {
     }
 };
 
-var copydirSync = function(srcDir, src, destDir, dest, filters, encode) {
-    var srcFile = srcDir + src,
-        destFile = destDir + dest,
+var copyDir = function(srcBaseDir, src, destBaseDir, dest, filters, encode) {
+    var srcFile = srcBaseDir + src,
+        destFile = destBaseDir + dest,
         files;
     if (destFile.charAt(destFile.length - 1) == '/') {
         if (!fs.existsSync(destFile)) {
@@ -132,7 +133,7 @@ var copydirSync = function(srcDir, src, destDir, dest, filters, encode) {
         files = fs.readdirSync(srcFile);
         files.forEach(function(file) {
             if (fs.statSync(srcFile + file).isDirectory()) {
-                copydirSync(srcFile + file + '/', '', destFile + file + '/', '', filters, encode);
+                copyDir(srcFile + file + '/', '', destFile + file + '/', '', filters, encode);
             } else {
                 copyFile(srcFile + file, destFile + file, file, filters, encode);
             }
@@ -177,6 +178,23 @@ function processPackage(package) {
     fs.writeFileSync(outputDir + target, outputCode.join('\n'), ENCODING);
 }
 
+var amdstart = [], amdend = [];
+amdstart.push('(function(root, factory) {\n');
+amdstart.push('    if (typeof define === "function" && define.amd) {\n');
+amdstart.push('        define([\'jquery\', \'jquerymobile\', \'arttemplate\'], function($, jqm, artTemplate) {\n');
+amdstart.push('            factory(root, $, jqm, artTemplate);\n');
+amdstart.push('            return root.MX;\n');
+amdstart.push('        });\n');
+amdstart.push('    } else {\n');
+amdstart.push('        factory(root, root.jQuery, root.jQuery.mobile, root.template);\n');
+amdstart.push('    }\n');
+amdstart.push('}(window, function(window, $, jqm, artTemplate) {\n');
+amdstart.push('\n');
+amdend.push('\n\n');
+amdend.push('}));\n');
+amdstart = amdstart.join('');
+amdend = amdend.join('');
+
 function processBuild(build) {
     var name = build.name,
         target = build.target,
@@ -196,7 +214,10 @@ function processBuild(build) {
         outputCode.push(code);
     });
     
-    code = outputCode.join(compress ? '' : '\n');
+    code = outputCode.join(compress ? '' : '\n\n');
+    if (target === 'matrix-nolibs.js' || target === 'matrix-nolibs.min.js') {
+        code = amdstart + code + amdend;
+    }
     
     if (compress) {
         log('  * Compress and obfuscate ' + build.target);
@@ -213,7 +234,11 @@ function processBuild(build) {
 }
 
 function copyResource(resource) {
-    copydirSync(BASE_DIR, resource.src, outputDir, resource.dest, resource.filters, ENCODING);
+    copyDir(BASE_DIR, resource.src, outputDir, resource.dest, resource.filters, ENCODING);
+}
+
+function copyDist() {
+    copyDir(outputDir, '', DIST_DIR, '', '', ENCODING);
 }
 
 function buildProject() {
@@ -271,6 +296,8 @@ function buildProject() {
                 copyResource(resource);
             });
         }
+
+        copyDist();
     } else {
         err('No "' + packagePath + '" in this directory');
     }

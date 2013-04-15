@@ -9,7 +9,7 @@
  *      artTemplate对应'arttemplate'
  *
  */
-(function(X) {
+MX.kindle(function(X) {
     X.klass.KlassManager = function() {
         var classes = {};
         
@@ -78,4 +78,4 @@
     X.lib.artTemplate && X.reg('arttemplate', X.lib.artTemplate);
 
     X.reg('klassmanager', X.klass.KlassManager);
-})(MX);
+});

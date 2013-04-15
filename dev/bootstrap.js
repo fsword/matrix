@@ -169,37 +169,37 @@
         remoteBaseUrl = window.remoteBaseUrl || jsBaseUrl,
         headjsNode,
         headReady = false,
-        readyFnCache = [],
+        readyFnCaches = [],
         headjsTimeoutId,
         invalidTimeoutId,
         xhr = new window.XMLHttpRequest(),
         xhrTimeoutId;
-    
+
     headjsNode = document.createElement('script');
     headjsNode.src = remoteBaseUrl + 'src/lib/headjs-0.99.js';
     headjsNode.type = "text/javascript";
     headjsNode.onload = function() {
         headReady = true;
     };
-    
+
     if (bootstrap.nextSibling) {
         headNode.insertBefore(headjsNode, bootstrap.nextSibling);
     } else {
         headNode.appendChild(headjsNode);
     }
-    
+
     window.MX = {
         ready: function() {
-            readyFnCache.push(Array.prototype.slice.call(arguments, 0));
+            readyFnCaches.push(Array.prototype.slice.call(arguments, 0));
         }
     };
-    
+
     function err(msg) {
         if (console) {
             console.error('bootstrap.js error: ' + msg);
         }
     };
-    
+
     function loadDepend(packageConf) {
         var builds = packageConf.builds,
             packages = packageConf.packages,
@@ -207,7 +207,7 @@
             package,
             file,
             depends = [];
-        
+
         builds.forEach(function(build) {
             if (build.target == dependBuild) {
                 dependPackages = build.packages;
@@ -231,7 +231,7 @@
         }
         loadHeadJS(depends);
     };
-    
+
     function loadHeadJS(depends) {
         if (!headReady) {
             headjsTimeoutId = setTimeout(function() {
@@ -252,8 +252,8 @@
             } else {
                 head.js.apply(window, depends.concat([function() {
                     // 注册给真实MX.ready函数
-                    if (readyFnCache.length > 0) {
-                        readyFnCache.forEach(function(cache) {
+                    if (readyFnCaches.length > 0) {
+                        readyFnCaches.forEach(function(cache) {
                             MX.ready.apply(window, cache);
                         });
                     }

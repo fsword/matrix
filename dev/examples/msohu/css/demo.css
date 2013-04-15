@@ -166,7 +166,6 @@ ul {
 }
 
 .ui-mobile, .ui-mobile .ui-page {
-    min-height: 460px;
     overflow: hidden;
 }
 
@@ -181,13 +180,9 @@ ul {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     width: 100%;
+    height: 100%;
     background: url("../images/background.jpg") no-repeat left top;
     background-size: 550px 600px;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: 0;
     display: -webkit-box;
     display: box;
 }

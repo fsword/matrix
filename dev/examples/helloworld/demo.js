@@ -13,7 +13,7 @@ MX.ready('klass', function(X, Klass) {
 
         onRender: function() {
             // 更新body对象的HTML，body是一个jquery element对象
-            this.body.html('Hello World!');
+            this.body.html('<h1>Hello World!</h1><p>这个一个简单的例子，参见<a href="demo.js" target="_blank">main.js</a></p>');
         }
     });
 

@@ -8,7 +8,7 @@ Matrix构建在 jQuery 1.9.1 以及 jQuery Mobile 1.3.0 之上，Matrix自身并
 ## 功能特性
 
 ### MVC框架
-Matrix是一个高度集成jQuery Mobile的MVC框架，它将jQuery Mobile的UI、事件控制等功能结构化，让开发者更少的纠结在jQuery Mobile以及如何构建页面本身，更多的专注在业务开发上。
+Matrix是一个高度集成jQuery Mobile的MVC框架，它将jQuery Mobile的UI、事件控制等功能结构化，使用View、Controller、Template更快速的构建Single Page WebApp。
 
 ### 高速模版引擎
 Matrix集成了[artTemplate](https://github.com/aui/artTemplate)模版引擎，并提供LocalStorage模版缓存机制。
@@ -76,9 +76,27 @@ MX.ready('klass', function(X, Klass) {
 * Use Model (建设中)
 * Use Store (建设中)
 * Use jQuery Mobile Widget (建设中)
-* Use RequireJS (建设中)
-* Use SeaJS (建设中)
+* [Use RequireJS](http://mxjs.github.io/matrix/dev/examples/requirejs/index.html "Hello RequireJS")
 * [手机搜狐WebApp](http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html "手机搜狐（向Zaker致敬）")
+
+## 对jQuery Mobile的说明
+Matrix框架是构建在jQuery Mobile（简称jqm）之上，既可以依赖包含所有jqm组件的版本，也可以只依赖jqm核心库，Matrix提供两个版本的jqm打包：jquery.mobile-1.3.0.js和jquery.mobile-1.3.0-lite.js
+
+jquery.mobile-1.3.0.js包含除Core Init模块之外的所有jqm代码，最后被打包在matrix-all.js中
+
+jquery.mobile-1.3.0-lite.js则只包含以下模块的代码，最后被打包matrix.js中：
+* Core，除init之外的部分
+* Events
+* Navigation
+* Transitions
+* Utilities，仅包含以下部分
+** match media polyfill
+** zoom handling
+* ios orientation change fix
+* Widgets
+** toolbars fixed
+** toolbars fixed workarounds
+** loading message
 
 ## Downloads
 
