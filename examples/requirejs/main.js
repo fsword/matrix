@@ -9,7 +9,7 @@ require.config({
         jquery: 'src/lib/jquery-1.9.1',
         jquerymobile: 'src/lib/jquery.mobile-1.3.0',
         arttemplate: 'src/lib/artTemplate-1.4.0'  ,
-        matrix: 'dist/matrix-nolibs'
+        matrix: 'matrix-nolibs'
     },
 
     shim: {
