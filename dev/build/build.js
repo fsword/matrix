@@ -23,7 +23,6 @@ program
 var BASE_DIR = '../',
     SRC_DIR = BASE_DIR + 'src/',
     OUTPUT_DIR = BASE_DIR + 'tags/',
-    DIST_DIR = BASE_DIR + 'dist/',
     ENCODING = 'utf8';
 
 var projectName = program.project,
@@ -237,10 +236,6 @@ function copyResource(resource) {
     copyDir(BASE_DIR, resource.src, outputDir, resource.dest, resource.filters, ENCODING);
 }
 
-function copyDist() {
-    copyDir(outputDir, '', DIST_DIR, '', '', ENCODING);
-}
-
 function buildProject() {
     var packagePath = BASE_DIR + 'package-' + projectName + '.json',
         packageConfig,
@@ -296,8 +291,6 @@ function buildProject() {
                 copyResource(resource);
             });
         }
-
-        copyDist();
     } else {
         err('No "' + packagePath + '" in this directory');
     }
