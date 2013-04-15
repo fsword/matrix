@@ -90,13 +90,13 @@ jquery.mobile-1.3.0-lite.js则只包含以下模块的代码，最后被打包ma
 * Navigation
 * Transitions
 * Utilities，仅包含以下部分
- - match media polyfill
- - zoom handling
+- match media polyfill
+- zoom handling
 * ios orientation change fix
 * Widgets
- - toolbars fixed
- - toolbars fixed workarounds
- - loading message
+- toolbars fixed
+- toolbars fixed workarounds
+- loading message
 
 ## Downloads
 
