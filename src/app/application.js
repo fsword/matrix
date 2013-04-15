@@ -580,6 +580,13 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
             return !!this.getPagelet(hash);
         },
 
+        // private
+        destroyPagelet: function(pagelet) {
+            if (pagelet && !pagelet.singleton && pagelet.noCache === true) {
+                pagelet.destroy();
+            }
+        },
+
         /**
          * 指定一个hash，跳转到页面
          *
@@ -721,6 +728,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                 this.startUpView = null;
             }
 
+            this.destroyPagelet(this.lastPagelet);
             this.lastPagelet = this.nextPagelet;
             this.nextPagelet = null;
             this.isPageChanging = false;
@@ -765,39 +773,35 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
      * </code>
      */
     X.App = new X.app.Application();
-});
 
-/*
- * Matrix框架的Appliaction，摒弃了jQuery mobile的初始化机制，而且，不能兼容包含jquery mobile core init模块的库，
- * Appliaction重新定义了，jquery mobile的初始化过程，抛弃了Navigation对window.history的时间'pushState'以及'hashchange'事件的处理，
- * 框架自身定义了一套完整的页面导航机制
- *
- * 在引入jquery mobile的js库时，一定要使用定制下载的代码，这部分代码不能包括core init模块，
- * jquery mobile定制下载地址：http://jquerymobile.com/download-builder/
- *
- * Matrix框架默认包含两个定制的jquery mobile的js文件，jquery.mobile-1.3.0.js和jquery.mobile-1.3.0-lite.js
- *
- * jquery.mobile-1.3.0.js包含除core init模块之外的所有jqmobile代码
- *
- * jquery.mobile-1.3.0-lite.js则只包含以下模块的代码：
- *  - Core，除init之外的部分
- *  - Events
- *  - Navigation
- *  - Transitions
- *  - Utilities，仅包含以下部分
- *      - match media polyfill
- *      - zoom handling
- *      - ios orientation change fix
- *  - Widgets
- *      - toolbars fixed
- *      - toolbars fixed workarounds
- *      - loading message
- */
-if ($ && $.mobile) {
+    /*
+     * Matrix框架的Appliaction，摒弃了jQuery mobile的初始化机制，而且，不能兼容包含jquery mobile core init模块的库，
+     * Appliaction重新定义了，jquery mobile的初始化过程，抛弃了Navigation对window.history的时间'pushState'以及'hashchange'事件的处理，
+     * 框架自身定义了一套完整的页面导航机制
+     *
+     * 在引入jquery mobile的js库时，一定要使用定制下载的代码，这部分代码不能包括core init模块，
+     * jquery mobile定制下载地址：http://jquerymobile.com/download-builder/
+     *
+     * Matrix框架默认包含两个定制的jquery mobile的js文件，jquery.mobile-1.3.0.js和jquery.mobile-1.3.0-lite.js
+     *
+     * jquery.mobile-1.3.0.js包含除core init模块之外的所有jqmobile代码
+     *
+     * jquery.mobile-1.3.0-lite.js则只包含以下模块的代码：
+     *  - Core，除init之外的部分
+     *  - Events
+     *  - Navigation
+     *  - Transitions
+     *  - Utilities，仅包含以下部分
+     *      - match media polyfill
+     *      - zoom handling
+     *      - ios orientation change fix
+     *  - Widgets
+     *      - toolbars fixed
+     *      - toolbars fixed workarounds
+     *      - loading message
+     */
     $('html').addClass("ui-mobile");
-
     window.scrollTo(0, 1);
-
     $.extend($.mobile, {
         // 禁用jquery mobile自动初始化页面配置
         autoInitializePage: false,
@@ -817,4 +821,4 @@ if ($ && $.mobile) {
         // 初始化时定义为0，防止页面视图切换时滚回顶部出现抖动
         defaultHomeScroll: 0
     });
-}
+});

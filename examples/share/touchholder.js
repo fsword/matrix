@@ -58,6 +58,11 @@ MX.ready('jquery', 'klass', function(X, $, Klass) {
                         if (offsetX != 0) {
                             e.preventDefault();
                         }
+                        if ((this.swept && this.swept === 'left' && offsetX > 0) ||
+                            (this.swept && this.swept === 'right' && offsetX < 0) ||
+                            (!this.swept && offsetX != 0)) {
+                            e.preventDefault();
+                        }
                     } else {
                         delete this.touchCoords;
                         return;
@@ -65,7 +70,9 @@ MX.ready('jquery', 'klass', function(X, $, Klass) {
                 } else {
                     if (absY > absX) {
                         this.touchMoveVertical = true;
-                        if (offsetX != 0) {
+                        if ((this.swept && this.swept === 'up' && offsetY > 0) ||
+                            (this.swept && this.swept === 'down' && offsetY < 0) ||
+                            (!this.swept && offsetY != 0)) {
                             e.preventDefault();
                         }
                     } else {

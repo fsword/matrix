@@ -1,18 +1,11 @@
 /**
  * @class MX
  */
-window.MX = {
-    /**
-     * The version of the framework
-     */
-    version: '{@VERSION}'
-};
+window.MX = {};
 
-(function(X) {
+(function(X, $, artTemplate) {
     var slice = Array.prototype.slice,
         toString = Object.prototype.toString,
-        $ = window.jQuery,
-        artTemplate = window.template,
         ua = window.navigator.userAgent,
         android = ua.match(/(Android)[\/\s+]([\d.]+)/),
         ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
@@ -22,7 +15,12 @@ window.MX = {
         kindle = ua.match(/Kindle\/([\d.]+)/),
         blackberry = ua.match(/(BlackBerry).*Version\/([\d.]+)/),
         os;
-    
+
+    /**
+     * The version of the framework
+     */
+    X.version = '{@VERSION}';
+
     /**
      * 声明命名空间，用法如下：
      *
@@ -53,7 +51,7 @@ window.MX = {
             ns,
             sub,
             current;
-        
+
         for(; i < len1; ++i) {
             main = arguments[i];
             ns = arguments[i].split('.');
@@ -77,7 +75,7 @@ window.MX = {
      */
     X.ns = X.namespace;
     X.ns('MX.lib', 'MX.klass', 'MX.lib', 'MX.util', 'MX.app');
-    
+
     $.extend(X.lib, {
         jQuery: $,
         artTemplate: artTemplate
@@ -88,7 +86,7 @@ window.MX = {
         artTemplate.openTag = '<#';
         artTemplate.closeTag = '#>';
     }
-    
+
     $.extend(X, {
         /**
          * A reusable empty function
@@ -114,7 +112,7 @@ window.MX = {
 
             return type === 'string' || type === 'number' || type === 'boolean';
         },
-        
+
         /**
          * Returns true if the passed value is empty, false otherwise. The value is deemed to be empty if it is either:
          *
@@ -214,7 +212,7 @@ window.MX = {
             return value ? value.nodeName === "#text" : false;
         }
     });
-    
+
     os = {};
     if (android) {
         os.android = true;
@@ -279,7 +277,7 @@ window.MX = {
 
             return object;
         },
-        
+
         /**
          * 将对象转换成数组，包含以下几种参数传递方式：
          *
@@ -312,14 +310,14 @@ window.MX = {
             if (!X.isDefined(obj)) {
                 return [];
             } else if (X.isArray(obj)) {
-                return slice.call(obj);
+                return slice.call(obj, 0);
             } else if (toString.call(obj) == '[object Arguments]') {
-                return slice.call(obj);
+                return slice.call(obj, 0);
             } else {
                 return slice.call(arguments, 0);
             }
         },
-        
+
         /**
          * 遍历一个对象或数组，$.each的封装类，允许指定回调函数的作用域
          * @param {Element/Array} obj 遍历的对象或数组
@@ -336,17 +334,17 @@ window.MX = {
                 $.each(obj, fn);
             }
         },
-        
+
         /**
          * Calls this function after the number of millseconds specified, optionally in a specific scope. Example usage:
          * <pre><code>
          *  var sayHi = function(name){
          *      alert('Hi, ' + name);
          *  }
-         *  
+         *
          *  // executes immediately:
          *  sayHi('max');
-         *  
+         *
          *  // executes after 2 seconds:
          *  MX.defer(sayHi, 2000, this, ['max']);
          * </code></pre>
@@ -368,7 +366,7 @@ window.MX = {
             return 0;
         }
     });
-    
+
     $.extend(X, {
         /**
          * 声明一个匿名函数工作空间，并执行。同时进行类依赖管理，将依赖类对象作为参数传给回调函数
@@ -426,13 +424,13 @@ window.MX = {
                 len = args.length,
                 fnArgs = args.slice(0, len - 1),
                 fn = args[len - 1];
-            
-            fnArgs.forEach(function(alias, i) {
+
+            X.each(fnArgs, function(i, alias) {
                 fnArgs[i] = X.klass.KlassManager.get(alias);
             });
             fn.apply(window, [X].concat(fnArgs));
         },
-        
+
         /**
          * 代理$.ready()函数，并具备MX.kindle()的特性
          *
@@ -459,4 +457,4 @@ window.MX = {
             });
         }
     });
-})(MX);
+})(window.MX, window.jQuery, window.template);

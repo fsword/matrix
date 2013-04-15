@@ -148,6 +148,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
                 this.holder = new TouchHolder({
                     target: this.getCt(),
                     type: 'v',
+                    swept: 'down',
                     scope: this,
                     handleTouchEnd: this.onTouchEnd
                 });
@@ -434,7 +435,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
             favEl = $('<div class="favourite"><div class="title">MATRIX<span>Based on the <a href="https://github.com/mxjs/matrix" target="_blank">Matrix</a> Framework</span></div><a href="#0" class="download" data-message="true"></a></div>');
             $body.append(favEl);
         }
-        favEl.height(window.innerHeight);
+        favEl.height($('#mx-app-page-index-pagelet').height());
         favEl.one('webkitAnimationEnd animationend', function() {
             favEl.removeClass('animated bounceInDown');
             favEl.css('-webkit-transform', 'translateY(0px)');
@@ -562,7 +563,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
 
     var config = {
         /* 定义页面模版 */
-        templateVersion: '1.7',
+        templateVersion: '1.8',
         templateUrl: 'main.tmpl',
 
         /* 定义Web SQL Database，使用浏览器DB缓存新闻列表、正文数据 */

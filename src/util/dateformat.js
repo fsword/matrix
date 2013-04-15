@@ -119,7 +119,7 @@ console.log(MX.util.DateFormat.format(dt, MX.util.DateFormat.patterns.ShortDate)
  * on every Date object.
  */
 
-(function() {
+MX.kindle(function(MX) {
 
 // create private copy of MX's MX.util.Format.format() method
 // - to remove unnecessary dependency
@@ -1466,4 +1466,4 @@ var utilDate = MX.util.DateFormat;
 
 MX.reg('dateformat', MX.util.DateFormat);
 
-})();
+});
