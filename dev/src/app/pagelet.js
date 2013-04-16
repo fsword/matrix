@@ -57,14 +57,14 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
          *
          * 如果要设置页面离开效果，使用下面这种方式:
          *  transition: {
-         *      in: 'fade',
-         *      out: 'slideup'
+         *      pageIn: 'fade',
+         *      pageOut: 'slideup'
          *  }
          *
          * 还可以通过设置reverse属性，使动画反向
          *  transition: {
-         *      in: 'fade',
-         *      out: {
+         *      pageIn: 'fade',
+         *      pageOut: {
          *          effect: 'slideup',
          *          reverse: true
          *      }
@@ -118,19 +118,19 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
             this.transition = this.transition || '';
             if (X.isString(this.transition)) {
                 this.transition = {
-                    in: this.transition,
-                    out: ''
-                }
+                    pageIn: this.transition,
+                    pageOut: ''
+                };
             }
-            if (X.isString(this.transition.in)) {
-                this.transition.in = {
-                    effect: this.transition.in
-                }
+            if (X.isString(this.transition.pageIn)) {
+                this.transition.pageIn = {
+                    effect: this.transition.pageIn
+                };
             }
-            if (X.isString(this.transition.out)) {
-                this.transition.out = {
-                    effect: this.transition.out
-                }
+            if (X.isString(this.transition.pageOut)) {
+                this.transition.pageOut = {
+                    effect: this.transition.pageOut
+                };
             }
         },
 

@@ -726,7 +726,8 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
  * window.localStorage的封装类，可以将String或Object存储到localStorage中，将值取回时，可以还原成存储时的格式
  */
 MX.kindle(function(X) {
-    var storage = window.localStorage;
+    var storage = window.localStorage,
+        JSON = window.JSON;
 
     var LocalStorage = {
         /**
@@ -740,7 +741,11 @@ MX.kindle(function(X) {
          * @param {String/Number/Object/Array/...} value
          */
         set: function(key, value) {
-            storage.setItem(LocalStorage.globalPrefix + key, JSON.stringify(value));
+            try {
+                storage.setItem(LocalStorage.globalPrefix + key, JSON.stringify(value));
+            } catch (e) {
+                // ignore
+            }
         },
 
         /**
@@ -749,7 +754,12 @@ MX.kindle(function(X) {
          * @returns {Mixed}
          */
         get: function(key) {
-            return JSON.parse(storage.getItem(LocalStorage.globalPrefix + key));
+            try {
+                return JSON.parse(storage.getItem(LocalStorage.globalPrefix + key));
+            } catch (e) {
+                // ignore
+            }
+            return '';
         },
 
         /**

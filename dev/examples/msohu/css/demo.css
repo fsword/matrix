@@ -165,10 +165,6 @@ ul {
     text-shadow: none;
 }
 
-.ui-mobile, .ui-mobile .ui-page {
-    overflow: hidden;
-}
-
 /* loading icon */
 .ui-icon-loading {
     background: url(../images/ajax-loader.gif);
@@ -180,11 +176,11 @@ ul {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     width: 100%;
-    height: 100%;
     background: url("../images/background.jpg") no-repeat left top;
     background-size: 550px 600px;
     display: -webkit-box;
     display: box;
+    overflow-x: hidden !important;
 }
 
 .index-content.slip {
@@ -193,7 +189,6 @@ ul {
 }
 
 .winBox {
-    overflow: hidden;
 }
 
 .winBox li {
@@ -509,6 +504,41 @@ ul {
     }
 }
 
+@-ms-keyframes bounceInDown {
+    0% {
+        -o-transform: translateY(-500px);
+        -o-animation-timing-function: cubic-bezier(.34,.01,.68,.28);
+    }
+    36% {
+        -o-transform: translateY(0px);
+        -o-animation-timing-function: cubic-bezier(.57,.2,.84,.42);
+    }
+    55% {
+        -o-transform: translateY(-120px);
+        -o-animation-timing-function: cubic-bezier(.54,.01,.8,.34);
+    }
+    73% {
+        -o-transform: translateY(0);
+        -o-animation-timing-function: cubic-bezier(.54,.01,.8,.34);
+    }
+    82% {
+        -o-transform: translateY(-37px);
+        -o-animation-timing-function: cubic-bezier(.42,.01,.77,.35);
+    }
+    91% {
+        -o-transform: translateY(0);
+        -o-animation-timing-function: cubic-bezier(.42,.01,.77,.35);
+    }
+    96% {
+        -o-transform: translateY(-12px);
+        -o-animation-timing-function: cubic-bezier(.3,.2,.82,.72);
+    }
+    100% {
+        -o-transform: translateY(0);
+        -o-animation-timing-function: cubic-bezier(.3,.2,.82,.72);
+    }
+}
+
 @-o-keyframes bounceInDown {
     0% {
         -o-transform: translateY(-500px);
@@ -582,12 +612,16 @@ ul {
 .bounceInDown {
     -webkit-animation-name: bounceInDown;
     -moz-animation-name: bounceInDown;
+    -ms-animation-name: bounceInDown;
     -o-animation-name: bounceInDown;
     animation-name: bounceInDown;
 }
 
 .favouriteOut {
     -webkit-transition: all 300ms ease;
+    -moz-transition: all 300ms ease;
+    -ms-transition: all 300ms ease;
+    -o-transition: all 300ms ease;
     transition: all 300ms ease;
 }
 

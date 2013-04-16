@@ -39,7 +39,7 @@ window.MX = {};
     /**
      * The version of the framework
      */
-    X.version = '0.0.5';
+    X.version = '0.0.6';
 
     /**
      * 声明命名空间，用法如下：
@@ -1548,7 +1548,8 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
  * window.localStorage的封装类，可以将String或Object存储到localStorage中，将值取回时，可以还原成存储时的格式
  */
 MX.kindle(function(X) {
-    var storage = window.localStorage;
+    var storage = window.localStorage,
+        JSON = window.JSON;
 
     var LocalStorage = {
         /**
@@ -1562,7 +1563,11 @@ MX.kindle(function(X) {
          * @param {String/Number/Object/Array/...} value
          */
         set: function(key, value) {
-            storage.setItem(LocalStorage.globalPrefix + key, JSON.stringify(value));
+            try {
+                storage.setItem(LocalStorage.globalPrefix + key, JSON.stringify(value));
+            } catch (e) {
+                // ignore
+            }
         },
 
         /**
@@ -1571,7 +1576,12 @@ MX.kindle(function(X) {
          * @returns {Mixed}
          */
         get: function(key) {
-            return JSON.parse(storage.getItem(LocalStorage.globalPrefix + key));
+            try {
+                return JSON.parse(storage.getItem(LocalStorage.globalPrefix + key));
+            } catch (e) {
+                // ignore
+            }
+            return '';
         },
 
         /**
@@ -6065,14 +6075,14 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
          *
          * 如果要设置页面离开效果，使用下面这种方式:
          *  transition: {
-         *      in: 'fade',
-         *      out: 'slideup'
+         *      pageIn: 'fade',
+         *      pageOut: 'slideup'
          *  }
          *
          * 还可以通过设置reverse属性，使动画反向
          *  transition: {
-         *      in: 'fade',
-         *      out: {
+         *      pageIn: 'fade',
+         *      pageOut: {
          *          effect: 'slideup',
          *          reverse: true
          *      }
@@ -6126,19 +6136,19 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
             this.transition = this.transition || '';
             if (X.isString(this.transition)) {
                 this.transition = {
-                    in: this.transition,
-                    out: ''
-                }
+                    pageIn: this.transition,
+                    pageOut: ''
+                };
             }
-            if (X.isString(this.transition.in)) {
-                this.transition.in = {
-                    effect: this.transition.in
-                }
+            if (X.isString(this.transition.pageIn)) {
+                this.transition.pageIn = {
+                    effect: this.transition.pageIn
+                };
             }
-            if (X.isString(this.transition.out)) {
-                this.transition.out = {
-                    effect: this.transition.out
-                }
+            if (X.isString(this.transition.pageOut)) {
+                this.transition.pageOut = {
+                    effect: this.transition.pageOut
+                };
             }
         },
 
@@ -7070,12 +7080,12 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                     transition = np.controller.getTransition(np.hash, lp ? lp.hash : '');
                 }
                 if (!transition && lp) {
-                    transition = lp.transition.out.effect;
-                    transtionOptions.reverse = lp.transition.out.reverse;
+                    transition = lp.transition.pageOut.effect;
+                    transtionOptions.reverse = lp.transition.pageOut.reverse;
                 }
                 if (!transition) {
-                    transition = np.transition.in.effect || np.transition.out.effect || 'fade';
-                    transtionOptions.reverse = np.transition.in.reverse;
+                    transition = np.transition.pageIn.effect || np.transition.pageOut.effect || 'fade';
+                    transtionOptions.reverse = np.transition.pageIn.reverse;
                 }
                 transtionOptions.transition = transition;
 
