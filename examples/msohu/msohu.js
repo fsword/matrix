@@ -97,6 +97,9 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
         bodyCfg: {
             cls: 'index-content', // 为body element设置css
             template: 'index-body-template' // 为body绑定一个模版
+        },
+        onRender: function() {
+            this.body.css('min-height', window.innerHeight + 'px');
         }
     });
 
@@ -640,8 +643,8 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
                 },
                 cls: 'winContent', // 为pagelet容器设置css
                 transition: {
-                    in: 'slideup', // 定义切入页面的动画效果
-                    out: { // 定义切出页面的动画效果
+                    pageIn: 'slideup', // 定义切入页面的动画效果
+                    pageOut: { // 定义切出页面的动画效果
                         effect: 'slideup',
                         reverse: true
                     }
@@ -668,8 +671,8 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
                 },
                 cls: 'winContent',
                 transition: {
-                    in: 'slideup',
-                    out: {
+                    pageIn: 'slideup',
+                    pageOut: {
                         effect: 'slideup',
                         reverse: true
                     }
