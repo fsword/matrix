@@ -221,6 +221,10 @@ ul {
     text-decoration: none;
 }
 
+.winBox .wLi:nth-last-child(1),.winBox .wLi:nth-last-child(2) {
+    margin-bottom: 0;
+}
+
 .winBox .wHot {
     background: rgba(235, 117, 58, 0.9);
 }

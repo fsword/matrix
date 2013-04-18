@@ -643,8 +643,8 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
                 },
                 cls: 'winContent', // 为pagelet容器设置css
                 transition: {
-                    pageIn: 'slideup', // 定义切入页面的动画效果
-                    pageOut: { // 定义切出页面的动画效果
+                    show: 'slideup', // 定义切入页面的动画效果
+                    hide: { // 定义切出页面的动画效果
                         effect: 'slideup',
                         reverse: true
                     }
@@ -671,8 +671,8 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
                 },
                 cls: 'winContent',
                 transition: {
-                    pageIn: 'slideup',
-                    pageOut: {
+                    show: 'slideup',
+                    hide: {
                         effect: 'slideup',
                         reverse: true
                     }
