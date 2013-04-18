@@ -688,12 +688,12 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                     transition = np.controller.getTransition(np.hash, lp ? lp.hash : '');
                 }
                 if (!transition && lp) {
-                    transition = lp.transition.pageOut.effect;
-                    transtionOptions.reverse = lp.transition.pageOut.reverse;
+                    transition = lp.transition.hide.effect;
+                    transtionOptions.reverse = lp.transition.hide.reverse;
                 }
                 if (!transition) {
-                    transition = np.transition.pageIn.effect || np.transition.pageOut.effect || 'fade';
-                    transtionOptions.reverse = np.transition.pageIn.reverse;
+                    transition = np.transition.show.effect || np.transition.hide.effect || 'fade';
+                    transtionOptions.reverse = np.transition.show.reverse;
                 }
                 transtionOptions.transition = transition;
 
