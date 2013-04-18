@@ -19,7 +19,7 @@ window.MX = {};
     /**
      * The version of the framework
      */
-    X.version = '0.0.6';
+    X.version = '0.0.7';
 
     /**
      * 声明命名空间，用法如下：
@@ -307,15 +307,21 @@ window.MX = {};
          *
          */
         toArray: function(obj) {
+            var args, i, len;
             if (!X.isDefined(obj)) {
-                return [];
+                args = [];
             } else if (X.isArray(obj)) {
-                return slice.call(obj, 0);
+                args = slice.call(obj, 0);
             } else if (toString.call(obj) == '[object Arguments]') {
-                return slice.call(obj, 0);
+                args = slice.call(obj, 0);
             } else {
-                return slice.call(arguments, 0);
+                // 为了兼容IE8以下浏览器，IE8不支持Arguments对象
+                args = [];
+                for (i = 0, len = arguments.length; i < len; i++) {
+                    args.push(arguments[i]);
+                }
             }
+            return args;
         },
 
         /**
@@ -420,7 +426,7 @@ window.MX = {};
          * @param {Function} callback 回调函数
          */
         kindle: function() {
-            var args = X.toArray(arguments),
+            var args = X.toArray.apply(X, arguments),
                 len = args.length,
                 fnArgs = args.slice(0, len - 1),
                 fn = args[len - 1];
@@ -451,7 +457,7 @@ window.MX = {};
          * @param {Function} callback 回调函数
          */
         ready: function() {
-            var args = X.toArray(arguments);
+            var args = X.toArray.apply(X, arguments);
             $(document).ready(function() {
                 X.kindle.apply(window, args);
             });

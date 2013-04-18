@@ -118,18 +118,18 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
             this.transition = this.transition || '';
             if (X.isString(this.transition)) {
                 this.transition = {
-                    pageIn: this.transition,
-                    pageOut: ''
+                    show: this.transition,
+                    hide: ''
                 };
             }
-            if (X.isString(this.transition.pageIn)) {
-                this.transition.pageIn = {
-                    effect: this.transition.pageIn
+            if (X.isString(this.transition.show)) {
+                this.transition.show = {
+                    effect: this.transition.show
                 };
             }
-            if (X.isString(this.transition.pageOut)) {
-                this.transition.pageOut = {
-                    effect: this.transition.pageOut
+            if (X.isString(this.transition.hide)) {
+                this.transition.hide = {
+                    effect: this.transition.hide
                 };
             }
         },

@@ -15964,7 +15964,7 @@ window.MX = {};
     /**
      * The version of the framework
      */
-    X.version = '0.0.6';
+    X.version = '0.0.7';
 
     /**
      * 声明命名空间，用法如下：
@@ -16252,15 +16252,21 @@ window.MX = {};
          *
          */
         toArray: function(obj) {
+            var args, i, len;
             if (!X.isDefined(obj)) {
-                return [];
+                args = [];
             } else if (X.isArray(obj)) {
-                return slice.call(obj, 0);
+                args = slice.call(obj, 0);
             } else if (toString.call(obj) == '[object Arguments]') {
-                return slice.call(obj, 0);
+                args = slice.call(obj, 0);
             } else {
-                return slice.call(arguments, 0);
+                // 为了兼容IE8以下浏览器，IE8不支持Arguments对象
+                args = [];
+                for (i = 0, len = arguments.length; i < len; i++) {
+                    args.push(arguments[i]);
+                }
             }
+            return args;
         },
 
         /**
@@ -16365,7 +16371,7 @@ window.MX = {};
          * @param {Function} callback 回调函数
          */
         kindle: function() {
-            var args = X.toArray(arguments),
+            var args = X.toArray.apply(X, arguments),
                 len = args.length,
                 fnArgs = args.slice(0, len - 1),
                 fn = args[len - 1];
@@ -16396,7 +16402,7 @@ window.MX = {};
          * @param {Function} callback 回调函数
          */
         ready: function() {
-            var args = X.toArray(arguments);
+            var args = X.toArray.apply(X, arguments);
             $(document).ready(function() {
                 X.kindle.apply(window, args);
             });
@@ -22061,18 +22067,18 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
             this.transition = this.transition || '';
             if (X.isString(this.transition)) {
                 this.transition = {
-                    pageIn: this.transition,
-                    pageOut: ''
+                    show: this.transition,
+                    hide: ''
                 };
             }
-            if (X.isString(this.transition.pageIn)) {
-                this.transition.pageIn = {
-                    effect: this.transition.pageIn
+            if (X.isString(this.transition.show)) {
+                this.transition.show = {
+                    effect: this.transition.show
                 };
             }
-            if (X.isString(this.transition.pageOut)) {
-                this.transition.pageOut = {
-                    effect: this.transition.pageOut
+            if (X.isString(this.transition.hide)) {
+                this.transition.hide = {
+                    effect: this.transition.hide
                 };
             }
         },
@@ -23005,12 +23011,12 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                     transition = np.controller.getTransition(np.hash, lp ? lp.hash : '');
                 }
                 if (!transition && lp) {
-                    transition = lp.transition.pageOut.effect;
-                    transtionOptions.reverse = lp.transition.pageOut.reverse;
+                    transition = lp.transition.hide.effect;
+                    transtionOptions.reverse = lp.transition.hide.reverse;
                 }
                 if (!transition) {
-                    transition = np.transition.pageIn.effect || np.transition.pageOut.effect || 'fade';
-                    transtionOptions.reverse = np.transition.pageIn.reverse;
+                    transition = np.transition.show.effect || np.transition.hide.effect || 'fade';
+                    transtionOptions.reverse = np.transition.show.reverse;
                 }
                 transtionOptions.transition = transition;
 
