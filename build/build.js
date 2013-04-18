@@ -257,10 +257,10 @@ function buildProject() {
         if (!fs.existsSync(outputDir)) {
             fs.mkdirSync(outputDir);
         }
-        outputDir += projectName + '/';
+        /*outputDir += projectName + '/';
         if (!fs.existsSync(outputDir)) {
             fs.mkdirSync(outputDir);
-        }
+        }*/
         outputDir += tag + '/';
         if (fs.existsSync(outputDir)) {
             rmdirSync(outputDir);
