@@ -181,6 +181,7 @@ ul {
     display: -webkit-box;
     display: box;
     overflow-x: hidden !important;
+    padding-bottom: 5px;
 }
 
 .index-content.slip {
@@ -219,10 +220,6 @@ ul {
     text-align: center;
     margin: 0 0 10px 10px;
     text-decoration: none;
-}
-
-.winBox .wLi:nth-last-child(1),.winBox .wLi:nth-last-child(2) {
-    margin-bottom: 0;
 }
 
 .winBox .wHot {
