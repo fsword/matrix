@@ -1,9 +1,7 @@
 /*!
- * 打包命令：node build.js -p [projectName] -b [buildNumber]
- * Example: node build.js -p matrix -b 1
- * 
- * node build.js -h 查看使用帮助
- * 
+ * 打包命令：node build.js -b [buildNumber]
+ * Example: node build.js -b 1
+ *
  * 依赖node module: uglify-js,commander，使用npm安装
  * npm install uglify-js@1
  * npm install commander
@@ -15,8 +13,7 @@ var program = require('commander'),
     pro = require("uglify-js").uglify;
 
 program
-    .usage('node build.js -p [projectName] -b [buildNumber]')
-    .option('-p, --project [value]', '项目名称')
+    .usage('node build.js -b [buildNumber]')
     .option('-b, --build [value]', '编译版本号')
     .parse(process.argv);
 
@@ -25,7 +22,7 @@ var BASE_DIR = '../',
     OUTPUT_DIR = BASE_DIR + 'tags/',
     ENCODING = 'utf8';
 
-var projectName = program.project,
+var projectName = 'matrix',
     buildNumber = program.build,
     tag,
     license,
@@ -41,9 +38,6 @@ function err(msg) {
     process.exit(0);
 }
 
-if (!projectName) {
-    err('缺少参数<-p or --project>');
-}
 if (!buildNumber) {
     err('缺少参数<-b or --build>');
 }
