@@ -161,8 +161,8 @@
     };
     
     var params = parseParams(bootstrapSrc),
-        projectName = params.p,
-        dependBuild = params.d,
+        projectName = 'matrix',
+        dependBuild = params.d + '.js',
         packageFile = 'package-' + projectName + '.json',
         srcArr = bootstrapSrc.split('?'),
         jsBaseUrl = srcArr[0].substring(0, srcArr[0].length - 'bootstrap.js'.length),
