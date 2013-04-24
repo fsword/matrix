@@ -1,5 +1,5 @@
 /*!
- * 打包命令：node build-css.js -s "resources/jquerymobile/1.3.0/lite/" -o "resources/jquerymobile/1.3.0/" -n lite
+ * 打包命令：node build-css.js -s "resources/jquerymobile/1.3.1/lite/" -o "resources/jquerymobile/1.3.1/" -n lite
  * 
  * 依赖node module: clean-css,commander，使用npm安装
  * npm install clean-css
