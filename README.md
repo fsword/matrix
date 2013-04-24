@@ -3,7 +3,7 @@
 
 Matrix是一个面向移动端WebApp开发的前端框架，适用于开发Single Page Web Application。当前还处于开发阶段，功能还不完善，初期的Matrix功能会更好的支持阅读类产品开发，如新闻客户端等。
 
-Matrix构建在 jQuery 1.9.1 以及 jQuery Mobile 1.3.0 之上，Matrix自身并不提供CSS、页面动画以及UI组件等功能，它只是将这些资源更有效的整合起来，并提供更多项目开发中所需要的工具、套件，辅助开发者更高效的构建移动WebApp项目。
+Matrix构建在 jQuery 1.9.1 以及 jQuery Mobile 1.3.1 之上，Matrix自身并不提供CSS、页面动画以及UI组件等功能，它只是将这些资源更有效的整合起来，并提供更多项目开发中所需要的工具、套件，辅助开发者更高效的构建移动WebApp项目。
 
 ## 功能特性
 
@@ -82,9 +82,9 @@ MX.ready('klass', function(X, Klass) {
 ## 对jQuery Mobile的说明
 Matrix框架是构建在jQuery Mobile（简称jqm）之上，既可以依赖包含所有jqm组件的版本，也可以只依赖jqm核心库，Matrix提供两个版本的jqm打包：jquery.mobile-1.3.0.js和jquery.mobile-1.3.0-lite.js
 
-jquery.mobile-1.3.0.js包含除Core Init模块之外的所有jqm代码，最后被打包在matrix-all.js中
+jquery.mobile-1.3.1.js包含除Core Init模块之外的所有jqm代码，最后被打包在matrix-all.js中
 
-jquery.mobile-1.3.0-lite.js则只包含以下模块的代码，最后被打包matrix.js中：
+jquery.mobile-1.3.1-lite.js则只包含以下模块的代码，最后被打包matrix.js中：
 * Core，除init之外的部分
 * Events
 * Navigation
@@ -92,7 +92,7 @@ jquery.mobile-1.3.0-lite.js则只包含以下模块的代码，最后被打包ma
 * Utilities，仅包含以下部分
  - match media polyfill
  - zoom handling
-* ios orientation change fix
+ - ios orientation change fix
 * Widgets
  - toolbars fixed
  - toolbars fixed workarounds
