@@ -39,7 +39,7 @@ window.MX = {};
     /**
      * The version of the framework
      */
-    X.version = '0.0.8';
+    X.version = '0.0.9';
 
     /**
      * 声明命名空间，用法如下：

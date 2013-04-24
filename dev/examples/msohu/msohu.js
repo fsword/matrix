@@ -7,12 +7,15 @@
  * 由于例子中的数据访问存在跨域安全问题，所以本例托管在搜狐的服务器上，访问地址如下：
  * http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html
  */
-MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'dateformat', function(X, $, Klass, LocalStorage, iScrollUtil, TouchHolder, DateFormat) {
+MX.ready('jquery', 'arttemplate', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'dateformat', function(X, $, artTemplate, Klass, LocalStorage, iScrollUtil, TouchHolder, DateFormat) {
     /*
      * 本例包含三个页面：主页、新闻列表页、新闻正文页
      *
      * 其中，主页Pagelet为单例页面，三个页面的Pagelet配置的代码在最末尾
      */
+
+    // 模版输出HTML标签
+    artTemplate.isEscape = false;
 
     var $window = $(window), $body = $('body'),
         isShowFavourite = false,
@@ -244,7 +247,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
                             showFocus = false;
                         }
                         X.each(data.data, function(i, val) {
-                            if (val.id.length != 6) {
+                            if (val.id.length == 9) {
                                 arr.push(val);
                             }
                         });
