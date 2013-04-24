@@ -7,7 +7,7 @@
  * 由于例子中的数据访问存在跨域安全问题，所以本例托管在搜狐的服务器上，访问地址如下：
  * http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html
  */
-MX.ready('jquery', 'artTemplate', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'dateformat', function(X, $, artTemplate, Klass, LocalStorage, iScrollUtil, TouchHolder, DateFormat) {
+MX.ready('jquery', 'arttemplate', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'dateformat', function(X, $, artTemplate, Klass, LocalStorage, iScrollUtil, TouchHolder, DateFormat) {
     /*
      * 本例包含三个页面：主页、新闻列表页、新闻正文页
      *
