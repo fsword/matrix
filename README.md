@@ -85,18 +85,18 @@ Matrix框架是构建在jQuery Mobile（简称jqm）之上，既可以依赖包�
 1. jquery.mobile-1.3.1.js，包含除Core Init模块之外的所有jqm代码，最后被打包在matrix-all.js中
 
 2. jquery.mobile-1.3.1-lite.js，则只包含以下模块的代码，最后被打包matrix.js中：
-* Core，除init之外的部分
-* Events
-* Navigation
-* Transitions
-* Utilities，仅包含以下部分
- - match media polyfill
- - zoom handling
- - ios orientation change fix
-* Widgets
- - toolbars fixed
- - toolbars fixed workarounds
- - loading message
+ * Core，除init之外的部分
+ * Events
+ * Navigation
+ * Transitions
+ * Utilities，仅包含以下部分
+   - match media polyfill
+   - zoom handling
+   - ios orientation change fix
+ * Widgets
+   - toolbars fixed
+   - toolbars fixed workarounds
+   - loading message
 
 ## Downloads
 
