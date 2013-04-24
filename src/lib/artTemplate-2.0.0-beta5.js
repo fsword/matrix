@@ -2,7 +2,6 @@
  * artTemplate - Template Engine
  * https://github.com/aui/artTemplate
  * Released under the MIT, BSD, and GPL Licenses
- * Email: 1987.tangbin@gmail.com
  */
 
 
@@ -274,7 +273,7 @@ var template = function (id, content) {
         };
 
 
-        var arrayforEach =  Array.prototype.forEach || function (block, thisObject) {
+        var arrayforEach = Array.prototype.forEach || function (block, thisObject) {
             var len = this.length >>> 0;
 
             for (var i = 0; i < len; i++) {
@@ -294,13 +293,15 @@ var template = function (id, content) {
 
         var keyWords =
             // 关键字
-            'break,case,catch,continue,debugger,default,delete,do,else,false,finally,for,function,if'
-                + ',in,instanceof,new,null,return,switch,this,throw,true,try,typeof,var,void,while,with'
+            'break,case,catch,continue,debugger,default,delete,do,else,false'
+                + ',finally,for,function,if,in,instanceof,new,null,return,switch,this'
+                + ',throw,true,try,typeof,var,void,while,with'
 
                 // 保留字
-                + ',abstract,boolean,byte,char,class,const,double,enum,export,extends,final,float,goto'
-                + ',implements,import,int,interface,long,native,package,private,protected,public,short'
-                + ',static,super,synchronized,throws,transient,volatile'
+                + ',abstract,boolean,byte,char,class,const,double,enum,export,extends'
+                + ',final,float,goto,implements,import,int,interface,long,native'
+                + ',package,private,protected,public,short,static,super,synchronized'
+                + ',throws,transient,volatile'
 
                 // ECMA 5 - use strict
                 + ',arguments,let,yield'
@@ -327,7 +328,7 @@ var template = function (id, content) {
 
 
         // 提取js源码中所有变量
-        var _getVariable = function (code) {
+        var getVariable = function (code) {
 
             code = code
                 .replace(filter, ',')
@@ -414,7 +415,8 @@ var template = function (id, content) {
 
 
             code = "'use strict';"
-                + variables + replaces[0] + code + 'return new String(' + replaces[3] + ')';
+                + variables + replaces[0] + code
+                + 'return new String(' + replaces[3] + ')';
 
 
             try {
@@ -443,8 +445,8 @@ var template = function (id, content) {
                 }
 
                 code = code
-                    // 单双引号与反斜杠转义
-                    .replace(/('|"|\\)/g, '\\$1')
+                    // 单引号与反斜杠转义(因为编译后的函数默认使用单引号，因此双引号无需转义)
+                    .replace(/('|\\)/g, '\\$1')
                     // 换行符转义(windows + linux)
                     .replace(/\r/g, '\\r')
                     .replace(/\n/g, '\\n');
@@ -487,7 +489,10 @@ var template = function (id, content) {
 
                         // 转义处理，但排除辅助方法
                         var name = code.replace(/\s*\([^\)]+\)/, '');
-                        if (!helpers.hasOwnProperty(name) && !/^(include|print)$/.test(name)) {
+                        if (
+                            !helpers.hasOwnProperty(name)
+                                && !/^(include|print)$/.test(name)
+                            ) {
                             code = '$escapeHTML($getValue(' + code + '))';
                         }
 
@@ -513,7 +518,7 @@ var template = function (id, content) {
             // 提取模板中的变量名
             function getKey (code) {
 
-                code = _getVariable(code);
+                code = getVariable(code);
 
                 // 分词
                 forEach(code, function (name) {
@@ -556,7 +561,8 @@ var template = function (id, content) {
                         if (name.indexOf('$') === 0) {
                             value = '$helpers.' + name;
                         } else {
-                            value = value + '===undefined?$helpers.' + name + ':' + value;
+                            value = value
+                                + '===undefined?$helpers.' + name + ':' + value;
                         }
                     }
 
@@ -576,6 +582,12 @@ var template = function (id, content) {
 })(template, this);
 
 
-if (typeof module !== 'undefined' && module.exports) {
+// RequireJS || SeaJS
+if (typeof define === 'function') {
+    define(function(require, exports, module) {
+        module.exports = template;
+    });
+    // NodeJS
+} else if (typeof exports !== 'undefined') {
     module.exports = template;
 }
