@@ -247,7 +247,7 @@ MX.ready('jquery', 'arttemplate', 'klass', 'localstorage', 'iscrollutil', 'touch
                             showFocus = false;
                         }
                         X.each(data.data, function(i, val) {
-                            if (val.id.length == 9) {
+                            if (val.id.toString().length == 9) {
                                 arr.push(val);
                             }
                         });
