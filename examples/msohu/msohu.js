@@ -159,6 +159,8 @@ MX.ready('jquery', 'arttemplate', 'klass', 'localstorage', 'iscrollutil', 'touch
                     handleTouchEnd: this.onTouchEnd
                 });
             }
+
+            this.getBody().css('min-height', window.innerHeight + 'px');
         },
         beforePageHide: function() { // Controller扩展方法，当离开页面之前被调用
             hideFavourite();
@@ -316,6 +318,7 @@ MX.ready('jquery', 'arttemplate', 'klass', 'localstorage', 'iscrollutil', 'touch
                 this.vHolder = new TouchHolder({
                     target: this.getCt(),
                     type: 'v',
+                    swept: 'down',
                     scope: this,
                     handleTouchEnd: this.onVerticalTouchEnd
                 });
