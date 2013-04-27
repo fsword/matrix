@@ -230,6 +230,9 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                 if (this.cls) {
                     this.el.addClass(this.cls);
                 }
+
+                this.el.css('min-height', window.innerHeight + 'px');
+
                 container.append(this.el);
                 
                 if (this.view) {
@@ -303,6 +306,9 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
 
         // private
         onOrientationChange: function() {
+            if (this.el) {
+                this.el.css('min-height', window.innerHeight + 'px');
+            }
             if (this.controller) {
                 this.controller.onOrientationChange();
                 this.controller.fireEvent('orientationchange', this.controller);

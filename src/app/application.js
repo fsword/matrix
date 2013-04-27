@@ -666,7 +666,6 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                 this.pageChangeOptions = this.pageChangeOptions || {};
 
                 np = this.nextPagelet = pagelet;
-
                 np.render(this.pageContainer);
                 np.el.css('min-height', window.innerHeight + 'px');
 
@@ -740,11 +739,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 
         // private
         onOrientationChange: function(e) {
-            var lp = this.lastPagelet;
-            if (lp) {
-                lp.el.css('min-height', window.innerHeight + 'px');
-                lp.onOrientationChange();
-            }
+            this.lastPagelet && this.lastPagelet.onOrientationChange();
         },
 
         // private
