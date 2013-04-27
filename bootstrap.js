@@ -158,7 +158,7 @@
             }, this);
         }
         return params;
-    };
+    }
     
     var params = parseParams(bootstrapSrc),
         projectName = 'matrix',
