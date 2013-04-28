@@ -700,7 +700,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                  * 在页面切换之前，需要将页面的body的滚动条重置到顶部，否则，jquery mobile changePage函数在处理slideDown的动画效果时，
                  * 如果页面body的scrollTop在底部，会导致动画过度效果异常，页面会弹跳卡顿，动画无法正常执行
                  */
-                $body.scrollTop(0);
+                //$body.scrollTop(0);
 
                 $.mobile.changePage(np.el, transtionOptions);
             }
