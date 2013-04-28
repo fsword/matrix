@@ -159,6 +159,8 @@ MX.ready('jquery', 'arttemplate', 'klass', 'localstorage', 'iscrollutil', 'touch
                     handleTouchEnd: this.onTouchEnd
                 });
             }
+
+            this.getBody().css('min-height', window.innerHeight + 'px');
         },
         beforePageHide: function() { // Controller扩展方法，当离开页面之前被调用
             hideFavourite();
@@ -316,6 +318,7 @@ MX.ready('jquery', 'arttemplate', 'klass', 'localstorage', 'iscrollutil', 'touch
                 this.vHolder = new TouchHolder({
                     target: this.getCt(),
                     type: 'v',
+                    swept: 'down',
                     scope: this,
                     handleTouchEnd: this.onVerticalTouchEnd
                 });
@@ -327,12 +330,20 @@ MX.ready('jquery', 'arttemplate', 'klass', 'localstorage', 'iscrollutil', 'touch
         onHorizontalTouchEnd: function() {
             // 手指左右滑动时，切换上一页、下一页
             var params = this.getParams();
-            if (this.hHolder.touchCoords.stopX - this.hHolder.touchCoords.startX > 100 && params.page > 1) {
-                X.App.go('c/' + params.id + '/' + (parseInt(params.page) - 1), {
-                    reverse: true
-                });
-            } else if (this.hHolder.touchCoords.startX - this.hHolder.touchCoords.stopX > 100 && params.page < 10) {
-                X.App.go('c/' + params.id + '/' + (parseInt(params.page) + 1));
+            if (this.hHolder.touchCoords.stopX - this.hHolder.touchCoords.startX > 100) {
+                if (params.page > 1) {
+                    X.App.go('c/' + params.id + '/' + (parseInt(params.page) - 1), {
+                        reverse: true
+                    });
+                } else {
+                    showMessage('看清楚，现在就是第一页');
+                }
+            } else if (this.hHolder.touchCoords.startX - this.hHolder.touchCoords.stopX > 100) {
+                if (params.page < 10) {
+                    X.App.go('c/' + params.id + '/' + (parseInt(params.page) + 1));
+                } else {
+                    showMessage('没有下一页，别滑了');
+                }
             }
         },
         onVerticalTouchEnd: function() {
@@ -387,7 +398,7 @@ MX.ready('jquery', 'arttemplate', 'klass', 'localstorage', 'iscrollutil', 'touch
             template: 'article-header-template'
         },
         footerCfg: {
-            cls: 'footer',
+            cls: 'detail_footer',
             template: 'article-footer-template',
             fixed: true // 设置footer为fixed定位
         },
@@ -569,7 +580,7 @@ MX.ready('jquery', 'arttemplate', 'klass', 'localstorage', 'iscrollutil', 'touch
 
     var config = {
         /* 定义页面模版 */
-        templateVersion: '1.8',
+        templateVersion: '1.9',
         templateUrl: 'main.tmpl',
 
         /* 定义Web SQL Database，使用浏览器DB缓存新闻列表、正文数据 */

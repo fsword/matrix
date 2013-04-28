@@ -95,7 +95,7 @@
             <# if (data[0]) { #>
                 <div class="banner">
                     <div class="b_info">
-                        <a href="#n/<#= data[0]['id'] #>">
+                        <a href="#/n/<#= data[0]['id'] #>">
                             <img src="http://s7.rr.itc.cn/g<#= data[0]['cover_image_url'] #>" alt=""/>
                             <span class="i_title"><#= data[0]['title'] #></span>
                         </a>
@@ -105,13 +105,13 @@
             <div class="article">
                 <div class="article_info double_info ">
                     <# if (data[1]) { #>
-                        <a href="#n/<#= data[1]['id'] #>">
+                        <a href="#/n/<#= data[1]['id'] #>">
                             <span><#= data[1]['title'] #></span>
                             <p><#= data[1]['comment_count'] #>评论 <#= data[1]['create_time'] #></p>
                         </a>
                     <# } #>
                     <# if (data[2]) { #>
-                       <a href="#n/<#= data[2]['id'] #>">
+                       <a href="#/n/<#= data[2]['id'] #>">
                            <span><#= data[2]['title'] #></span>
                            <p><#= data[2]['comment_count'] #>评论 <#= data[2]['create_time'] #></p>
                        </a>
@@ -122,13 +122,13 @@
             <div class="article">
                 <div class="article_info double_info ">
                     <# if (data[0]) { #>
-                        <a href="#n/<#= data[0]['id'] #>">
+                        <a href="#/n/<#= data[0]['id'] #>">
                             <span><#= data[0]['title'] #></span>
                             <p><#= data[0]['comment_count'] #>评论 <#= data[0]['create_time'] #></p>
                         </a>
                     <# } #>
                     <# if (data[1]) { #>
-                       <a href="#n/<#= data[1]['id'] #>">
+                       <a href="#/n/<#= data[1]['id'] #>">
                            <span><#= data[1]['title'] #></span>
                            <p><#= data[1]['comment_count'] #>评论 <#= data[1]['create_time'] #></p>
                        </a>
@@ -138,7 +138,7 @@
             <# if (data[2]) { #>
                 <div class="banner">
                     <div class="b_info">
-                        <a href="#n/<#= data[2]['id'] #>">
+                        <a href="#/n/<#= data[2]['id'] #>">
                             <img src="http://s7.rr.itc.cn/g<#= data[2]['cover_image_url'] #>" alt=""/>
                             <span class="i_title"><#= data[2]['title'] #></span>
                         </a>
@@ -151,7 +151,7 @@
             <# if (data[0]) { #>
                 <div class="banner">
                     <div class="t_info" style="background-color: <#= bgColor #>">
-                        <a href="#n/<#= data[0]['id'] #>">
+                        <a href="#/n/<#= data[0]['id'] #>">
                             <span class="i_title"><#= data[0]['title'] #></span>
                             <p><#= data[1]['comment_count'] #>评论 <#= data[1]['create_time'] #></p>
                         </a>
@@ -162,13 +162,13 @@
             <div class="article article_nopic">
                 <div class="article_info double_info ">
                     <# if (data[1]) { #>
-                        <a href="#n/<#= data[1]['id'] #>">
+                        <a href="#/n/<#= data[1]['id'] #>">
                             <span><#= data[1]['title'] #></span>
                             <p><#= data[1]['comment_count'] #>评论 <#= data[1]['create_time'] #></p>
                         </a>
                     <# } #>
                     <# if (data[2]) { #>
-                       <a href="#n/<#= data[2]['id'] #>">
+                       <a href="#/n/<#= data[2]['id'] #>">
                            <span><#= data[2]['title'] #></span>
                            <p><#= data[2]['comment_count'] #>评论 <#= data[2]['create_time'] #></p>
                        </a>
@@ -179,13 +179,13 @@
             <div class="article article_nopic">
                 <div class="article_info double_info ">
                     <# if (data[0]) { #>
-                        <a href="#n/<#= data[0]['id'] #>">
+                        <a href="#/n/<#= data[0]['id'] #>">
                             <span><#= data[0]['title'] #></span>
                             <p><#= data[0]['comment_count'] #>评论 <#= data[0]['create_time'] #></p>
                         </a>
                     <# } #>
                     <# if (data[1]) { #>
-                       <a href="#n/<#= data[1]['id'] #>">
+                       <a href="#/n/<#= data[1]['id'] #>">
                            <span><#= data[1]['title'] #></span>
                            <p><#= data[1]['comment_count'] #>评论 <#= data[1]['create_time'] #></p>
                        </a>
@@ -195,7 +195,7 @@
             <# if (data[2]) { #>
                 <div class="banner">
                     <div class="t_info" style="background-color: <#= bgColor #>">
-                        <a href="#n/<#= data[2]['id'] #>">
+                        <a href="#/n/<#= data[2]['id'] #>">
                             <span class="i_title"><#= data[2]['title'] #></span>
                             <p><#= data[2]['comment_count'] #>评论 <#= data[2]['create_time'] #></p>
                         </a>
@@ -208,13 +208,13 @@
     <div class="article <# if (!showFocus) { #>article_nopic<# } #>">
         <div class="article_info double_info ">
             <# if (data[3]) { #>
-                <a href="#n/<#= data[3]['id'] #>">
+                <a href="#/n/<#= data[3]['id'] #>">
                     <span><#= data[3]['title'] #></span>
                     <p><#= data[3]['comment_count'] #>评论 <#= data[3]['create_time'] #></p>
                 </a>
             <# } #>
             <# if (data[4]) { #>
-               <a href="#n/<#= data[4]['id'] #>">
+               <a href="#/n/<#= data[4]['id'] #>">
                    <span><#= data[4]['title'] #></span>
                    <p><#= data[4]['comment_count'] #>评论 <#= data[4]['create_time'] #></p>
                </a>
@@ -224,7 +224,7 @@
     <# if (data[5]) { #>
         <div class="article">
             <div class="article_info single_info">
-                <a href="#n/<#= data[5]['id'] #>">
+                <a href="#/n/<#= data[5]['id'] #>">
                     <span><#= data[5]['title'] #></span>
                     <p><#= data[5]['comment_count'] #>评论 <#= data[5]['create_time'] #></p>
                 </a>
@@ -239,13 +239,11 @@
 </script>
 
 <script id="article-footer-template" type="text/tmpl">
-    <div class="detail_footer">
-        <a href="#0" class="ico-back btn_back "><span>返回</span></a>
-        <a href="#0" class="ico-approve" data-message="true"><span>赞成</span></a>
-        <a href="#0" class="ico-turn" data-message="true"><span>转载</span></a>
-        <a href="#0" class="ico-comment" data-message="true"><span>评论</span></a>
-        <a href="#0" class="ico-refresh btn_refresh "><span>刷新</span></a>
-    </div>
+    <a href="#0" class="ico-back btn_back "><span>返回</span></a>
+    <a href="#0" class="ico-approve" data-message="true"><span>赞成</span></a>
+    <a href="#0" class="ico-turn" data-message="true"><span>转载</span></a>
+    <a href="#0" class="ico-comment" data-message="true"><span>评论</span></a>
+    <a href="#0" class="ico-refresh btn_refresh "><span>刷新</span></a>
 </script>
 
 <script id="article-body-template" type="text/tmpl">

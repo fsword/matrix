@@ -16006,7 +16006,7 @@ window.MX = {};
     /**
      * The version of the framework
      */
-    X.version = '0.0.10';
+    X.version = '0.0.11';
 
     /**
      * 声明命名空间，用法如下：
@@ -22221,6 +22221,9 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                 if (this.cls) {
                     this.el.addClass(this.cls);
                 }
+
+                this.el.css('min-height', window.innerHeight + 'px');
+
                 container.append(this.el);
                 
                 if (this.view) {
@@ -22294,6 +22297,9 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
 
         // private
         onOrientationChange: function() {
+            if (this.el) {
+                this.el.css('min-height', window.innerHeight + 'px');
+            }
             if (this.controller) {
                 this.controller.onOrientationChange();
                 this.controller.fireEvent('orientationchange', this.controller);
@@ -23031,7 +23037,6 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                 this.pageChangeOptions = this.pageChangeOptions || {};
 
                 np = this.nextPagelet = pagelet;
-
                 np.render(this.pageContainer);
                 np.el.css('min-height', window.innerHeight + 'px');
 
@@ -23066,7 +23071,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                  * 在页面切换之前，需要将页面的body的滚动条重置到顶部，否则，jquery mobile changePage函数在处理slideDown的动画效果时，
                  * 如果页面body的scrollTop在底部，会导致动画过度效果异常，页面会弹跳卡顿，动画无法正常执行
                  */
-                $body.scrollTop(0);
+                //$body.scrollTop(0);
 
                 $.mobile.changePage(np.el, transtionOptions);
             }
@@ -23105,11 +23110,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 
         // private
         onOrientationChange: function(e) {
-            var lp = this.lastPagelet;
-            if (lp) {
-                lp.el.css('min-height', window.innerHeight + 'px');
-                lp.onOrientationChange();
-            }
+            this.lastPagelet && this.lastPagelet.onOrientationChange();
         },
 
         // private
