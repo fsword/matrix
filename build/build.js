@@ -73,10 +73,24 @@ var rmdirSync = (function() {
 
 var copyFile = function(src, dest, fileName, filters, encode) {
     var canCopy = true,
-        code, match;
+        code, match,
+        destDirs = dest.split('/'),
+        destDirsLen = destDirs.length,
+        destDir = '';
+
+    destDirs.forEach(function(dir, i) {
+        if (i < destDirsLen - 1) {
+            destDir += dir + '/';
+            if (!fs.existsSync(destDir)) {
+                fs.mkdirSync(destDir);
+            }
+        }
+    });
+
     if (filters) {
         canCopy = (typeof filters === 'string' ? new RegExp(filters, 'i') : filters).test(fileName);
     }
+
     if (canCopy) {
         if (!/\.(html|js|css|txt|manifest|tmpl|md)$/i.test(fileName)) {
             var rOption = {
