@@ -85,6 +85,7 @@ window.MX = {};
     if (artTemplate) {
         artTemplate.openTag = '<#';
         artTemplate.closeTag = '#>';
+        artTemplate.isEscape = false; // 默认让模版输出HTML标签
     }
 
     $.extend(X, {
