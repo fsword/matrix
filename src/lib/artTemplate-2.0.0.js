@@ -30,7 +30,7 @@ var template = function (id, content) {
     exports.openTag = '<%';     // 设置逻辑语法开始标签
     exports.closeTag = '%>';    // 设置逻辑语法结束标签
     exports.isEscape = true;    // HTML字符编码输出开关
-    exports.isCompress = false;	// 剔除渲染后HTML多余的空白开关
+    exports.isCompress = false; // 剔除渲染后HTML多余的空白开关
     exports.parser = null;      // 自定义语法插件接口
 
 
@@ -117,9 +117,9 @@ var template = function (id, content) {
 
                 return _debug(e);
 
-            };
+            }
 
-        };
+        }
 
 
         render.prototype = Render.prototype;
@@ -221,7 +221,7 @@ var template = function (id, content) {
 
         function error () {
             return error + '';
-        };
+        }
 
         error.toString = function () {
             return '{Template Error}';
@@ -239,7 +239,7 @@ var template = function (id, content) {
         // 辅助方法集合
         exports.prototype = {
             $render: exports.render,
-            $escapeHTML: function (content) {
+            $escape: function (content) {
 
                 return typeof content === 'string'
                     ? content.replace(/&(?![\w#]+;)|[<>"']/g, function (s) {
@@ -253,7 +253,7 @@ var template = function (id, content) {
                 })
                     : content;
             },
-            $getValue: function (value) {
+            $string: function (value) {
 
                 if (typeof value === 'string' || typeof value === 'number') {
 
@@ -429,7 +429,7 @@ var template = function (id, content) {
             } catch (e) {
                 e.temp = 'function anonymous($data) {' + code + '}';
                 throw e;
-            };
+            }
 
 
 
@@ -454,7 +454,7 @@ var template = function (id, content) {
                 code = replaces[1] + "'" + code + "'" + replaces[2];
 
                 return code + '\n';
-            };
+            }
 
 
             // 处理逻辑语句
@@ -493,11 +493,11 @@ var template = function (id, content) {
                             !helpers.hasOwnProperty(name)
                                 && !/^(include|print)$/.test(name)
                             ) {
-                            code = '$escapeHTML($getValue(' + code + '))';
+                            code = '$escape($string(' + code + '))';
                         }
 
                     } else {
-                        code = '$getValue(' + code + ')';
+                        code = '$string(' + code + ')';
                     }
 
 
@@ -512,7 +512,7 @@ var template = function (id, content) {
                 getKey(code);
 
                 return code + '\n';
-            };
+            }
 
 
             // 提取模板中的变量名
@@ -531,7 +531,7 @@ var template = function (id, content) {
 
                 });
 
-            };
+            }
 
 
             // 声明模板变量
@@ -570,7 +570,7 @@ var template = function (id, content) {
                 }
 
                 variables += name + '=' + value + ',';
-            };
+            }
 
 
         };
