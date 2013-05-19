@@ -18,7 +18,7 @@
                 },
                 {
                     "path": "lib/",
-                    "name": "artTemplate-2.0.0-beta5.js"
+                    "name": "artTemplate-2.0.0.js"
                 }
             ]
         },
@@ -37,7 +37,7 @@
                 },
                 {
                     "path": "lib/",
-                    "name": "artTemplate-2.0.0-beta5.js"
+                    "name": "artTemplate-2.0.0.js"
                 }
             ]
         },
