@@ -1,5 +1,4 @@
 # Matrix - A Mobile WebApp Framework
-===============
 
 Matrix是一个面向移动端WebApp开发的前端框架，适用于开发Single Page Web Application。当前还处于开发阶段，功能还不完善，初期的Matrix功能会更好的支持阅读类产品开发，如新闻客户端等。
 
