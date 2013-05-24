@@ -187,7 +187,7 @@ function processPackage(package) {
 
 var amdstart = [], amdend = [];
 amdstart.push('(function(root, factory) {\n');
-amdstart.push('    if (typeof define === "function" && (define.amd || define.cmd)) {\n');
+amdstart.push('    if (typeof define === "function" && (define.amd || seajs)) {\n');
 amdstart.push('        define([\'jquery\', \'jquerymobile\', \'arttemplate\'], function($, jqm, artTemplate) {\n');
 amdstart.push('            factory(root, $, jqm, artTemplate);\n');
 amdstart.push('            return root.MX;\n');
