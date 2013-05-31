@@ -42,6 +42,25 @@ if (!buildNumber) {
     err('缺少参数<-b or --build>');
 }
 
+
+function parseParams(url) {
+    var params = {},
+        idx = url.indexOf('?'),
+        paramStr = idx != -1 ? url.substring(idx) : '';
+    if (paramStr) {
+        paramStr = paramStr.substr(1);
+        idx = paramStr.indexOf('#');
+        if (idx != -1) {
+            paramStr = paramStr.substring(0, idx);
+        }
+        paramStr.split('&').forEach(function(param) {
+            param = param.split('=');
+            params[param[0]] = param[1];
+        }, this);
+    }
+    return params;
+}
+
 var rmdirSync = (function() {
     function iterator(url, dirs) {
         var stat = fs.statSync(url);
@@ -116,7 +135,8 @@ var copyFile = function(src, dest, fileName, filters, encode) {
             if (/\.html$/i.test(fileName)) {
                 match = code.match(/<script type="text\/javascript" id="bootstrap" src="(.*)"><\/script>/);
                 if (match && match[0]) {
-                    code = code.replace(match[0], '<script type="text/javascript" src="../../matrix.min.js"></script>');
+                    var params = parseParams(match[1]),
+                    code = code.replace(match[0], '<script type="text/javascript" src="../../' + params.d + '.min.js"></script>');
                 }
                 match = code.match(/<html data\-manifest="appcache.manifest">/);
                 if (match && match[0]) {
