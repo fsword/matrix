@@ -19,7 +19,7 @@ window.MX = {};
     /**
      * The version of the framework
      */
-    X.version = '0.0.11';
+    X.version = '0.0.14';
 
     /**
      * 声明命名空间，用法如下：
@@ -85,6 +85,7 @@ window.MX = {};
     if (artTemplate) {
         artTemplate.openTag = '<#';
         artTemplate.closeTag = '#>';
+        artTemplate.isEscape = false; // 默认让模版输出HTML标签
     }
 
     $.extend(X, {

@@ -5,8 +5,8 @@
     "packages": [
         {
             "name": "Third Party JavaScript Libraries",
-            "target": "pkgs/libs.js",
-            "id": "libs",
+            "target": "pkgs/libs-lite.js",
+            "id": "libs-lite",
             "files": [
                 {
                     "path": "lib/",
@@ -18,14 +18,14 @@
                 },
                 {
                     "path": "lib/",
-                    "name": "artTemplate-2.0.0-beta5.js"
+                    "name": "artTemplate-2.0.1.js"
                 }
             ]
         },
         {
             "name": "Third Party JavaScript Libraries",
-            "target": "pkgs/libs-widgets.js",
-            "id": "libs-widgets",
+            "target": "pkgs/libs-all.js",
+            "id": "libs-all",
             "files": [
                 {
                     "path": "lib/",
@@ -37,7 +37,7 @@
                 },
                 {
                     "path": "lib/",
-                    "name": "artTemplate-2.0.0-beta5.js"
+                    "name": "artTemplate-2.0.1.js"
                 }
             ]
         },
@@ -133,21 +133,21 @@
     ],
     "builds": [
         {
-            "name": "All",
-            "target": "matrix.js",
+            "name": "Lite",
+            "target": "matrix-lite.js",
             "packages": [
-                "libs",
+                "libs-lite",
                 "core",
                 "utils",
                 "app"
             ]
         },
         {
-            "name": "All Min",
-            "target": "matrix.min.js",
+            "name": "Lite Min",
+            "target": "matrix-lite.min.js",
             "compress": true,
             "packages": [
-                "libs",
+                "libs-lite",
                 "core",
                 "utils",
                 "app"
@@ -157,7 +157,7 @@
             "name": "All Widgets",
             "target": "matrix-all.js",
             "packages": [
-                "libs-widgets",
+                "libs-all",
                 "core",
                 "utils",
                 "app"
@@ -168,7 +168,7 @@
             "target": "matrix-all.min.js",
             "compress": true,
             "packages": [
-                "libs-widgets",
+                "libs-all",
                 "core",
                 "utils",
                 "app"

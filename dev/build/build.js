@@ -42,6 +42,25 @@ if (!buildNumber) {
     err('缺少参数<-b or --build>');
 }
 
+
+function parseParams(url) {
+    var params = {},
+        idx = url.indexOf('?'),
+        paramStr = idx != -1 ? url.substring(idx) : '';
+    if (paramStr) {
+        paramStr = paramStr.substr(1);
+        idx = paramStr.indexOf('#');
+        if (idx != -1) {
+            paramStr = paramStr.substring(0, idx);
+        }
+        paramStr.split('&').forEach(function(param) {
+            param = param.split('=');
+            params[param[0]] = param[1];
+        }, this);
+    }
+    return params;
+}
+
 var rmdirSync = (function() {
     function iterator(url, dirs) {
         var stat = fs.statSync(url);
@@ -73,10 +92,24 @@ var rmdirSync = (function() {
 
 var copyFile = function(src, dest, fileName, filters, encode) {
     var canCopy = true,
-        code, match;
+        code, match,
+        destDirs = dest.split('/'),
+        destDirsLen = destDirs.length,
+        destDir = '';
+
+    destDirs.forEach(function(dir, i) {
+        if (i < destDirsLen - 1) {
+            destDir += dir + '/';
+            if (!fs.existsSync(destDir)) {
+                fs.mkdirSync(destDir);
+            }
+        }
+    });
+
     if (filters) {
         canCopy = (typeof filters === 'string' ? new RegExp(filters, 'i') : filters).test(fileName);
     }
+
     if (canCopy) {
         if (!/\.(html|js|css|txt|manifest|tmpl|md)$/i.test(fileName)) {
             var rOption = {
@@ -102,7 +135,8 @@ var copyFile = function(src, dest, fileName, filters, encode) {
             if (/\.html$/i.test(fileName)) {
                 match = code.match(/<script type="text\/javascript" id="bootstrap" src="(.*)"><\/script>/);
                 if (match && match[0]) {
-                    code = code.replace(match[0], '<script type="text/javascript" src="../../matrix.min.js"></script>');
+                    var params = parseParams(match[1]),
+                    code = code.replace(match[0], '<script type="text/javascript" src="../../' + params.d + '.min.js"></script>');
                 }
                 match = code.match(/<html data\-manifest="appcache.manifest">/);
                 if (match && match[0]) {
@@ -173,7 +207,7 @@ function processPackage(package) {
 
 var amdstart = [], amdend = [];
 amdstart.push('(function(root, factory) {\n');
-amdstart.push('    if (typeof define === "function" && define.amd) {\n');
+amdstart.push('    if (typeof define === "function" && (define.amd || seajs)) {\n');
 amdstart.push('        define([\'jquery\', \'jquerymobile\', \'arttemplate\'], function($, jqm, artTemplate) {\n');
 amdstart.push('            factory(root, $, jqm, artTemplate);\n');
 amdstart.push('            return root.MX;\n');

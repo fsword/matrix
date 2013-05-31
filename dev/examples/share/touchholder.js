@@ -28,6 +28,7 @@ MX.ready('jquery', 'klass', function(X, $, Klass) {
             this.handleTouchStart && this.handleTouchStart.call(this.scope || window, this);
             this.fireEvent('touchstart', this);
         },
+
         onTouchMove: function(e) {
             if (!this.touchCoords) {
                 return;
@@ -55,9 +56,6 @@ MX.ready('jquery', 'klass', function(X, $, Klass) {
                 if (this.type == 'h') {
                     if (absX > absY) {
                         this.touchMoveVertical = false;
-                        if (offsetX != 0) {
-                            e.preventDefault();
-                        }
                         if ((this.swept && this.swept === 'left' && offsetX > 0) ||
                             (this.swept && this.swept === 'right' && offsetX < 0) ||
                             (!this.swept && offsetX != 0)) {
