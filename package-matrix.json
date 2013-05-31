@@ -196,11 +196,6 @@
     ],
     "resources": [
         {
-            "src": "build/",
-            "dest": "build/",
-            "filters": ".*"
-        },
-        {
             "src": "src/",
             "dest": "src/",
             "filters": ".*"
@@ -213,16 +208,6 @@
         {
             "src": "examples/",
             "dest": "examples/",
-            "filters": ".*"
-        },
-        {
-            "src": "package-matrix.json",
-            "dest": "package-matrix.json",
-            "filters": ".*"
-        },
-        {
-            "src": "bootstrap.js",
-            "dest": "bootstrap.js",
             "filters": ".*"
         },
         {
