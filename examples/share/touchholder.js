@@ -28,6 +28,7 @@ MX.ready('jquery', 'klass', function(X, $, Klass) {
             this.handleTouchStart && this.handleTouchStart.call(this.scope || window, this);
             this.fireEvent('touchstart', this);
         },
+
         onTouchMove: function(e) {
             if (!this.touchCoords) {
                 return;
