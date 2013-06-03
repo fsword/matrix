@@ -249,7 +249,10 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                 } else {
                     // 初始化启动画面的jquery mobile element的page扩展特性，在执行第一次由启动视图切换到首视图时会使用到
                     this.startUpView.page();
-                    this.startUpView.css('min-height', window.innerHeight + 'px');
+
+                    // 在Windows Phone 8下，flexbox 布局对 min-height 属性不生效，需要给容器设定一个高度
+                    //this.startUpView.css('min-height', window.innerHeight + 'px');
+                    this.startUpView.css('height', window.innerHeight + 'px');
                 }
 
                 // 初始化jquery mobile配置 start-----------------------------
@@ -654,7 +657,9 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
         // private
         changePage: function(pagelet) {
             var path = $.mobile.path, url, lp = this.lastPagelet, np, transition, transtionOptions;
-            window.scrollTo(0, 1);
+
+            X.isSafari && window.scrollTo(0, 1);
+
             url = path.getLocation();
             this.history.add(url, {
                 url: url,
@@ -667,7 +672,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 
                 np = this.nextPagelet = pagelet;
                 np.render(this.pageContainer);
-                np.el.css('min-height', window.innerHeight + 'px');
+                np.el.css('height', window.innerHeight + 'px');
 
                 transtionOptions = $.extend({}, this.pageChangeOptions, {
                     fromHashChange: true
@@ -796,7 +801,9 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
      *      - loading message
      */
     $('html').addClass("ui-mobile");
-    window.scrollTo(0, 1);
+
+    X.isSafari && window.scrollTo(0, 1);
+
     $.extend($.mobile, {
         // 禁用jquery mobile自动初始化页面配置
         autoInitializePage: false,
