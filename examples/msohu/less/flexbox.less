@@ -1,0 +1,96 @@
+.flexBox() {
+    display: -webkit-box; /*兼容不支持 flex*/
+
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+//标准下描述主轴的方向  ==》水平方向
+.row() {
+    -webkit-box-orient: horizontal; /*兼容不支持 flex-direction */
+
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+}
+
+//标准下描述主轴的方向  ==》垂直方向
+.col() {
+    -webkit-box-orient: vertical; /*兼容不支持 flex-direction */
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+@row: 'row';
+@col: 'col';
+
+.box-direction (@arguments) {
+    .local(@arguments) when (@arguments = @row) {
+        .row();
+    }
+    .local(@arguments) when (@arguments = @col) {
+        .col();
+    }
+    .local(@arguments);
+}
+
+.flex (@arguments:1) {
+    -webkit-box-flex: @arguments; /*兼容不支持 flex*/
+    -webkit-flex: @arguments;
+    -ms-flex: @arguments;
+
+    flex: @arguments;
+}
+
+.flex-warp (@arguments) {//nowrap | wrap | wrap-reverse
+
+    -webkit-flex-wrap: @arguments;
+    -ms-flex-wrap: @arguments;
+    flex-wrap: @arguments;
+}
+
+.flex-flow(@direction,@warp) {
+    -webkit-flex-flow: @direction @warp;
+}
+
+//主轴的对齐方式
+.justify(@arguments) {
+    -webkit-box-pack: @arguments; /*兼容不支持 flex 用老的display:-webkit-box替代*/
+    -ms-flex-pack: @arguments;
+
+    //标准下 沿主线对齐方式 justify-content: flex-start | flex-end | center | space-between | space-around
+    -webkit-justify-content: ~ `'flex-@{arguments}'`;
+    -webkit-justify-content: @arguments;
+    justify-content: ~ `'flex-@{arguments}'`;
+    justify-content: @arguments;
+}
+
+//垂直于主轴的对齐方式
+.align(@arguments) {
+    -webkit-box-align: @arguments; /*兼容不支持 flex 用老的display:-webkit-box替代*/
+    -ms-flex-align: @arguments;
+
+    -webkit-align-items: ~ `'flex-@{arguments}'`;
+    -webkit-align-items: @arguments;
+    align-items: ~ `'flex-@{arguments}'`;
+    align-items: @arguments;
+
+}
+
+.align-one(@arguments) {//子元素是一个的时候无效
+    -webkit-align-content: ~ `'flex-@{arguments}'`;
+    -webkit-align-content: @arguments;
+    align-content: ~ `'flex-@{arguments}'`;
+    align-content: @arguments;
+
+}
+
+//子元素自己的对齐方式
+.align-self(@argument) {
+    -webkit-align-self: ~ `'flex-@{arguments}'`;
+    -webkit-align-self: @arguments;
+    align-self: ~ `'flex-@{arguments}'`;
+    align-self: @arguments;
+}

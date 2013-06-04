@@ -108,18 +108,18 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
         alias: 'msohu.indexcontroller',
         extend: 'controller',
         onPageCreate: function() { // Controller扩展方法，当创建页面DOM时被调用
-            var body = this.getBody();
+            var scrollWrap = this.getBody().find('.container');
             this.resetBodyWidth();
-            this.scroll = iScrollUtil.createScroll('h', body, {
+            this.scroll = iScrollUtil.createScroll('h', scrollWrap, {
                 snap: true,
                 momentum: false,
                 hScrollbar: false,
                 onScrollMove: function() {
                     var w = window.innerWidth, x = this.x, scale = Math.abs(x) / w;
-                    body.css('background-position-x', x > 0 ? 0 : -scale * (w / 8));
+                    scrollWrap.css('background-position-x', x > 0 ? 0 : -scale * (w / 8));
                 },
                 onScrollEnd: function() {
-                    var winPage = body.find('.winPage');
+                    var winPage = scrollWrap.find('.winPage');
                     if (this.currPageX % 2 == 1) {
                         winPage.addClass('rotate');
                     } else {
@@ -127,11 +127,11 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
                     }
                 },
                 onTouchEnd: function() {
-                    body.one('webkitTransitionEnd transitionend', function() {
-                        body.removeClass('slip');
+                    scrollWrap.one('webkitTransitionEnd transitionend', function() {
+                        scrollWrap.removeClass('slip');
                     });
-                    body.addClass('slip');
-                    body.css('background-position-x', -this.currPageX * (window.innerWidth / 8));
+                    scrollWrap.addClass('slip');
+                    scrollWrap.css('background-position-x', -this.currPageX * (window.innerWidth / 8));
                 }
             });
         },
@@ -267,8 +267,8 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
         alias: 'msohu.channelcontroller',
         extend: 'controller',
         delegates: { // 定义页面事件监听，以及回调函数
-            'click .btn_back': 'back',
-            'click .btn_refresh': 'refresh'
+            'click .back': 'back',
+            'click .refresh': 'refresh'
         },
         initEvents: function() { // Controller扩展方法，当Controller初始化时被调用
             this.mon(this.getStore('channel-store'), 'load', this.onStoreLoad);
@@ -391,11 +391,11 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
         alias: 'msohu.articleview',
         extend: 'view',
         headerCfg: {
-            cls: 'detail_title',
+            cls: 'header',
             template: 'article-header-template'
         },
         footerCfg: {
-            cls: 'detail_footer',
+            cls: 'footer',
             template: 'article-footer-template',
             fixed: true // 设置footer为fixed定位
         },
@@ -410,15 +410,15 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
         alias: 'msohu.articlecontroller',
         extend: 'controller',
         delegates: { // 定义页面事件监听，以及回调函数
-            'click .btn_back': 'back',
-            'click .btn_refresh': 'refresh'
+            'click .back': 'back',
+            'click .refresh': 'refresh'
         },
         initEvents: function() { // Controller扩展方法，当Controller初始化时被调用
             this.mon(this.getModel('article-model'), 'load', this.onModelLoad);
         },
         onModelLoad: function(model) {
             var rs = model.get();
-            this.getHeader().find('.i_title').html(rs['title']);
+            this.getHeader().find('.title').html(rs['title']);
             this.getHeader().find('p').html(rs['media'] + ' ' + rs['create_time']);
         },
         onPageCreate: function() { // Controller扩展方法，当创建页面DOM时被调用
@@ -452,7 +452,11 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
         favEl.height($('#mx-app-page-index-pagelet').height());
         favEl.one('webkitAnimationEnd animationend', function() {
             favEl.removeClass('animated bounceInDown');
-            favEl.css('-webkit-transform', 'translateY(0px)');
+            favEl.css({
+                '-webkit-transform': 'translateY(0px)',
+                '-ms-transform': 'translateY(0px)',
+                'transform': 'translateY(0px)'
+            });
             $body.on('touchstart', bodyTouchStart);
         });
         favEl.addClass('animated bounceInDown');
@@ -476,7 +480,12 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
                 });
                 favEl.addClass('favouriteOut');
             }
-            favEl.css('-webkit-transform', 'translateY(' + -favEl.height() + 'px)');
+            var h = -favEl.height();
+            favEl.css({
+                '-webkit-transform': 'translateY(' + h + 'px)',
+                '-ms-transform': 'translateY(' + h + 'px)',
+                'transform': 'translateY(' + h + 'px)'
+            });
             $body.off('touchstart', bodyTouchStart);
             $body.off('touchmove', bodyTouchMove);
             $body.off('touchend', bodyTouchEnd);
@@ -500,8 +509,13 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
         e.preventDefault();
         touchCoords.stopX = e.originalEvent.touches[0].pageX;
         touchCoords.stopY = e.originalEvent.touches[0].pageY;
-        var y = touchCoords.stopY - touchCoords.startY;
-        favEl.css('-webkit-transform', 'translateY(' + (y > 0 ? 0 : y) + 'px)');
+        var y = touchCoords.stopY - touchCoords.startY,
+            transformStyle = 'translateY(' + (y > 0 ? 0 : y) + 'px)';
+        favEl.css({
+            '-webkit-transform': transformStyle,
+            '-ms-transform': transformStyle,
+            'transform': transformStyle
+        });
     }
     function bodyTouchEnd(e) {
         $body.off('touchmove', bodyTouchMove);
@@ -514,12 +528,21 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
         }
         if ((touchCoords.stopY < touchCoords.startY && (e.timeStamp - touchCoords.timeStamp < 100)) || (touchCoords.stopY - touchCoords.startY < -100)) {
             $body.off('touchstart', bodyTouchStart);
-            favEl.css('-webkit-transform', 'translateY(' + -favEl.height() + 'px)');
+            var transformStyle = 'translateY(' + -favEl.height() + 'px)';
+            favEl.css({
+                '-webkit-transform': transformStyle,
+                '-ms-transform': transformStyle,
+                'transform': transformStyle
+            });
             resetFavCount = setTimeout(function() {
                 favCount = 0;
             }, 2000);
         } else {
-            favEl.css('-webkit-transform', 'translateY(0px)');
+            favEl.css({
+                '-webkit-transform': 'translateY(0px)',
+                '-ms-transform': 'translateY(0px)',
+                'transform': 'translateY(0px)'
+            });
         }
     }
     // Favourite欢迎画面 end *********************************************
@@ -652,7 +675,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
                         return storageKey + '-' + params.id + '-' + pageNumber;
                     }
                 },
-                cls: 'winContent', // 为pagelet容器设置css
+                cls: 'list_page', // 为pagelet容器设置css
                 transition: {
                     show: 'slideup', // 定义切入页面的动画效果
                     hide: { // 定义切出页面的动画效果
@@ -680,7 +703,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
                         };
                     }
                 },
-                cls: 'winContent',
+                cls: 'detail_page',
                 transition: {
                     show: 'slideup',
                     hide: {
