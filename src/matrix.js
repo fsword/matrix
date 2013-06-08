@@ -8,8 +8,8 @@ window.MX = {};
         toString = Object.prototype.toString,
         navigator = window.navigator,
         userAgent = navigator.userAgent,
-        android = userAgent.match(/(Android)[\/\s+]([\d.]+)/),
-        ios = userAgent.match(/(iPad|iPhone|iPod).*OS\s([\d_]+)/),
+        android = userAgent.match(/(Android)[\s\/]+([\d\.]+)/),
+        ios = userAgent.match(/(iPad|iPhone|iPod)\s+OS\s([\d_\.]+)/),
         isWebkit = /WebKit\/[\d.]+/i.test(userAgent),
         isSafari = ios ? (navigator.standalone ? isWebkit : (/Safari/i.test(userAgent) && !/CriOS/i.test(userAgent) && !/MQQBrowser/i.test(userAgent))) : false,
         os;
