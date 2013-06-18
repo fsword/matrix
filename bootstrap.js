@@ -198,14 +198,12 @@
         if (console) {
             console.error('bootstrap.js error: ' + msg);
         }
-    };
+    }
 
     function loadDepend(packageConf) {
         var builds = packageConf.builds,
             packages = packageConf.packages,
             dependPackages,
-            package,
-            file,
             depends = [];
 
         builds.forEach(function(build) {
@@ -215,22 +213,22 @@
             }
         });
         if (dependPackages) {
-            packages.forEach(function(package) {
-                if (dependPackages.indexOf(package.id) != -1) {
-                    package.files.forEach(function(file) {
+            packages.forEach(function(pack) {
+                if (dependPackages.indexOf(pack.id) != -1) {
+                    pack.files.forEach(function(file) {
                         depends.push(jsBaseUrl + 'src/' + file.path + file.name);
                     });
                 }
             });
         } else {
-            packages.forEach(function(package) {
-                package.files.forEach(function(file) {
+            packages.forEach(function(pack) {
+                pack.files.forEach(function(file) {
                     depends.push(jsBaseUrl + 'src/' + file.path + file.name);
                 });
             });
         }
         loadHeadJS(depends);
-    };
+    }
 
     function loadHeadJS(depends) {
         if (!headReady) {
@@ -260,7 +258,7 @@
                 }]));
             }
         }
-    };
+    }
     
     xhr.open('GET', remoteBaseUrl + packageFile, true);
     xhrTimeoutId = setTimeout(function() {
