@@ -45,7 +45,6 @@
 }
 
 .flex-warp (@arguments) {//nowrap | wrap | wrap-reverse
-
     -webkit-flex-wrap: @arguments;
     -ms-flex-wrap: @arguments;
     flex-wrap: @arguments;
@@ -61,9 +60,9 @@
     -ms-flex-pack: @arguments;
 
     //标准下 沿主线对齐方式 justify-content: flex-start | flex-end | center | space-between | space-around
-    -webkit-justify-content: ~ `'flex-@{arguments}'`;
+    -webkit-justify-content: ~`'flex-@{arguments}'`;
     -webkit-justify-content: @arguments;
-    justify-content: ~ `'flex-@{arguments}'`;
+    justify-content: ~`'flex-@{arguments}'`;
     justify-content: @arguments;
 }
 
@@ -72,25 +71,25 @@
     -webkit-box-align: @arguments; /*兼容不支持 flex 用老的display:-webkit-box替代*/
     -ms-flex-align: @arguments;
 
-    -webkit-align-items: ~ `'flex-@{arguments}'`;
+    -webkit-align-items: ~`'flex-@{arguments}'`;
     -webkit-align-items: @arguments;
-    align-items: ~ `'flex-@{arguments}'`;
+    align-items: ~`'flex-@{arguments}'`;
     align-items: @arguments;
 
 }
 
 .align-one(@arguments) {//子元素是一个的时候无效
-    -webkit-align-content: ~ `'flex-@{arguments}'`;
+    -webkit-align-content: ~`'flex-@{arguments}'`;
     -webkit-align-content: @arguments;
-    align-content: ~ `'flex-@{arguments}'`;
+    align-content: ~`'flex-@{arguments}'`;
     align-content: @arguments;
 
 }
 
 //子元素自己的对齐方式
 .align-self(@argument) {
-    -webkit-align-self: ~ `'flex-@{arguments}'`;
+    -webkit-align-self: ~`'flex-@{arguments}'`;
     -webkit-align-self: @arguments;
-    align-self: ~ `'flex-@{arguments}'`;
+    align-self: ~`'flex-@{arguments}'`;
     align-self: @arguments;
 }
