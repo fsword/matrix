@@ -192,7 +192,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
              */
             this.mon(window, 'hashchange', this.onHashChange);
 
-            this.mon(window, 'orientationchange', this.onOrientationChange);
+            this.mon(window, 'orientationchange', X.createOrientationChangeProxy(this.onOrientationChange, this));
         },
 
         /**
@@ -251,8 +251,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                     this.startUpView.page();
 
                     // 在Windows Phone 8下，flexbox 布局对 min-height 属性不生效，需要给容器设定一个高度
-                    //this.startUpView.css('min-height', window.innerHeight + 'px');
-                    this.startUpView.css('height', window.innerHeight + 'px');
+                    this.startUpView.css('min-height', window.innerHeight + 'px');
                 }
 
                 // 初始化jquery mobile配置 start-----------------------------
@@ -658,7 +657,9 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
         changePage: function(pagelet) {
             var path = $.mobile.path, url, lp = this.lastPagelet, np, transition, transtionOptions;
 
+            // 将body滚动到顶部，防止页面滚动条错位
             X.isSafari && window.scrollTo(0, 1);
+            $body.scrollTop(0);
 
             url = path.getLocation();
             this.history.add(url, {
@@ -672,7 +673,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 
                 np = this.nextPagelet = pagelet;
                 np.render(this.pageContainer);
-                np.el.css('height', window.innerHeight + 'px');
+                np.el.css('min-height', window.innerHeight + 'px');
 
                 transtionOptions = $.extend({}, this.pageChangeOptions, {
                     fromHashChange: true
@@ -713,7 +714,6 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 
         // private
         onPageChange: function() {
-            // 在页面切换完成之后，将body滚动到顶部，防止页面滚动条错位
             $body.scrollTop(0);
             this.fireEvent('pagechange', this, this.nextPagelet, this.lastPagelet);
             this.afterChangePage();

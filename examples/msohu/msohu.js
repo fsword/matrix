@@ -119,11 +119,11 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
                     scrollWrap.css('background-position-x', x > 0 ? 0 : -scale * (w / 8));
                 },
                 onScrollEnd: function() {
-                    var winPage = scrollWrap.find('.winPage');
+                    var pageStatus = scrollWrap.find('.page_status');
                     if (this.currPageX % 2 == 1) {
-                        winPage.addClass('rotate');
+                        pageStatus.addClass('rotate');
                     } else {
-                        winPage.removeClass('rotate');
+                        pageStatus.removeClass('rotate');
                     }
                 },
                 onTouchEnd: function() {
@@ -179,6 +179,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
             var w = window.innerWidth;
             body.find('.winBox').width(w * 2);
             body.find('.winBox li').width(w);
+            this.scroll && this.scroll.refresh();
         },
         destroyHolder: function() {
             if (this.holder) {
@@ -600,7 +601,7 @@ MX.ready('jquery', 'klass', 'localstorage', 'iscrollutil', 'touchholder', 'datef
 
     var config = {
         /* 定义页面模版 */
-        templateVersion: '1.9',
+        templateVersion: '1.10',
         templateUrl: 'main.tmpl',
 
         /* 定义Web SQL Database，使用浏览器DB缓存新闻列表、正文数据 */

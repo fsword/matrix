@@ -1,7 +1,12 @@
 @import "base/_reset";
 @import "base/reset";
-    ._reset();
-    .reset();
+
+    ._reset()
+
+;
+    .reset()
+
+;
 @import "base/veryless-1.0.0";
 ////////////////////////////////////////////////////////
 @import "flexbox";
@@ -152,14 +157,14 @@
     line-height: 40px;
 }
 
-    /************************/
+/************************/
 html {
     -webkit-text-size-adjust: none;
     text-size-adjust: none;
 
 }
 
-    /************************重置默认样式(及JQuery UI)*********************/
+/************************重置默认样式(及JQuery UI)*********************/
 ul {
     list-style: none;
 }
@@ -168,20 +173,20 @@ ul {
     text-shadow: none;
 }
 
-    /* loading icon */
+/* loading icon */
 .ui-icon-loading {
     background: url(../images/ajax-loader.gif);
     background-size: 46px 46px;
 }
 
-    /******************样式开始***************************/
+/******************样式开始***************************/
 
 .wraper, html, body {
     height: 100%;
 
 }
 
-    /*.list_page.ui-page-active */
+/*.list_page.ui-page-active */
 .list_page.ui-page-active {
     .flexBox();
     .box-direction (@col);
@@ -192,139 +197,139 @@ ul {
         .flex(1);
         .flexBox();
         .box-direction (@col);
-        padding: 0 0 30px;
+        padding: 0px 0px;
         height: 460px;
         .box-sizing(border-box);
     }
-  //banner
-  .banner {
-    width: 100%;
-    height: 150px;
-
-    .b_info {
-      border-bottom: 0;
-      a {
-        display: block;
-      }
-    }
-    .b_info {
-      .box-sizing(border-box);
-      margin: auto;
-      width: 320px;
-      height: 150px;
-      overflow: hidden;
-      position: relative;
-      background-color: #d3d7d4;
-      border: 1px solid #d3d7d4;
-      border-left-width: 0;
-      border-right-width: 0;
-      margin-bottom: -1px;
-
-    }
-    .b_info  .title {
-      position: absolute;
-      bottom: 0;
-      left: 10px;
-      margin-bottom: 3px;
-      color: #ffffff;
-      font-weight: bold;
-      font-size: 20px;
-      line-height: 1.5em;
-      text-shadow: 1px 1px 0 rgba(0, 0, 0, .8);
-    }
-
-    .t_info {
-      line-height: 26px;
-      padding: 20px 10px 15px;
-      background: #528ce0;
-      height: 105px;
-      .box-sizing(border-box);
-      a {
-        color: #ffffff;
-      }
-      em {
-        display: block;
-        font-size: 10px;
-      }
-
-      .title {
-        font-size: 22px;
-        line-height: 26px;
-      }
-    }
-
-  }
-
-  .banner + .article .info {
-    border-top: 0;
-  }
-  .no_banner_pic{
-    height:auto;
-  }
-  //article
-  .article {
-    .flex(1);
-    .flexBox();
-    .box-direction(@col);
-    padding: 0 10px;
-
-    .info {
-      .flexBox();
-      .box-direction(@row);
-      .flex(1);
-      //对齐方式
-      border-top: 1px solid #cccccc;
-
-      a {
-        .flex(1);
-        .flexBox();
-        .align(center);
-        .flex-warp(wrap);
-
-      }
-      a span {
-
-        display: block;
+    //banner
+    .banner {
         width: 100%;
-        .box-sizing(border-box);
+        height: 150px;
 
-        strong {
-          word-wrap: break-word;
-          word-break: break-all;
+        .b_info {
+            border-bottom: 0;
+            a {
+                display: block;
+            }
+        }
+        .b_info {
+            .box-sizing(border-box);
+            margin: auto;
+            width: 320px;
+            height: 150px;
+            overflow: hidden;
+            position: relative;
+            background-color: #d3d7d4;
+            border: 1px solid #d3d7d4;
+            border-left-width: 0;
+            border-right-width: 0;
+            margin-bottom: -1px;
+
+        }
+        .b_info  .title {
+            position: absolute;
+            bottom: 0;
+            left: 10px;
+            margin-bottom: 3px;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 20px;
+            line-height: 1.5em;
+            text-shadow: 1px 1px 0 rgba(0, 0, 0, .8);
         }
 
-      }
-      a:nth-child(2) {
-        padding-left: 10px;
-      }
-      .title {
-        color: #333333;
-        font-weight: bold;
-      }
-      .status {
-        font-size: 9px;
-        line-height: 18px;
-        display: block;
-      }
-    }
-    .double_info {
-      a:first-child {
-        border-right: 1px solid #cccccc;
-      }
+        .t_info {
+            line-height: 26px;
+            padding: 20px 10px 15px;
+            background: #528ce0;
+            height: 105px;
+            .box-sizing(border-box);
+            a {
+                color: #ffffff;
+            }
+            em {
+                display: block;
+                font-size: 10px;
+            }
+
+            .title {
+                font-size: 22px;
+                line-height: 26px;
+            }
+        }
 
     }
-    .single_info {
-      span {
-        font-size: 20px;
-        line-height: 26px;
-      }
+
+    .banner + .article .info {
+        border-top: 0;
     }
-  }
-  .article:first-child {
-    .info {
-      border-top: 0;
+    .no_banner_pic {
+        height: auto;
     }
-  }
+    //article
+    .article {
+        .flex(1);
+        .flexBox();
+        .box-direction(@col);
+        padding: 0 10px;
+
+        .info {
+            .flexBox();
+            .box-direction(@row);
+            .flex(1);
+            //对齐方式
+            border-top: 1px solid #cccccc;
+
+            a {
+                .flex(1);
+                .flexBox();
+                .align(center);
+                .flex-warp(wrap);
+
+            }
+            a span {
+
+                display: block;
+                width: 100%;
+                .box-sizing(border-box);
+
+                strong {
+                    word-wrap: break-word;
+                    word-break: break-all;
+                }
+
+            }
+            a:nth-child(2) {
+                padding-left: 10px;
+            }
+            .title {
+                color: #333333;
+                font-weight: bold;
+            }
+            .status {
+                font-size: 9px;
+                line-height: 18px;
+                display: block;
+            }
+        }
+        .double_info {
+            a:first-child {
+                border-right: 1px solid #cccccc;
+            }
+
+        }
+        .single_info {
+            span {
+                font-size: 20px;
+                line-height: 26px;
+            }
+        }
+    }
+    .article:first-child {
+        .info {
+            border-top: 0;
+        }
+    }
     //当没有banner图时的样式
     .no_banner_pic {
 
@@ -376,7 +381,6 @@ ul {
 
     .footer {
         height: 30px;
-        position: absolute;
         bottom: 0;
         width: 100%;
         overflow: hidden;
@@ -474,9 +478,11 @@ ul {
         }
     }
 }
-.no_banner_pic ~ .article .double_info .title{
-  font-size: 16px;
+
+.no_banner_pic ~ .article .double_info .title {
+    font-size: 16px;
 }
+
 .detail_page {
     position: relative;
 
@@ -503,7 +509,7 @@ ul {
     }
 
     .container {
-        padding: 0 0 30px;
+        padding: 0 0 20px;
         .cnt {
             line-height: 24px;
             font-size: 16px;
@@ -529,13 +535,12 @@ ul {
 
     .footer {
         height: 30px;
-        /*position: fixed;*/
         bottom: 0;
         width: 100%;
         background: #ffffff;
         border-top: 1px solid #f2f2f2;
         padding-top: 5px;
-        padding-bottom:0;
+        padding-bottom: 0;
 
         .flexBox();
 
@@ -614,10 +619,6 @@ ul {
             font-size: 0;
             line-height: 0
         }
-        .winBox .wHot {
-            background: rgba(235, 117, 58, 0.9);
-        }
-
         .winBox .wLi {
             float: left;
             background: rgba(45, 163, 222, 0.9);
@@ -673,6 +674,9 @@ ul {
                 font-size: 13px;
                 line-height: 18px;
             }
+        }
+        .winBox .wHot {
+            background: rgba(235, 117, 58, 0.9);
         }
         //end==>.winBox .wLi
     }
@@ -889,7 +893,7 @@ ul {
     transition: all 300ms ease;
 }
 
-    /*内容页样 winContent 样式*/
+/*内容页样 winContent 样式*/
 .winContent.ui-page-active {
     display: -webkit-box;
     display: box;

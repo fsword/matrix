@@ -365,6 +365,26 @@ window.MX = {};
             }
             fn.apply(scope, args);
             return 0;
+        },
+
+        /**
+         * 代理 orientation change 事件回调函数
+         * @param fn
+         * @param scope
+         * @returns {Function}
+         */
+        createOrientationChangeProxy: function(fn, scope) {
+            return function() {
+                clearTimeout(scope.orientationChangedTimeout);
+                var args = slice.call(arguments, 0);
+                scope.orientationChangedTimeout = setTimeout($.proxy(function() {
+                    var ori = window.orientation;
+                    if (ori != scope.lastOrientation) {
+                        fn.apply(scope, args);
+                    }
+                    scope.lastOrientation = ori;
+                }, scope), os.android ? 500 : 0);
+            };
         }
     });
 

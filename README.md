@@ -92,11 +92,11 @@ Matrix框架是构建在jQuery Mobile（简称jqm）之上，既可以依赖包�
 
 ## Downloads
 
-* [v0.1.1](http://mxjs.github.io/matrix/tags/matrix-0.1.1.zip "matrix-0.1.1.zip")(latest version)
+* [v1.0.0](http://mxjs.github.io/matrix/tags/matrix-1.0.0.zip "matrix-1.0.0.zip")(latest version)
 
 ## Change Log
 
-### v0.1.1 (2013/5/25)
+### v1.0.0 (2013/7/9)
 
 * 第一个版本发布
 
