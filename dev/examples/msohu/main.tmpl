@@ -1,67 +1,71 @@
-<script id="index-body-template" type="text/tmpl">
-    <ul class="winBox" style="width:640px">
-        <li style="width:320px;">
-           <div class="li_box">
-                <a href="#/c/0/1" class="wLi wHot">
-                    <i class="ico ico-home"></i>
-                    <span class="ttl">聚焦头条</span>
-                </a>
-                <a href="#/c/1/1" class="wLi wHot">
-                    <i class="ico ico-news"></i>
-                    <span class="ttl">社会新闻</span>
-                </a>
-                <a href="#/c/2/1" class="wLi">
-                    <i class="ico ico-finance"></i>
-                    <span class="ttl">财经频道</span>
-                </a>
-                <a href="#/c/3/1" class="wLi">
-                    <i class="ico ico-ent"></i>
-                    <span class="ttl">娱乐频道</span>
-                </a>
-                <a href="#/c/4/1" class="wLi">
-                    <i class="ico ico-sport"></i>
-                    <span class="ttl">体育频道</span>
-                </a>
-                <a href="#/c/5/1" class="wLi">
-                    <i class="ico ico-tech"></i>
-                    <span class="ttl">科技频道</span>
-                </a>
+<script id="index-body-template" type="text/tmpl" xmlns="http://www.w3.org/1999/html">
+    <div class="home_page">
+        <div class="container">
+            <ul class="winBox" style="width:640px;">
+                <li style="width:320px;">
+                    <div class="li_box">
+                        <a href="#/c/0/1" class="wLi wHot">
+                            <i class="ico ico-home"></i>
+                            <span class="ttl">聚焦头条</span>
+                        </a>
+                        <a href="#/c/1/1" class="wLi wHot">
+                            <i class="ico ico-news"></i>
+                            <span class="ttl">社会新闻</span>
+                        </a>
+                        <a href="#/c/2/1" class="wLi">
+                            <i class="ico ico-finance"></i>
+                            <span class="ttl">财经频道</span>
+                        </a>
+                        <a href="#/c/3/1" class="wLi">
+                            <i class="ico ico-ent"></i>
+                            <span class="ttl">娱乐频道</span>
+                        </a>
+                        <a href="#/c/4/1" class="wLi">
+                            <i class="ico ico-sport"></i>
+                            <span class="ttl">体育频道</span>
+                        </a>
+                        <a href="#/c/5/1" class="wLi">
+                            <i class="ico ico-tech"></i>
+                            <span class="ttl">科技频道</span>
+                        </a>
 
-                <a href="#/c/6/1" class="wLi">
-                    <i class="ico ico-woman"></i>
-                    <span class="ttl">女人频道</span>
-                </a>
-                <a href="#/c/7/1" class="wLi">
-                    <i class="ico ico-auto"></i>
-                    <span class="ttl">汽车频道</span>
-                </a>
+                        <a href="#/c/6/1" class="wLi">
+                            <i class="ico ico-woman"></i>
+                            <span class="ttl">女人频道</span>
+                        </a>
+                        <a href="#/c/7/1" class="wLi">
+                            <i class="ico ico-auto"></i>
+                            <span class="ttl">汽车频道</span>
+                        </a>
+                    </div>
+                </li>
+                <li style="width:320px;">
+                    <div class="li_box">
+                        <a href="#/c/8/1" class="wLi">
+                            <i class="ico ico-astro"></i>
+                            <span class="ttl">星座频道</span>
+                        </a>
+                        <a href="#/c/9/1" class="wLi">
+                            <i class="ico ico-joke"></i>
+                            <span class="ttl">笑话频道</span>
+                        </a>
+                        <a href="#0" class="wLi" data-message="true">
+                            <i class="ico ico-plus"></i>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+            <div class="nav_tool">
+                <a href="#0" class="download" data-message="true"></a>
+                <a href="#0" class="manage" data-message="true"></a>
+                <a href="#0" class="add" data-message="true"></a>
             </div>
-        </li>
-        <li style="width:320px;">
-            <div class="li_box">
-                <a href="#/c/8/1" class="wLi">
-                    <i class="ico ico-astro"></i>
-                    <span class="ttl">星座频道</span>
-                </a>
-                <a href="#/c/9/1" class="wLi">
-                    <i class="ico ico-joke"></i>
-                    <span class="ttl">笑话频道</span>
-                </a>
-                <a href="#0" class="wLi" data-message="true">
-                    <i class="ico ico-plus"></i>
-                </a>
+            <div class="page_status">
+                <div class="num">
+                    <span class="front">1</span>
+                    <span class="back">2</span>
+                </div>
             </div>
-        </li>
-    </ul>
-    <div class="nav_tool">
-        <a href="#0" class="download" data-message="true"></a>
-        <a href="#0" class="manage" data-message="true"></a>
-        <a href="#0" class="add" data-message="true"></a>
-    </div>
-    <div class="winPage">
-        <div class="winPageCont">
-            <span class="front">1</span>
-            <span class="back">2</span>
         </div>
     </div>
 </script>
@@ -73,7 +77,7 @@
 </script>
 
 <script id="channel-footer-template" type="text/tmpl">
-    <a href="#0" class="btn_ft btn_back ico-back "><span>返回</span></a>
+    <a href="#0" class="btn back"><span class="ico ico-01"></span></a>
     <div class="status_bar">
         <span class="s_time"><#= sTime #></span>
         <span class="rel_bg">
@@ -86,169 +90,151 @@
         </span>
         <span class="s_time"><#= eTime #></span>
     </div>
-    <a href="#0" class="btn_ft btn_refresh ico-refresh"><span>刷新</span></a>
+    <a href="#0" class="btn refresh"><span class="ico ico-02"></span></a>
 </script>
 
 <script id="channel-body-template" type="text/tmpl">
-    <# if (showFocus) { #>
-        <# if (focusTop) { #>
-            <# if (data[0]) { #>
-                <div class="banner">
+    <# if (focusTop) { #>
+        <# if (data[0]) { #>
+            <# if (showFocus) { #>
+                <article class="banner">
                     <div class="b_info">
                         <a href="#/n/<#= data[0]['id'] #>">
-                            <img src="http://s7.rr.itc.cn/g<#= data[0]['cover_image_url'] #>" alt=""/>
-                            <span class="i_title"><#= data[0]['title'] #></span>
+                            <img src="http://s7.rr.itc.cn/g<#= data[0]['cover_image_url'] #>" alt="">
+                            <span class="title"><#= data[0]['title'] #></span>
                         </a>
                     </div>
-                </div>
-            <# } #>
-            <div class="article">
-                <div class="article_info double_info ">
-                    <# if (data[1]) { #>
-                        <a href="#/n/<#= data[1]['id'] #>">
-                            <span><#= data[1]['title'] #></span>
-                            <p><#= data[1]['comment_count'] #>评论 <#= data[1]['create_time'] #></p>
-                        </a>
-                    <# } #>
-                    <# if (data[2]) { #>
-                       <a href="#/n/<#= data[2]['id'] #>">
-                           <span><#= data[2]['title'] #></span>
-                           <p><#= data[2]['comment_count'] #>评论 <#= data[2]['create_time'] #></p>
-                       </a>
-                   <# } #>
-                </div>
-            </div>
-        <# } else { #>
-            <div class="article">
-                <div class="article_info double_info ">
-                    <# if (data[0]) { #>
+                </article>
+            <# } else { #>
+                <article class="banner no_banner_pic">
+                    <div class="t_info" style="background-color: <#= bgColor #>">
                         <a href="#/n/<#= data[0]['id'] #>">
-                            <span><#= data[0]['title'] #></span>
-                            <p><#= data[0]['comment_count'] #>评论 <#= data[0]['create_time'] #></p>
+                            <span>
+                                <strong class="title" ><#= data[0]['title'] #></strong>
+                                <em class="status"><#= data[0]['comment_count'] #>评论 <#= data[0]['create_time'] #></em>
+                            </span>
                         </a>
-                    <# } #>
-                    <# if (data[1]) { #>
-                       <a href="#/n/<#= data[1]['id'] #>">
-                           <span><#= data[1]['title'] #></span>
-                           <p><#= data[1]['comment_count'] #>评论 <#= data[1]['create_time'] #></p>
-                       </a>
-                   <# } #>
-                </div>
+                        <span class="h_line"></span>
+                    </div>
+                </article>
+            <# } #>
+        <# } #>
+        <article class="article">
+            <div class="info double_info">
+                <# if (data[1]) { #>
+                    <a href="#/n/<#= data[1]['id'] #>">
+                        <span>
+                            <strong class="title"><#= data[1]['title'] #></strong>
+                            <em class="status"><#= data[1]['comment_count'] #>评论 <#= data[1]['create_time'] #></em>
+                        </span>
+                    </a>
+                <# } #>
+                <# if (data[2]) { #>
+                   <a href="#/n/<#= data[2]['id'] #>">
+                      <span>
+                           <strong class="title"><#= data[2]['title'] #></strong>
+                           <em class="status"><#= data[2]['comment_count'] #>评论 <#= data[2]['create_time'] #></em>
+                      </span>
+                   </a>
+               <# } #>
             </div>
-            <# if (data[2]) { #>
-                <div class="banner">
+        </article>
+    <# } else { #>
+        <article class="article">
+            <div class="info double_info">
+                <# if (data[0]) { #>
+                    <a href="#/n/<#= data[0]['id'] #>">
+                        <span>
+                            <strong class="title"><#= data[0]['title'] #></strong>
+                            <em class="status"><#= data[0]['comment_count'] #>评论 <#= data[0]['create_time'] #></em>
+                        </span>
+                    </a>
+                <# } #>
+                <# if (data[1]) { #>
+                   <a href="#/n/<#= data[1]['id'] #>">
+                        <span>
+                            <strong class="title"><#= data[1]['title'] #></strong>
+                            <em class="status"><#= data[1]['comment_count'] #>评论 <#= data[0]['create_time'] #></em>
+                        </span>
+                   </a>
+               <# } #>
+            </div>
+        </article>
+        <# if (data[2]) { #>
+            <# if (showFocus) { #>
+                <article class="banner">
                     <div class="b_info">
                         <a href="#/n/<#= data[2]['id'] #>">
                             <img src="http://s7.rr.itc.cn/g<#= data[2]['cover_image_url'] #>" alt=""/>
-                            <span class="i_title"><#= data[2]['title'] #></span>
+                            <span class="title"><#= data[2]['title'] #></span>
                         </a>
                     </div>
-                </div>
-            <# } #>
-        <# } #>
-    <# } else { #>
-        <# if (focusTop) { #>
-            <# if (data[0]) { #>
-                <div class="banner">
-                    <div class="t_info" style="background-color: <#= bgColor #>">
-                        <a href="#/n/<#= data[0]['id'] #>">
-                            <span class="i_title"><#= data[0]['title'] #></span>
-                            <p><#= data[1]['comment_count'] #>评论 <#= data[1]['create_time'] #></p>
-                        </a>
-                        <span class="h_line"></span>
-                    </div>
-                </div>
-            <# } #>
-            <div class="article article_nopic">
-                <div class="article_info double_info ">
-                    <# if (data[1]) { #>
-                        <a href="#/n/<#= data[1]['id'] #>">
-                            <span><#= data[1]['title'] #></span>
-                            <p><#= data[1]['comment_count'] #>评论 <#= data[1]['create_time'] #></p>
-                        </a>
-                    <# } #>
-                    <# if (data[2]) { #>
-                       <a href="#/n/<#= data[2]['id'] #>">
-                           <span><#= data[2]['title'] #></span>
-                           <p><#= data[2]['comment_count'] #>评论 <#= data[2]['create_time'] #></p>
-                       </a>
-                   <# } #>
-                </div>
-            </div>
-        <# } else { #>
-            <div class="article article_nopic">
-                <div class="article_info double_info ">
-                    <# if (data[0]) { #>
-                        <a href="#/n/<#= data[0]['id'] #>">
-                            <span><#= data[0]['title'] #></span>
-                            <p><#= data[0]['comment_count'] #>评论 <#= data[0]['create_time'] #></p>
-                        </a>
-                    <# } #>
-                    <# if (data[1]) { #>
-                       <a href="#/n/<#= data[1]['id'] #>">
-                           <span><#= data[1]['title'] #></span>
-                           <p><#= data[1]['comment_count'] #>评论 <#= data[1]['create_time'] #></p>
-                       </a>
-                   <# } #>
-                </div>
-            </div>
-            <# if (data[2]) { #>
-                <div class="banner">
+                </article>
+            <# } else { #>
+                <article class="banner no_banner_pic">
                     <div class="t_info" style="background-color: <#= bgColor #>">
                         <a href="#/n/<#= data[2]['id'] #>">
-                            <span class="i_title"><#= data[2]['title'] #></span>
-                            <p><#= data[2]['comment_count'] #>评论 <#= data[2]['create_time'] #></p>
+                            <span>
+                                <strong class="title" ><#= data[2]['title'] #></strong>
+                                <em class="status"><#= data[2]['comment_count'] #>评论 <#= data[2]['create_time'] #></em>
+                            </span>
                         </a>
                         <span class="h_line"></span>
                     </div>
-                </div>
+                </article>
             <# } #>
         <# } #>
     <# } #>
-    <div class="article <# if (!showFocus) { #>article_nopic<# } #>">
-        <div class="article_info double_info ">
+    <article class="article">
+        <div class="info double_info">
             <# if (data[3]) { #>
                 <a href="#/n/<#= data[3]['id'] #>">
-                    <span><#= data[3]['title'] #></span>
-                    <p><#= data[3]['comment_count'] #>评论 <#= data[3]['create_time'] #></p>
+                    <span>
+                         <strong class="title"><#= data[3]['title'] #></strong>
+                         <em class="status"><#= data[3]['comment_count'] #>评论 <#= data[3]['create_time'] #></em>
+                    </span>
                 </a>
             <# } #>
             <# if (data[4]) { #>
                <a href="#/n/<#= data[4]['id'] #>">
-                   <span><#= data[4]['title'] #></span>
-                   <p><#= data[4]['comment_count'] #>评论 <#= data[4]['create_time'] #></p>
+                    <span>
+                         <strong class="title"><#= data[4]['title'] #></strong>
+                         <em class="status"><#= data[4]['comment_count'] #>评论 <#= data[4]['create_time'] #></em>
+                   </span>
                </a>
            <# } #>
         </div>
-    </div>
+    </article>
     <# if (data[5]) { #>
-        <div class="article">
-            <div class="article_info single_info">
+        <article class="article">
+            <div class="info single_info">
                 <a href="#/n/<#= data[5]['id'] #>">
-                    <span><#= data[5]['title'] #></span>
-                    <p><#= data[5]['comment_count'] #>评论 <#= data[5]['create_time'] #></p>
+                    <span>
+                        <strong class="title"><#= data[5]['title'] #></strong>
+                        <em class="status"><#= data[5]['comment_count'] #>评论 <#= data[5]['create_time'] #></em>
+                    </span>
                 </a>
             </div>
-        </div>
+        </article>
     <# } #>
 </script>
 
 <script id="article-header-template" type="text/tmpl">
-    <h1 class="i_title"></h1>
+    <h1 class="title"></h1>
     <p></p>
 </script>
 
 <script id="article-footer-template" type="text/tmpl">
-    <a href="#0" class="ico-back btn_back "><span>返回</span></a>
-    <a href="#0" class="ico-approve" data-message="true"><span>赞成</span></a>
-    <a href="#0" class="ico-turn" data-message="true"><span>转载</span></a>
-    <a href="#0" class="ico-comment" data-message="true"><span>评论</span></a>
-    <a href="#0" class="ico-refresh btn_refresh "><span>刷新</span></a>
+    <a href="#0" class="btn back"><span class="ico ico-01"></span></a>
+    <a href="#0" class="btn approve"><span class="ico ico-03"></span></a>
+    <a href="#0" class="btn turn"><span class="ico ico-04"></span></a>
+    <a href="#0" class="btn comment"><span class="ico ico-05"></span></a>
+    <a href="#0" class="btn refresh"><span class="ico ico-02"></span></a>
 </script>
 
 <script id="article-body-template" type="text/tmpl">
-    <div class="detail_cont">
+    <article class="cnt">
         <#= content #>
-    </div>
-    <a href="http://m.sohu.com/n/<#= id #>/" class="look_original_btn" target="_blank"><span>查看原文</span></a>
+    </article>
+    <a href="http://m.sohu.com/n/377424509/" class="look_original_btn" target="_blank"><span>查看原文</span></a>
 </script>

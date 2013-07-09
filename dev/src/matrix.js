@@ -6,20 +6,18 @@ window.MX = {};
 (function(X, $, artTemplate) {
     var slice = Array.prototype.slice,
         toString = Object.prototype.toString,
-        ua = window.navigator.userAgent,
-        android = ua.match(/(Android)[\/\s+]([\d.]+)/),
-        ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
-        iphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
-        webos = ua.match(/(webOS|hpwOS)[\s\/]([\d.]+)/),
-        touchpad = webos && ua.match(/TouchPad/),
-        kindle = ua.match(/Kindle\/([\d.]+)/),
-        blackberry = ua.match(/(BlackBerry).*Version\/([\d.]+)/),
+        navigator = window.navigator,
+        userAgent = navigator.userAgent,
+        android = userAgent.match(/(Android)[\s\/]+([\d\.]+)/),
+        ios = userAgent.match(/(iPad|iPhone|iPod)\s+OS\s([\d_\.]+)/),
+        isWebkit = /WebKit\/[\d.]+/i.test(userAgent),
+        isSafari = ios ? (navigator.standalone ? isWebkit : (/Safari/i.test(userAgent) && !/CriOS/i.test(userAgent) && !/MQQBrowser/i.test(userAgent))) : false,
         os;
 
     /**
      * The version of the framework
      */
-    X.version = '0.0.14';
+    X.version = '1.0.0';
 
     /**
      * 声明命名空间，用法如下：
@@ -219,28 +217,16 @@ window.MX = {};
         os.android = true;
         os.version = android[2];
     }
-    if (iphone) {
-        os.ios = os.iphone = true;
-        os.version = iphone[2].replace(/_/g, '.');
-    }
-    if (ipad) {
-        os.ios = os.ipad = true;
-        os.version = ipad[2].replace(/_/g, '.');
-    }
-    if (webos) {
-        os.webos = true;
-        os.version = webos[2];
-    }
-    if (touchpad) {
-        os.touchpad = true;
-    }
-    if (blackberry) {
-        os.blackberry = true;
-        os.version = blackberry[2];
-    }
-    if (kindle) {
-        os.kindle = true;
-        os.version = kindle[1];
+    if (ios) {
+        os.ios = true;
+        os.version = ios[2].replace(/_/g, '.');
+        if (ios[0] === 'iPad') {
+            os.ipad = true;
+        } else if (ios[0] === 'iPhone') {
+            os.iphone = true;
+        } else if (ios[0] === 'iPod') {
+            os.ipod = true;
+        }
     }
 
     $.extend(X, {
@@ -250,15 +236,23 @@ window.MX = {};
          * true表示为当前操作系统
          *  Boolean : ios
          *  Boolean : android
-         *  Boolean : webos
-         *  Boolean : touchpad
-         *  Boolean : blackberry
-         *  Boolean : kindle
-         *
+         *  Boolean : ipad
+         *  Boolean : iphone
+         *  Boolean : ipod
          *  String : version 系统版本号
          *
          */
         os: os,
+
+        /**
+         * 是否webkit内核浏览器
+         */
+        isWebkit: isWebkit,
+
+        /**
+         * 是否safari浏览器
+         */
+        isSafari: isSafari,
 
         /**
          * 将config包含的属性，合并到object对象，如果object已存在相同的属性名，则忽略合并
@@ -371,6 +365,26 @@ window.MX = {};
             }
             fn.apply(scope, args);
             return 0;
+        },
+
+        /**
+         * 代理 orientation change 事件回调函数
+         * @param fn
+         * @param scope
+         * @returns {Function}
+         */
+        createOrientationChangeProxy: function(fn, scope) {
+            return function() {
+                clearTimeout(scope.orientationChangedTimeout);
+                var args = slice.call(arguments, 0);
+                scope.orientationChangedTimeout = setTimeout($.proxy(function() {
+                    var ori = window.orientation;
+                    if (ori != scope.lastOrientation) {
+                        fn.apply(scope, args);
+                    }
+                    scope.lastOrientation = ori;
+                }, scope), os.android ? 500 : 0);
+            };
         }
     });
 

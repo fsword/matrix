@@ -15983,20 +15983,18 @@ window.MX = {};
 (function(X, $, artTemplate) {
     var slice = Array.prototype.slice,
         toString = Object.prototype.toString,
-        ua = window.navigator.userAgent,
-        android = ua.match(/(Android)[\/\s+]([\d.]+)/),
-        ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
-        iphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
-        webos = ua.match(/(webOS|hpwOS)[\s\/]([\d.]+)/),
-        touchpad = webos && ua.match(/TouchPad/),
-        kindle = ua.match(/Kindle\/([\d.]+)/),
-        blackberry = ua.match(/(BlackBerry).*Version\/([\d.]+)/),
+        navigator = window.navigator,
+        userAgent = navigator.userAgent,
+        android = userAgent.match(/(Android)[\s\/]+([\d\.]+)/),
+        ios = userAgent.match(/(iPad|iPhone|iPod)\s+OS\s([\d_\.]+)/),
+        isWebkit = /WebKit\/[\d.]+/i.test(userAgent),
+        isSafari = ios ? (navigator.standalone ? isWebkit : (/Safari/i.test(userAgent) && !/CriOS/i.test(userAgent) && !/MQQBrowser/i.test(userAgent))) : false,
         os;
 
     /**
      * The version of the framework
      */
-    X.version = '0.0.14';
+    X.version = '1.0.0';
 
     /**
      * 声明命名空间，用法如下：
@@ -16196,28 +16194,16 @@ window.MX = {};
         os.android = true;
         os.version = android[2];
     }
-    if (iphone) {
-        os.ios = os.iphone = true;
-        os.version = iphone[2].replace(/_/g, '.');
-    }
-    if (ipad) {
-        os.ios = os.ipad = true;
-        os.version = ipad[2].replace(/_/g, '.');
-    }
-    if (webos) {
-        os.webos = true;
-        os.version = webos[2];
-    }
-    if (touchpad) {
-        os.touchpad = true;
-    }
-    if (blackberry) {
-        os.blackberry = true;
-        os.version = blackberry[2];
-    }
-    if (kindle) {
-        os.kindle = true;
-        os.version = kindle[1];
+    if (ios) {
+        os.ios = true;
+        os.version = ios[2].replace(/_/g, '.');
+        if (ios[0] === 'iPad') {
+            os.ipad = true;
+        } else if (ios[0] === 'iPhone') {
+            os.iphone = true;
+        } else if (ios[0] === 'iPod') {
+            os.ipod = true;
+        }
     }
 
     $.extend(X, {
@@ -16227,15 +16213,23 @@ window.MX = {};
          * true表示为当前操作系统
          *  Boolean : ios
          *  Boolean : android
-         *  Boolean : webos
-         *  Boolean : touchpad
-         *  Boolean : blackberry
-         *  Boolean : kindle
-         *
+         *  Boolean : ipad
+         *  Boolean : iphone
+         *  Boolean : ipod
          *  String : version 系统版本号
          *
          */
         os: os,
+
+        /**
+         * 是否webkit内核浏览器
+         */
+        isWebkit: isWebkit,
+
+        /**
+         * 是否safari浏览器
+         */
+        isSafari: isSafari,
 
         /**
          * 将config包含的属性，合并到object对象，如果object已存在相同的属性名，则忽略合并
@@ -16348,6 +16342,26 @@ window.MX = {};
             }
             fn.apply(scope, args);
             return 0;
+        },
+
+        /**
+         * 代理 orientation change 事件回调函数
+         * @param fn
+         * @param scope
+         * @returns {Function}
+         */
+        createOrientationChangeProxy: function(fn, scope) {
+            return function() {
+                clearTimeout(scope.orientationChangedTimeout);
+                var args = slice.call(arguments, 0);
+                scope.orientationChangedTimeout = setTimeout($.proxy(function() {
+                    var ori = window.orientation;
+                    if (ori != scope.lastOrientation) {
+                        fn.apply(scope, args);
+                    }
+                    scope.lastOrientation = ori;
+                }, scope), os.android ? 500 : 0);
+            };
         }
     });
 
@@ -22213,7 +22227,7 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
                     this.el.addClass(this.cls);
                 }
 
-                this.el.css('min-height', window.innerHeight + 'px');
+                this.el.css('height', window.innerHeight + 'px');
 
                 container.append(this.el);
                 
@@ -22289,7 +22303,7 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
         // private
         onOrientationChange: function() {
             if (this.el) {
-                this.el.css('min-height', window.innerHeight + 'px');
+                this.el.css('height', window.innerHeight + 'px');
             }
             if (this.controller) {
                 this.controller.onOrientationChange();
@@ -22554,7 +22568,7 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
              */
             this.mon(window, 'hashchange', this.onHashChange);
 
-            this.mon(window, 'orientationchange', this.onOrientationChange);
+            this.mon(window, 'orientationchange', X.createOrientationChangeProxy(this.onOrientationChange, this));
         },
 
         /**
@@ -22611,6 +22625,8 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
                 } else {
                     // 初始化启动画面的jquery mobile element的page扩展特性，在执行第一次由启动视图切换到首视图时会使用到
                     this.startUpView.page();
+
+                    // 在Windows Phone 8下，flexbox 布局对 min-height 属性不生效，需要给容器设定一个高度
                     this.startUpView.css('min-height', window.innerHeight + 'px');
                 }
 
@@ -23016,7 +23032,11 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
         // private
         changePage: function(pagelet) {
             var path = $.mobile.path, url, lp = this.lastPagelet, np, transition, transtionOptions;
-            window.scrollTo(0, 1);
+
+            // 将body滚动到顶部，防止页面滚动条错位
+            X.isSafari && window.scrollTo(0, 1);
+            $body.scrollTop(0);
+
             url = path.getLocation();
             this.history.add(url, {
                 url: url,
@@ -23070,7 +23090,6 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
 
         // private
         onPageChange: function() {
-            // 在页面切换完成之后，将body滚动到顶部，防止页面滚动条错位
             $body.scrollTop(0);
             this.fireEvent('pagechange', this, this.nextPagelet, this.lastPagelet);
             this.afterChangePage();
@@ -23158,7 +23177,9 @@ MX.kindle('jquery', 'klass', 'localstorage', 'pagelet', function(X, $, Klass, Lo
      *      - loading message
      */
     $('html').addClass("ui-mobile");
-    window.scrollTo(0, 1);
+
+    X.isSafari && window.scrollTo(0, 1);
+
     $.extend($.mobile, {
         // 禁用jquery mobile自动初始化页面配置
         autoInitializePage: false,
