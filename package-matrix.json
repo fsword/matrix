@@ -214,11 +214,6 @@
             "src": "MIT-LICENSE.md",
             "dest": "MIT-LICENSE.md",
             "filters": ".*"
-        },
-        {
-            "src": "README.md",
-            "dest": "README.md",
-            "filters": ".*"
         }
     ]
 }
