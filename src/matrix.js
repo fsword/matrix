@@ -10,9 +10,10 @@ window.MX = {};
         userAgent = navigator.userAgent,
         android = userAgent.match(/(Android)[\s\/]+([\d\.]+)/),
         ios = userAgent.match(/(iPad|iPhone|iPod)\s+OS\s([\d_\.]+)/),
+        wp = userAgent.match(/(Windows\s+Phone)\s([\d\.]+)/),
         isWebkit = /WebKit\/[\d.]+/i.test(userAgent),
         isSafari = ios ? (navigator.standalone ? isWebkit : (/Safari/i.test(userAgent) && !/CriOS/i.test(userAgent) && !/MQQBrowser/i.test(userAgent))) : false,
-        os;
+        os = {};
 
     /**
      * The version of the framework
@@ -212,7 +213,6 @@ window.MX = {};
         }
     });
 
-    os = {};
     if (android) {
         os.android = true;
         os.version = android[2];
@@ -220,24 +220,32 @@ window.MX = {};
     if (ios) {
         os.ios = true;
         os.version = ios[2].replace(/_/g, '.');
-        if (ios[0] === 'iPad') {
+        os.ios7 = /^7/.test(os.version);
+        if (ios[1] === 'iPad') {
             os.ipad = true;
-        } else if (ios[0] === 'iPhone') {
+        } else if (ios[1] === 'iPhone') {
             os.iphone = true;
-        } else if (ios[0] === 'iPod') {
+            os.iphone5 = window.screen.height == 568;
+        } else if (ios[1] === 'iPod') {
             os.ipod = true;
         }
+    }
+    if (wp) {
+        os.wp = true;
+        os.version = wp[2];
+        os.wp8 = /^8/.test(os.version);
     }
 
     $.extend(X, {
         /**
          * 移动设备操作系统信息，可能会包含一下属性:
          *
-         * true表示为当前操作系统
-         *  Boolean : ios
          *  Boolean : android
+         *  Boolean : ios
+         *  Boolean : ios7
          *  Boolean : ipad
          *  Boolean : iphone
+         *  Boolean : iphone5
          *  Boolean : ipod
          *  String : version 系统版本号
          *
@@ -383,7 +391,7 @@ window.MX = {};
                         fn.apply(scope, args);
                     }
                     scope.lastOrientation = ori;
-                }, scope), os.android ? 500 : 0);
+                }, scope), os.android ? 300 : 50);
             };
         }
     });
