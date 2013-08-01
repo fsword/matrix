@@ -60,11 +60,11 @@ MX.ready('klass', function(X, Klass) {
 
 ## 一个比较完整的例子：手机搜狐
 
-[手机搜狐WebApp](http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html "手机搜狐（向Zaker致敬）")的功能完全模拟ZAKER for iPhone开发。
+[手机搜狐WebApp](http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html "手机搜狐(仿ZAKER界面)")的功能完全模拟ZAKER for iPhone开发。
 
-你可以直接从手机浏览器打开[手机搜狐WebApp](http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html "手机搜狐（向Zaker致敬）")。由于页面是按照iPhone4S全屏高度设计，为了达到最佳展示效果，请使用iOS Safari打开，并将页面添加到你的桌面，然后从桌面打开进入。
+你可以直接从手机浏览器打开[手机搜狐WebApp](http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html "手机搜狐(仿ZAKER界面)")。由于页面是按照iPhone4S全屏高度设计，为了达到最佳展示效果，请使用iOS Safari打开，并将页面添加到你的桌面，然后从桌面打开进入。
 
-直接用手机扫描下面的二维码，就可以访问[手机搜狐WebApp](http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html "手机搜狐（向Zaker致敬）")
+直接用手机扫描下面的二维码，就可以访问[手机搜狐WebApp](http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html "手机搜狐(仿ZAKER界面)")
 
 ![QR Code](https://raw.github.com/mxjs/matrix/master/examples/msohu/qrcode.png "二维码")
 
@@ -76,7 +76,7 @@ MX.ready('klass', function(X, Klass) {
 * Use Store (建设中)
 * Use jQuery Mobile Widget (建设中)
 * [Use RequireJS](http://mxjs.github.io/matrix/dev/examples/requirejs/index.html "Hello RequireJS")
-* [手机搜狐WebApp](http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html "手机搜狐（向Zaker致敬）")
+* [手机搜狐WebApp](http://h5.m.sohu.com/matrix/v4/examples/msohu/index.html "手机搜狐(仿ZAKER界面)")
 
 ## 对jQuery Mobile的说明
 Matrix框架是构建在jQuery Mobile（简称jqm）之上，既可以依赖包含所有jqm组件的版本，也可以只依赖jqm核心库，Matrix提供两个版本的jqm打包：
