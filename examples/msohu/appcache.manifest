@@ -1,6 +1,6 @@
 CACHE MANIFEST
 
-# Version 1.19
+# Version 1.20
 
 CACHE:
 
@@ -12,7 +12,7 @@ http://s1.rr.itc.cn/h5/js/tags/v4/matrix/{@VERSION}/examples/share/iscrollutil.j
 http://s1.rr.itc.cn/h5/js/tags/v4/matrix/{@VERSION}/examples/share/touchholder.js
 http://s1.rr.itc.cn/h5/js/tags/v4/matrix/{@VERSION}/examples/msohu/msohu.js
 
-http://s1.rr.itc.cn/h5/js/tags/v4/matrix/{@VERSION}/resources/jquerymobile/1.3.0/lite/structure.css
+http://s1.rr.itc.cn/h5/js/tags/v4/matrix/{@VERSION}/resources/jquerymobile/1.3.1/lite/structure.css
 http://s1.rr.itc.cn/h5/js/tags/v4/matrix/{@VERSION}/examples/msohu/css/demo.css
 http://s1.rr.itc.cn/h5/js/tags/v4/matrix/{@VERSION}/examples/msohu/css/earth_normal.ttf
 
