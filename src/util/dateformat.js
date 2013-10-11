@@ -148,12 +148,12 @@ MX.util.DateFormat = {
     toString: function(date) {
         var pad = MX.util.Format.leftPad;
 
-        return date.getFullYear() + "-"
-            + pad(date.getMonth() + 1, 2, '0') + "-"
-            + pad(date.getDate(), 2, '0') + "T"
-            + pad(date.getHours(), 2, '0') + ":"
-            + pad(date.getMinutes(), 2, '0') + ":"
-            + pad(date.getSeconds(), 2, '0');
+        return date.getFullYear() + "-" + 
+            pad(date.getMonth() + 1, 2, '0') + "-" + 
+            pad(date.getDate(), 2, '0') + "T" + 
+            pad(date.getHours(), 2, '0') + ":" + 
+            pad(date.getMinutes(), 2, '0') + ":" + 
+            pad(date.getSeconds(), 2, '0');
     },
 
     /**
@@ -513,7 +513,7 @@ MX.util.DateFormat.monthNumbers = {
             // characters in a date format. For example, in a spanish
             // locale the format may be: 'd \\de F \\de Y'
             return format.replace(slashRe, '');
-        }
+        };
     }()),
 
     /**
@@ -651,7 +651,7 @@ dt = MX.util.DateFormat.parse("2006-02-29 03:20:01", "Y-m-d H:i:s", true); // re
      */
     parse : function(input, format, strict) {
         var p = utilDate.parseFunctions;
-        if (p[format] == null) {
+        if (p[format] === null) {
             utilDate.createParser(format);
         }
         return p[format](input, MX.isDefined(strict) ? strict : utilDate.useStrict);
@@ -903,8 +903,8 @@ dt = MX.util.DateFormat.parse("2006-02-29 03:20:01", "Y-m-d H:i:s", true); // re
         },
         y: {
             g:1,
-            c:"var ty = parseInt(results[{0}], 10);\n"
-                + "y = ty > MX.util.DateFormat.y2kYear ? 1900 + ty : 2000 + ty;\n", // 2-digit year
+            c:"var ty = parseInt(results[{0}], 10);\n" + 
+                "y = ty > MX.util.DateFormat.y2kYear ? 1900 + ty : 2000 + ty;\n", // 2-digit year
             s:"(\\d{1,2})"
         },
         /*
@@ -915,9 +915,9 @@ dt = MX.util.DateFormat.parse("2006-02-29 03:20:01", "Y-m-d H:i:s", true); // re
         //<locale type="object" property="parseCodes">
         a: {
             g:1,
-            c:"if (/(am)/i.test(results[{0}])) {\n"
-                + "if (!h || h == 12) { h = 0; }\n"
-                + "} else { if (!h || h < 12) { h = (h || 0) + 12; }}",
+            c:"if (/(am)/i.test(results[{0}])) {\n" + 
+                "if (!h || h == 12) { h = 0; }\n" + 
+                "} else { if (!h || h < 12) { h = (h || 0) + 12; }}",
             s:"(am|pm|AM|PM)",
             calcAtEnd: true
         },
@@ -925,9 +925,9 @@ dt = MX.util.DateFormat.parse("2006-02-29 03:20:01", "Y-m-d H:i:s", true); // re
         //<locale type="object" property="parseCodes">
         A: {
             g:1,
-            c:"if (/(am)/i.test(results[{0}])) {\n"
-                + "if (!h || h == 12) { h = 0; }\n"
-                + "} else { if (!h || h < 12) { h = (h || 0) + 12; }}",
+            c:"if (/(am)/i.test(results[{0}])) {\n" + 
+                "if (!h || h == 12) { h = 0; }\n" + 
+                "} else { if (!h || h < 12) { h = (h || 0) + 12; }}",
             s:"(AM|PM|am|pm)",
             calcAtEnd: true
         },
@@ -996,8 +996,8 @@ dt = MX.util.DateFormat.parse("2006-02-29 03:20:01", "Y-m-d H:i:s", true); // re
         },
         Z: {
             g:1,
-            c:"zz = results[{0}] * 1;\n" // -43200 <= UTC offset <= 50400
-                  + "zz = (-43200 <= zz && zz <= 50400)? zz : null;\n",
+            c:"zz = results[{0}] * 1;\n" + // -43200 <= UTC offset <= 50400
+                  "zz = (-43200 <= zz && zz <= 50400)? zz : null;\n",
             s:"([+-]?\\d{1,5})" // leading '+' sign is optional for UTC offset
         },
         c: function() {
@@ -1089,7 +1089,7 @@ dt = MX.util.DateFormat.parse("2006-02-29 03:20:01", "Y-m-d H:i:s", true); // re
             return '';
         }
 
-        if (formatFunctions[format] == null) {
+        if (formatFunctions[format] === null) {
             utilDate.createFormat(format);
         }
 
@@ -1132,10 +1132,10 @@ dt = MX.util.DateFormat.parse("2006-02-29 03:20:01", "Y-m-d H:i:s", true); // re
      */
     getGMTOffset : function(date, colon) {
         var offset = date.getTimezoneOffset();
-        return (offset > 0 ? "-" : "+")
-            + MX.util.Format.leftPad(Math.floor(Math.abs(offset) / 60), 2, "0")
-            + (colon ? ":" : "")
-            + MX.util.Format.leftPad(Math.abs(offset % 60), 2, "0");
+        return (offset > 0 ? "-" : "+") + 
+            MX.util.Format.leftPad(Math.floor(Math.abs(offset) / 60), 2, "0") + 
+            (colon ? ":" : "") + 
+            MX.util.Format.leftPad(Math.abs(offset % 60), 2, "0");
     },
 
     /**
@@ -1183,7 +1183,7 @@ dt = MX.util.DateFormat.parse("2006-02-29 03:20:01", "Y-m-d H:i:s", true); // re
      */
     isLeapYear : function(date) {
         var year = date.getFullYear();
-        return !!((year & 3) == 0 && (year % 100 || (year % 400 == 0 && year)));
+        return !!((year & 3) === 0 && (year % 100 || (year % 400 === 0 && year)));
     },
 
     /**
@@ -1442,7 +1442,12 @@ console.log(dt2); //returns 'Tue Sep 26 2006 00:00:00'
             proto = ['dateFormat', 'format', 'getTimezone', 'getGMTOffset', 'getDayOfYear', 'getWeekOfYear', 'isLeapYear', 'getFirstDayOfMonth', 'getLastDayOfMonth', 'getDaysInMonth', 'getSuffix', 'clone', 'isDST', 'clearTime', 'add', 'between'],
             sLen    = statics.length,
             pLen    = proto.length,
-            stat, prot, s;
+            stat, prot, s,
+            nFn = function() {
+                var args = Array.prototype.slice.call(arguments);
+                args.unshift(this);
+                return utilDate[prot].apply(utilDate, args);
+            };
 
         //Append statics
         for (s = 0; s < sLen; s++) {
@@ -1453,11 +1458,7 @@ console.log(dt2); //returns 'Tue Sep 26 2006 00:00:00'
         //Append to prototype
         for (p = 0; p < pLen; p++) {
             prot = proto[p];
-            nativeDate.prototype[prot] = function() {
-                var args = Array.prototype.slice.call(arguments);
-                args.unshift(this);
-                return utilDate[prot].apply(utilDate, args);
-            };
+            nativeDate.prototype[prot] = nFn;
         }
     }
 };

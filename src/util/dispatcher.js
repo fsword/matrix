@@ -33,7 +33,7 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
             e.removeListener(en, fn, scope);
             return fn.apply(scope, arguments);
         };
-    };
+    }
     
     var Dispatcher = Klass.define({
         // private
@@ -101,9 +101,8 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
          */
         addListener: function(eventName, fireFn, scope, options) {
             if (!X.isString(eventName)) {
-                var scope = eventName['scope'],
-                    listener,
-                    eName;
+                var listener, eName;
+                scope = eventName.scope;
                 for (eName in eventName) {
                     if (eventPropRe.test(eName)) {
                         continue;

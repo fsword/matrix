@@ -476,13 +476,13 @@ MX.kindle('jquery', 'klass', function(X, $, Klass) {
             }
 
             for (index = 0; index < length; index++) {
-                if (mapping[index] == undefined) {
+                if (mapping[index] === undefined) {
                     remaining.push(items[index]);
                 }
             }
 
             for (index = 0; index < length; index++) {
-                if (order[index] == undefined) {
+                if (order[index] === undefined) {
                     order[index] = remaining.shift();
                 }
             }

@@ -75,7 +75,7 @@ MX.kindle(function(X) {
     // 注册几个MX框架依赖库的alias
     X.reg('$', X.lib.jQuery);
     X.reg('jquery', X.lib.jQuery);
-    X.lib.artTemplate && X.reg('arttemplate', X.lib.artTemplate);
+    if (X.lib.artTemplate) X.reg('arttemplate', X.lib.artTemplate);
 
     X.reg('klassmanager', X.klass.KlassManager);
 });

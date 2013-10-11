@@ -170,16 +170,17 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
                 method,
                 fn,
                 i, 
-                len;
+                len,
+                proxy = function(proxyFn) {
+                    return function() {
+                        return proxyFn.apply(obj, arguments);
+                    };
+                };
             for (i = 0, len = methods.length; i < len; i++) {
                 method = methods[i];
                 fn = obj[method];
                 if (!this[method] && fn) {
-                    this[method] = function(proxyFn) {
-                        return function() {
-                            return proxyFn.apply(obj, arguments);
-                        };
-                    }(fn);
+                    this[method] = proxy(fn);
                 }
             }
         },
@@ -199,7 +200,7 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
                 for (; i >= 0; i--) {
                     item = this.eventCaches[i];
                     this.mun(item, item.type, item.selector, item.fn, item.scope);
-                };
+                }
             }
         },
         
@@ -360,7 +361,7 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
             });
             
             if (isClass) {
-                item.on && item.on(types, fn, scope, options);
+                if (item.on) item.on(types, fn, scope, options);
             } else {
                 item.on(types, selector, undefined, proxyFn);
             }
@@ -432,7 +433,7 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
                 if ((isClass ? item == event.item : item.is(event.item)) && types == event.type && selector == event.selector && fn == event.fn && scope == event.scope) {
                     this.eventCaches.splice(i, 1);
                     if (isClass) {
-                        item.un && item.un(types, fn, scope);
+                        if (item.un) item.un(types, fn, scope);
                     } else {
                         item.off(types, selector, undefined, event.proxyFn);
                     }
@@ -459,20 +460,18 @@ MX.kindle('jquery', 'klass', 'dispatcher', function(X, $, Klass, Dispatcher) {
          *  6、清空this.ob事件监听
          */
         destroy: function() {
-            if (!this.isDestroyed) {
-                if (this.fireEvent('beforedestroy', this) !== false) {
-                    this.destroying = true;
-                    this.beforeDestroy();
-                    
-                    this.clearEventCache();
-                    
-                    this.onDestroy();
-                    this.fireEvent('destroy', this);
-                    
-                    this.ob.purgeListeners();
-                    this.destroying = false;
-                    this.isDestroyed = true;
-                }
+            if (!this.isDestroyed && this.fireEvent('beforedestroy', this) !== false) {
+                this.destroying = true;
+                this.beforeDestroy();
+                
+                this.clearEventCache();
+                
+                this.onDestroy();
+                this.fireEvent('destroy', this);
+                
+                this.ob.purgeListeners();
+                this.destroying = false;
+                this.isDestroyed = true;
             }
         }
     });
